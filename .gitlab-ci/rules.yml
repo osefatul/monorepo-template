@@ -1,0 +1,41 @@
+# Shared rules for GitLab CI/CD
+
+.rules_mr_and_branches: &rules_mr_and_branches
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+.rules_main_only: &rules_main_only
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+.rules_develop_only: &rules_develop_only
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+.rules_staging_deploy: &rules_staging_deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+      allow_failure: false
+
+.rules_production_deploy: &rules_production_deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+      allow_failure: false
+
+.rules_security_scans: &rules_security_scans
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+.rules_nightly: &rules_nightly
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+      allow_failure: true

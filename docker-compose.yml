@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  internal-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.internal
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.internal.rule=Host(`internal.localhost`)"
+      - "traefik.http.services.internal.loadbalancer.server.port=80"
+
+  external-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.external
+    ports:
+      - "8081:80"
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.external.rule=Host(`external.localhost`)"
+      - "traefik.http.services.external.loadbalancer.server.port=80"
+
+  # Optional: Add a reverse proxy
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: corp-authsigner-network

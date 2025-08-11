@@ -1,0 +1,43 @@
+# Shared cache configuration for GitLab CI/CD
+
+.cache_node_modules: &cache_node_modules
+  cache:
+    key: 
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+      - apps/corp-authsigner-ui-internal/node_modules/
+      - apps/corp-authsigner-ui-external/node_modules/
+      - packages/shared/node_modules/
+    policy: pull-push
+
+.cache_node_modules_pull: &cache_node_modules_pull
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+      - apps/corp-authsigner-ui-internal/node_modules/
+      - apps/corp-authsigner-ui-external/node_modules/
+      - packages/shared/node_modules/
+    policy: pull
+
+.cache_build_artifacts: &cache_build_artifacts
+  cache:
+    key: build-$CI_COMMIT_SHA
+    paths:
+      - packages/shared/dist/
+      - apps/corp-authsigner-ui-internal/dist/
+      - apps/corp-authsigner-ui-external/dist/
+    policy: push
+
+.cache_build_artifacts_pull: &cache_build_artifacts_pull
+  cache:
+    key: build-$CI_COMMIT_SHA
+    paths:
+      - packages/shared/dist/
+      - apps/corp-authsigner-ui-internal/dist/
+      - apps/corp-authsigner-ui-external/dist/
+    policy: pull

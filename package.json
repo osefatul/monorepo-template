@@ -1,0 +1,67 @@
+{
+  "name": "corp-authsigner-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Corporate Auth Signer Monorepo",
+  "workspaces": [
+    "apps/corp-authsigner-ui-internal",
+    "apps/corp-authsigner-ui-external",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:internal": "npm run dev --workspace=corp-authsigner-ui-internal",
+    "dev:external": "npm run dev --workspace=corp-authsigner-ui-external",
+    "dev:both": "concurrently \"npm run dev:internal\" \"npm run dev:external\"",
+    "build:internal": "npm run build --workspace=corp-authsigner-ui-internal",
+    "build:external": "npm run build --workspace=corp-authsigner-ui-external",
+    "build:shared": "npm run build --workspace=shared",
+    "build:all": "npm run build:shared && npm run build:internal && npm run build:external",
+    "clean": "npm run clean --workspaces --if-present",
+    "clean:deps": "rm -rf node_modules apps/*/node_modules packages/*/node_modules",
+    "clean:build": "rm -rf apps/*/dist packages/*/dist",
+    "reset": "npm run clean:deps && npm run clean:build && npm install",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "lint:fix": "npm run lint:fix --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "test": "npm run test --workspaces --if-present",
+    "test:run": "npm run test:run --workspaces --if-present",
+    "test:coverage": "npm run coverage --workspaces --if-present",
+    "check-all": "npm run type-check && npm run lint && npm run format:check && npm run test:run",
+    "fix-all": "npm run lint:fix && npm run format",
+    "ci": "npm run check-all && npm run build:all",
+    "deps:check": "npm audit && npm outdated",
+    "deps:update": "npm update",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "vitest": "^2.1.8",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.3.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "concurrently": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "allowJs": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["packages/shared/src/*"],
+      "@shared": ["packages/shared/src"],
+      "@internal/*": ["apps/corp-authsigner-ui-internal/src/*"],
+      "@external/*": ["apps/corp-authsigner-ui-external/src/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "./packages/shared"
+    },
+    {
+      "path": "./apps/corp-authsigner-ui-internal"
+    },
+    {
+      "path": "./apps/corp-authsigner-ui-external"
+    }
+  ],
+  "include": [],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,310 @@
+stages:
+  - quality-checks
+  - test
+  - build
+  - security
+  - deploy-staging
+  - deploy-production
+
+variables:
+  NODE_VERSION: "18"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+# Global cache configuration
+.node_cache: &node_cache
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+      - apps/*/node_modules/
+      - packages/*/node_modules/
+    policy: pull
+
+# Base job for Node.js
+.node_base:
+  image: node:${NODE_VERSION}-alpine
+  before_script:
+    - apk add --no-cache git curl
+    - npm ci --prefer-offline --no-audit
+  <<: *node_cache
+
+# Quality Checks Stage
+lint:
+  extends: .node_base
+  stage: quality-checks
+  script:
+    - npm run lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+format-check:
+  extends: .node_base
+  stage: quality-checks
+  script:
+    - npm run format:check
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+type-check:
+  extends: .node_base
+  stage: quality-checks
+  script:
+    - npm run type-check
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# Test Stage
+test:
+  extends: .node_base
+  stage: test
+  script:
+    - npm run test:run
+  coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+test-coverage:
+  extends: .node_base
+  stage: test
+  script:
+    - npm run test:coverage
+  coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    paths:
+      - coverage/
+    expire_in: 1 week
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# Build Stage
+build-shared:
+  extends: .node_base
+  stage: build
+  script:
+    - npm run build:shared
+  artifacts:
+    paths:
+      - packages/shared/dist/
+    expire_in: 1 hour
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+build-internal:
+  extends: .node_base
+  stage: build
+  needs:
+    - build-shared
+  script:
+    - npm run build:internal
+  artifacts:
+    paths:
+      - apps/corp-authsigner-ui-internal/dist/
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+build-external:
+  extends: .node_base
+  stage: build
+  needs:
+    - build-shared
+  script:
+    - npm run build:external
+  artifacts:
+    paths:
+      - apps/corp-authsigner-ui-external/dist/
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# Docker Build Jobs
+build-internal-image:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  needs:
+    - build-internal
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE/internal
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -f Dockerfile.internal -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA -t $DOCKER_IMAGE_NAME:latest .
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE_NAME:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+build-external-image:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  needs:
+    - build-external
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE/external
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -f Dockerfile.external -t $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA -t $DOCKER_IMAGE_NAME:latest .
+    - docker push $DOCKER_IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $DOCKER_IMAGE_NAME:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# Security Stage
+security-audit:
+  extends: .node_base
+  stage: security
+  script:
+    - npm audit --audit-level moderate
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+dependency-scanning:
+  stage: security
+  script:
+    - echo "Dependency scanning would run here"
+    # Add your preferred dependency scanning tool
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# SAST (Static Application Security Testing)
+sast:
+  stage: security
+  include:
+    - template: Security/SAST.gitlab-ci.yml
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# Deploy to Staging
+deploy-staging-internal:
+  stage: deploy-staging
+  image: alpine:latest
+  needs:
+    - build-internal-image
+  environment:
+    name: staging
+    url: https://internal-staging.company.com
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Deploying internal app to staging environment"
+    - echo "Docker image: $CI_REGISTRY_IMAGE/internal:$CI_COMMIT_SHA"
+    # Add your staging deployment commands here
+    # Example: kubectl, helm, docker-compose, etc.
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  when: manual
+
+deploy-staging-external:
+  stage: deploy-staging
+  image: alpine:latest
+  needs:
+    - build-external-image
+  environment:
+    name: staging
+    url: https://external-staging.company.com
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Deploying external app to staging environment"
+    - echo "Docker image: $CI_REGISTRY_IMAGE/external:$CI_COMMIT_SHA"
+    # Add your staging deployment commands here
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+  when: manual
+
+# Deploy to Production
+deploy-production-internal:
+  stage: deploy-production
+  image: alpine:latest
+  needs:
+    - build-internal-image
+  environment:
+    name: production
+    url: https://internal.company.com
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Deploying internal app to production environment"
+    - echo "Docker image: $CI_REGISTRY_IMAGE/internal:$CI_COMMIT_SHA"
+    # Add your production deployment commands here
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual
+
+deploy-production-external:
+  stage: deploy-production
+  image: alpine:latest
+  needs:
+    - build-external-image
+  environment:
+    name: production
+    url: https://external.company.com
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Deploying external app to production environment"
+    - echo "Docker image: $CI_REGISTRY_IMAGE/external:$CI_COMMIT_SHA"
+    # Add your production deployment commands here
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual
+
+# Pages deployment for documentation
+pages:
+  stage: deploy-production
+  image: node:${NODE_VERSION}-alpine
+  script:
+    - mkdir public
+    - cp README.md public/index.md
+    - echo "Documentation deployed to GitLab Pages"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

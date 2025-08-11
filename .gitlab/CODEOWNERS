@@ -1,0 +1,26 @@
+# Global owners
+* @corp-team @tech-lead
+
+# Shared package
+/packages/shared/ @frontend-team @architecture-team
+
+# Internal app
+/apps/corp-authsigner-ui-internal/ @internal-team @security-team
+
+# External app  
+/apps/corp-authsigner-ui-external/ @external-team @security-team
+
+# Infrastructure and CI/CD
+/.gitlab-ci.yml @devops-team @tech-lead
+/docker/ @devops-team
+/Dockerfile* @devops-team
+
+# Configuration files
+/.vscode/ @frontend-team
+/.husky/ @frontend-team
+/tsconfig*.json @frontend-team @architecture-team
+/package*.json @frontend-team @architecture-team
+
+# Documentation
+/README.md @tech-lead @documentation-team
+/.gitlab/ @devops-team @tech-lead
