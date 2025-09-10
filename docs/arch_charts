@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Architecture & Workflows</title>
+    <title>Enhanced Auth Signer System Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -31,233 +31,303 @@
 <body class="bg-gray-100 p-8">
 
     <div class="container text-center">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">System Architecture & Workflows</h1>
-        <p class="text-gray-600 mb-6">This chart details the high-level architecture and various user workflows for the Enterprise Auth Signer Platform. The original diagram has been broken into smaller, more stable charts for better rendering and readability.</p>
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Enhanced Auth Signer System Architecture</h1>
+        <p class="text-gray-600 mb-6">Complete system architecture incorporating all functionality from transcripts: CME MVP with 500+ monthly changes, 15-16 business line scalability, OCR integration, digital signatures, and comprehensive workflows.</p>
     </div>
 
     <div class="container">
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">High-Level System Architecture</h2>
-        <div id="high-level-arch" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Enterprise Platform Overview</h2>
+        <div id="enterprise-overview" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Client User Workflows: Main Actions</h2>
-        <div id="client-workflows-main" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Internal User Management & Authentication</h2>
+        <div id="internal-user-auth" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Client User Workflows: Approval Flow</h2>
-        <div id="client-workflows-approval" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Internal User Signer Management Workflow</h2>
+        <div id="internal-signer-mgmt" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Guest User Workflow (No Corporate Connect Account)</h2>
-        <div id="guest-workflows" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">External User Onboarding & Authentication</h2>
+        <div id="external-user-onboarding" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Bulk Processing Workflow</h2>
-        <div id="bulk-processing" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">External User Self-Service Workflow</h2>
+        <div id="external-self-service" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Internal Banker Workflows</h2>
-        <div id="banker-workflows" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">OCR & Document Processing Integration</h2>
+        <div id="ocr-processing" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">System Integration Architecture</h2>
-        <div id="system-integration" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Digital Signature Workflow</h2>
+        <div id="digital-signature" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Data Model Architecture</h2>
-        <div id="data-model" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Multi-Business Line Configuration</h2>
+        <div id="business-line-config" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">API Architecture</h2>
-        <div id="api-architecture" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Enhanced Data Model with All Tables</h2>
+        <div id="enhanced-data-model" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Error Handling & Monitoring</h2>
-        <div id="error-handling" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Integration Architecture & Dependencies</h2>
+        <div id="integration-dependencies" class="mermaid text-left"></div>
 
-        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Security Architecture</h2>
-        <div id="security-architecture" class="mermaid text-left"></div>
+        <h2 class="text-xl font-semibold text-gray-700 mt-6 mb-2">Epic Structure & Development Flow</h2>
+        <div id="epic-development" class="mermaid text-left"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
     <script>
-        // Use a more robust rendering method to avoid parsing errors
         const diagrams = {
-            'high-level-arch': `
+            'enterprise-overview': `
                 graph TD
-                    HSA1["Enterprise Auth Signer Platform<br/>Reusable across 15-16 business lines<br/>CME MVP first, then IT&C, GSF, GCT"]
-                    HSA2["Corporate Connect Portal Integration<br/>Single Sign-On Authentication<br/>Entitlement-based access control"]
-                    HSA3["Spring Boot Microservice<br/>SQL Server Database<br/>RESTful API Architecture"]
-                    HSA4["External System Integrations<br/>WebKYC, FileNet, Service Request Platform<br/>Onboarding Service, OCR/AI Service"]
+                    EO1["Auth Signer Enterprise Platform<br/>• Reusable across 15-16 business lines<br/>• CME MVP: 500+ monthly changes<br/>• Target: Weeks to hours processing<br/>• Single source of truth for ASL data"]
+                    EO2["Business Lines Roadmap<br/>• Phase 1: CME (Q4 2025)<br/>• Phase 2: IT&C (Q1 2026)<br/>• Phase 3: GSF, GCT (Q2 2026)<br/>• Each with unique business rules"]
+                    EO3["Core Value Proposition<br/>• Eliminate manual email processes<br/>• Real-time status tracking<br/>• Self-service client portal<br/>• Automated compliance validation"]
+                    EO4["Technical Foundation<br/>• Spring Boot microservice<br/>• React UI in Corporate Connect<br/>• SQL Server with audit trails<br/>• OCR/AI document processing"]
 
-                    HSA1 --> HSA2
-                    HSA2 --> HSA3
-                    HSA3 --> HSA4
+                    EO1 --> EO2
+                    EO2 --> EO3
+                    EO3 --> EO4
             `,
-            'client-workflows-main': `
+            'internal-user-auth': `
                 graph TD
-                    CU1[Client logs in] --> CU2[Navigate to Auth Signer]
-                    CU2 --> CU3[View ASL Dashboard]
-                    CU3 --> CU4{Client Action?}
-                    CU4 --> CU5[Add New Signer]
-                    CU4 --> CU6[Remove Signer]
-                    CU4 --> CU7[Update Signer]
-                    CU4 --> CU8[Annual Attestation]
-                    CU4 --> CU9[Export/Print ASL]
-                    CU5 --> CU10[Automated Validation]
-                    CU6 --> CU10
-                    CU7 --> CU10
-                    CU8 --> CU10
+                    IUA1[Internal User Login<br/>SSO via Corporate Connect<br/>Role-based authentication] --> IUA2[Entitlement Validation<br/>Business line access check<br/>Account-level permissions]
+
+                    IUA2 --> IUA3{User Role?}
+                    IUA3 --> IUA4[Client Manager<br/>• CME portfolio access<br/>• Approval authority<br/>• Client relationship mgmt]
+                    IUA3 --> IUA5[Product Operations<br/>• Cross-business line access<br/>• Processing capabilities<br/>• Bulk upload rights]
+                    IUA3 --> IUA6[Trust Review<br/>• Compliance validation<br/>• Risk assessment<br/>• Audit capabilities]
+                    IUA3 --> IUA7[Risk Partners<br/>• KYC validation<br/>• Fraud verification<br/>• Escalation handling]
+
+                    IUA4 --> IUA8[User Management Dashboard<br/>• Account search by customer ID<br/>• Signer type filtering<br/>• Status overview]
+                    IUA5 --> IUA8
+                    IUA6 --> IUA8
+                    IUA7 --> IUA8
+
+                    IUA8 --> IUA9[Access Control Matrix<br/>• View permissions by business line<br/>• Edit rights per account type<br/>• Approval workflow assignment]
             `,
-            'client-workflows-approval': `
+            'internal-signer-mgmt': `
                 graph TD
-                    CU10[Automated Validation<br/>Service: ValidationEngine<br/>Check: Authority, approval requirements] --> CU11{Auto-Approval Eligible?<br/>Business Rules: Single signer authority<br/>No dual approval required}
-                    CU11 -->|Yes| CU12[Automated Processing<br/>Update ASL database<br/>Trigger WebKYC sync<br/>Send notifications]
-                    CU11 -->|No| CU13[Create Approval Task<br/>Assign to: CM, Prod Ops, Risk<br/>Notification sent to approver]
-                    CU13 --> CU14[Internal Approval Process<br/>UI: Internal dashboard review<br/>Action: Approve/Deny with comments]
-                    CU14 --> CU15{Approved?}
-                    CU15 -->|Yes| CU12
-                    CU15 -->|No| CU16[Reject with Feedback<br/>Notify client with reason<br/>Allow resubmission]
-                    CU12 --> CU17[System Updates<br/>WebKYC privilege sync<br/>FileNet document storage<br/>Audit trail creation]
-                    CU17 --> CU18[Client Notification<br/>Email + Dashboard status update<br/>Real-time visibility]
+                    ISM1[Select Customer/Account<br/>Search by customer ID<br/>View associated accounts] --> ISM2[Choose Account<br/>Deposits, investments, loans<br/>Different signers per account]
+
+                    ISM2 --> ISM3{Action Required?}
+                    ISM3 --> ISM4[Add New Signer<br/>Personal info collection<br/>Authorization type selection]
+                    ISM3 --> ISM5[Edit Existing Signer<br/>Editable: name, phone, email<br/>Non-editable: DOB, account numbers]
+                    ISM3 --> ISM6[Remove Signer<br/>Maintain minimum thresholds<br/>Transfer permissions if needed]
+                    ISM3 --> ISM7[View/Audit History<br/>7+ years retention<br/>Compliance reporting]
+
+                    ISM4 --> ISM8[Collect Required Data<br/>Name, title, email, phone<br/>Business address, entity name<br/>Third-party info if applicable]
+                    ISM8 --> ISM9[Digital Signature Capture<br/>Upload signature file<br/>KMS/HSM integration<br/>Signature validation]
+                    ISM9 --> ISM10[Authorization Type Selection<br/>Single signer, dual approval<br/>Dollar limit thresholds<br/>Business line specific rules]
+                    ISM10 --> ISM11[Validation Engine<br/>Business rule enforcement<br/>Duplicate checking<br/>Compliance verification]
+
+                    ISM5 --> ISM12[Field Edit Validation<br/>Personal info: editable<br/>Title changes allowed<br/>Account associations: add/remove only]
+                    ISM6 --> ISM13[Removal Validation<br/>Check minimum signer requirements<br/>Primary user restrictions<br/>Transfer workflow if needed]
+
+                    ISM11 --> ISM14{Approval Required?}
+                    ISM12 --> ISM14
+                    ISM13 --> ISM14
+
+                    ISM14 -->|No| ISM15[Direct Processing<br/>Update ASL database<br/>WebKYC sync<br/>Notification sent]
+                    ISM14 -->|Yes| ISM16[Multi-Person Approval<br/>Task assignment<br/>Reviewer notification<br/>Status tracking]
+
+                    ISM16 --> ISM17[Approval Decision<br/>Review and comments<br/>Approve/deny action<br/>Escalation if needed]
+                    ISM17 --> ISM18{Approved?}
+                    ISM18 -->|Yes| ISM15
+                    ISM18 -->|No| ISM19[Rejection Handling<br/>Feedback to initiator<br/>Resubmission option]
             `,
-            'guest-workflows': `
+            'external-user-onboarding': `
                 graph TD
-                    GU1[Internal Banker receives request<br/>Email, phone, or Service Request Platform] --> GU2[Banker logs into Internal UI<br/>SSO Authentication]
-                    GU2 --> GU3[Document Processing<br/>Upload paper/PDF document<br/>UI: DocumentUpload component]
-                    GU3 --> GU4[OCR/AI Processing<br/>API: POST /ocr/process<br/>Cognizant AI partnership<br/>Extract structured data]
-                    GU4 --> GU5[OCR Results Review<br/>UI: OCRReview component<br/>Confidence scores display<br/>Manual correction capability]
-                    GU5 --> GU6{OCR Accuracy Acceptable?<br/>Confidence threshold check}
-                    GU6 -->|No| GU7[Manual Data Entry<br/>UI: Form with OCR pre-population<br/>Banker manual corrections]
-                    GU6 -->|Yes| GU8[Generate Guest Access<br/>Service: GuestUserProvisioning<br/>Create secure token]
-                    GU7 --> GU8
-                    GU8 --> GU9[Guest Token Creation<br/>DB: Insert guest_tokens<br/>Expiration: 24 hours<br/>Single-use for sensitive operations]
-                    GU9 --> GU10[Email Client Secure Link<br/>Service: EmailService<br/>Unique URL with embedded token]
-                    GU10 --> GU11[Client clicks link<br/>Token validation<br/>IP address verification]
-                    GU11 --> GU12{Valid Token?<br/>Check expiration and usage}
-                    GU12 -->|No| GU13[Access Denied<br/>Security logging<br/>Error message display]
-                    GU12 -->|Yes| GU14[Guest Dashboard Load<br/>UI: GuestDashboard component<br/>Show extracted ASL data]
-                    GU14 --> GU15[Client Review & Edit<br/>Add/remove/modify signers<br/>Validate extracted information]
-                    GU15 --> GU16[Client Submission<br/>Mark token as used<br/>Status: PENDING_BANKER_APPROVAL]
-                    GU16 --> GU17[Banker Final Review<br/>UI: Internal approval dashboard<br/>Validate client changes]
-                    GU17 --> GU18{Banker Approval?}
-                    GU18 -->|Yes| CU17[System Updates<br/>WebKYC privilege sync<br/>FileNet document storage<br/>Audit trail creation]
-                    GU18 -->|No| GU20[Return to client<br/>Status: REQUIRES_CHANGES<br/>Generate new token if needed]
-                    GU20 --> GU15
+                    EUO1[Client Request Initiation<br/>Email, phone, or portal<br/>Existing vs new client] --> EUO2{Client has CC Account?}
+
+                    EUO2 -->|Yes| EUO3[Standard CC Login<br/>Existing credentials<br/>ASL section access]
+                    EUO2 -->|No| EUO4[OCR Document Processing<br/>Paper form upload<br/>AI data extraction]
+
+                    EUO4 --> EUO5[Confidence Score Review<br/>AI extraction accuracy<br/>Manual correction if needed]
+                    EUO5 --> EUO6[Guest Token Generation<br/>24-hour expiration<br/>Single-use for changes<br/>IP address validation]
+
+                    EUO6 --> EUO7[Secure Email Delivery<br/>Unique token URL<br/>Security instructions<br/>Expiration notice]
+                    EUO7 --> EUO8[Client Token Validation<br/>URL click verification<br/>Token authenticity check<br/>Access provisioning]
+
+                    EUO8 --> EUO9{Valid Access?}
+                    EUO9 -->|No| EUO10[Access Denied<br/>Security logging<br/>New token option]
+                    EUO9 -->|Yes| EUO11[Guest Dashboard<br/>Extracted data review<br/>Edit capabilities<br/>Submission workflow]
+
+                    EUO3 --> EUO12[Full CC Access<br/>Complete ASL management<br/>Real-time tracking<br/>Export capabilities]
+                    EUO11 --> EUO13[Limited Guest Access<br/>Review and confirm only<br/>No direct submissions<br/>Banker validation required]
             `,
-            'bulk-processing': `
+            'external-self-service': `
                 graph TD
-                    BP1[Bulk Request Initiation<br/>Excel/CSV file upload<br/>High-volume client needs] --> BP2[File Upload & Validation<br/>UI: BulkUpload component<br/>Format and schema validation]
-                    BP2 --> BP3[File Processing<br/>Service: BulkProcessingService<br/>Parse and validate data structure]
-                    BP3 --> BP4{File Valid?<br/>Schema check, data type validation}
-                    BP4 -->|No| BP5[Validation Error Report<br/>UI: Specific error display<br/>Allow file correction and re-upload]
-                    BP4 -->|Yes| BP6[Queue for Processing<br/>Service: Kafka Producer<br/>Topic: bulk-asl-processing<br/>Asynchronous handling]
-                    BP6 --> BP7[Background Processing<br/>Consumer: BulkProcessingConsumer<br/>Process each row individually]
-                    BP7 --> BP8[Individual Request Creation<br/>DB: Bulk insert into asl_requests<br/>Status: BULK_PROCESSING]
-                    BP8 --> BP9[Business Rules Application<br/>Service: ValidationEngine<br/>Apply validation to each request]
-                    BP9 --> BP10[Approval Task Generation<br/>DB: Insert into asl_approvals<br/>Group by approval requirements]
-                    BP10 --> BP11[Batch Approval Interface<br/>UI: Grouped approval dashboard<br/>Mass approve/reject capability]
-                    BP11 --> BP12[Batch Processing Completion<br/>Update all systems in parallel<br/>WebKYC batch API calls]
-                    BP12 --> BP13[Processing Report Generation<br/>Service: ReportingService<br/>Success/failure statistics<br/>Exception handling summary]
-                    BP13 --> BP14[Stakeholder Notification<br/>Email report distribution<br/>Dashboard updates]
+                    ESS1[Client Dashboard Access<br/>Current ASL display<br/>Pending request status<br/>Real-time updates] --> ESS2{Self-Service Action?}
+
+                    ESS2 --> ESS3[Add Signer Request<br/>Standardized form<br/>Validation rules<br/>Business line requirements]
+                    ESS2 --> ESS4[Remove Signer Request<br/>Select from current list<br/>Confirmation workflow<br/>Impact assessment]
+                    ESS2 --> ESS5[Update Signer Info<br/>Limited field editing<br/>Contact information<br/>Title/role changes]
+                    ESS2 --> ESS6[Annual Attestation<br/>List accuracy confirmation<br/>Digital signature required<br/>Compliance documentation]
+                    ESS2 --> ESS7[Export/Print ASL<br/>Business line templates<br/>PDF generation<br/>Official formatting]
+
+                    ESS3 --> ESS8[Form Validation<br/>Required field check<br/>Format verification<br/>Business rule application]
+                    ESS4 --> ESS8
+                    ESS5 --> ESS8
+                    ESS6 --> ESS9[Digital Attestation<br/>Legal binding signature<br/>Timestamp recording<br/>Certificate generation]
+                    ESS7 --> ESS10[Template Processing<br/>Business line specific verbiage<br/>Logo and formatting<br/>Download capability]
+
+                    ESS8 --> ESS11[Request Submission<br/>Status: PENDING<br/>Tracking number assigned<br/>Email confirmation]
+                    ESS9 --> ESS12[Attestation Complete<br/>Legal documentation<br/>Compliance record<br/>Next due date set]
+
+                    ESS11 --> ESS13[Automated Processing<br/>Validation engine<br/>Approval routing<br/>Status updates]
+                    ESS13 --> ESS14[Client Notification<br/>Status change alerts<br/>Email updates<br/>Dashboard refresh]
             `,
-            'banker-workflows': `
+            'ocr-processing': `
                 graph TD
-                    IB1[Banker Authentication<br/>SSO into Internal UI<br/>Role-based access control] --> IB2[Client Account Search<br/>UI: Search and selection<br/>Entitlement verification]
-                    IB2 --> IB3[ASL Management Dashboard<br/>View: Current signers, pending requests<br/>Historical audit trail access]
-                    IB3 --> IB4{Banker Action?}
-                    IB4 --> IB5[Initiate Client Request<br/>On behalf of client<br/>Service Request Platform integration]
-                    IB4 --> IB6[Review Pending Approvals<br/>UI: Task queue dashboard<br/>Multi-person approval workflow]
-                    IB4 --> IB7[Document Upload Processing<br/>OCR workflow initiation<br/>Guest user provisioning]
-                    IB4 --> IB8[Bulk Upload Management<br/>File processing oversight<br/>Batch approval coordination]
-                    IB4 --> IB9[Audit Trail Review<br/>Compliance reporting<br/>Historical analysis]
-                    IB6 --> IB10[Approval Decision<br/>UI: Review interface<br/>Comments and validation]
-                    IB10 --> IB11{Approve/Deny?}
-                    IB11 -->|Approve| IB12[System Updates<br/>Continue standard workflow]
-                    IB11 -->|Deny| IB13[Rejection Processing<br/>Notification and feedback]
+                    OCR1[Document Receipt<br/>Email, fax, or upload<br/>Multiple format support<br/>Quality assessment] --> OCR2[Document Categorization<br/>Business line identification<br/>Form type recognition<br/>Priority assignment]
+
+                    OCR2 --> OCR3[OCR/AI Processing<br/>Cognizant partnership<br/>ML model execution<br/>Data extraction]
+                    OCR3 --> OCR4[Confidence Scoring<br/>Field-level accuracy<br/>Overall document score<br/>Quality metrics]
+
+                    OCR4 --> OCR5{Confidence Threshold?}
+                    OCR5 -->|High Confidence| OCR6[Auto-Accept<br/>Direct data import<br/>Minimal review needed<br/>Fast processing]
+                    OCR5 -->|Medium Confidence| OCR7[Review Required<br/>Banker validation<br/>Selective correction<br/>Approval workflow]
+                    OCR5 -->|Low Confidence| OCR8[Manual Processing<br/>Full data entry<br/>Original document review<br/>Quality verification]
+
+                    OCR6 --> OCR9[Data Validation<br/>Business rule check<br/>Format verification<br/>Duplicate detection]
+                    OCR7 --> OCR10[Human Review Interface<br/>Side-by-side comparison<br/>Edit capabilities<br/>Approval tracking]
+                    OCR8 --> OCR11[Manual Entry Form<br/>Guided data input<br/>Validation assistance<br/>Error prevention]
+
+                    OCR9 --> OCR12[System Integration<br/>Database update<br/>Workflow initiation<br/>Status notification]
+                    OCR10 --> OCR12
+                    OCR11 --> OCR12
+
+                    OCR12 --> OCR13[Historical Migration<br/>7+ years processing<br/>Batch operations<br/>Progress tracking]
             `,
-            'system-integration': `
+            'digital-signature': `
                 graph TD
-                    SI1[Auth Signer Service<br/>Spring Boot Microservice<br/>Business Logic Engine]
-                    SI2[SQL Server Database<br/>Primary: auth_signer_db<br/>Tables: accounts, signers, requests, approvals, audit]
-                    SI3[WebKYC Integration<br/>API: Compliance validation<br/>Privilege management sync]
-                    SI4[FileNet Integration<br/>API: Document storage<br/>Historical document retrieval]
-                    SI5[OCR/AI Service<br/>Cognizant Partnership<br/>Document processing API]
-                    SI6[Service Request Platform<br/>Workflow initiation<br/>Task management integration]
-                    SI7[Corporate Connect<br/>Authentication provider<br/>UI hosting platform]
-                    SI8[Email/Notification Service<br/>Client communications<br/>Internal alerts]
-                    SI9[Kafka Message Broker<br/>Topic: bulk-processing<br/>Async workflow handling]
-                    SI10[API Gateway<br/>Authentication & authorization<br/>Rate limiting & monitoring]
-                    SI1 --> SI2
-                    SI1 --> SI3
-                    SI1 --> SI4
-                    SI1 --> SI5
-                    SI1 --> SI6
-                    SI1 --> SI8
-                    SI1 --> SI9
-                    SI10 --> SI1
-                    SI7 --> SI10
+                    DS1[Signature Requirement<br/>Legal compliance need<br/>Authentication purpose<br/>Non-repudiation] --> DS2{Signature Type?}
+
+                    DS2 --> DS3[Client Self-Service<br/>Web-based signature pad<br/>Touch/mouse capture<br/>Mobile compatibility]
+                    DS2 --> DS4[Document Signing<br/>PDF signature overlay<br/>Certificate embedding<br/>Timestamp inclusion]
+                    DS2 --> DS5[Biometric Signature<br/>Advanced authentication<br/>Multi-factor verification<br/>High-security scenarios]
+
+                    DS3 --> DS6[Signature Capture<br/>Vector data recording<br/>Pressure sensitivity<br/>Speed tracking]
+                    DS4 --> DS7[Document Processing<br/>File modification<br/>Security embedding<br/>Integrity protection]
+                    DS5 --> DS8[Biometric Validation<br/>Identity verification<br/>Match scoring<br/>Security clearance]
+
+                    DS6 --> DS9[KMS/HSM Integration<br/>Cryptographic signing<br/>Certificate management<br/>Key rotation]
+                    DS7 --> DS9
+                    DS8 --> DS9
+
+                    DS9 --> DS10[Signature Verification<br/>Authenticity check<br/>Tampering detection<br/>Legal validity]
+                    DS10 --> DS11[Storage & Archival<br/>Immutable records<br/>Audit trail creation<br/>Compliance documentation]
+
+                    DS11 --> DS12[Integration Points<br/>ASL request signing<br/>Attestation signatures<br/>Approval workflows<br/>Bulk operation signing]
             `,
-            'data-model': `
+            'business-line-config': `
                 graph TD
-                    DM1[accounts<br/>PK: account_id<br/>business_line, client_id<br/>account_name, status]
-                    DM2[authorized_signers<br/>PK: signer_id<br/>FK: account_id<br/>name, email, phone, title<br/>privilege_level, auth_limit<br/>effective_date, status]
-                    DM3[asl_requests<br/>PK: request_id<br/>FK: account_id<br/>request_type, status, initiated_by<br/>approval_required, business_justification]
-                    DM4[asl_request_details<br/>PK: detail_id<br/>FK: request_id, signer_id<br/>action, before_data, after_data]
-                    DM5[asl_approvals<br/>PK: approval_id<br/>FK: request_id<br/>approver_id, approval_level<br/>status, comments, approved_date]
-                    DM6[asl_audit_log<br/>PK: log_id<br/>account_id, signer_id, action<br/>changed_by, change_timestamp<br/>before_state, after_state<br/>source_system, ip_address]
-                    DM7[guest_tokens<br/>PK: token_id<br/>account_id, email, token_hash<br/>expires_at, used_at, created_date]
-                    DM8[asl_documents<br/>PK: document_id<br/>FK: request_id<br/>document_name, file_path<br/>filenet_id, ocr_processed<br/>ocr_confidence_score]
-                    DM9[business_line_configs<br/>PK: config_id<br/>business_line, config_key<br/>config_value, effective_date]
-                    DM1 --> DM2
-                    DM1 --> DM3
-                    DM3 --> DM4
-                    DM3 --> DM5
-                    DM1 --> DM6
-                    DM1 --> DM7
-                    DM3 --> DM8
+                    BLC1[Business Line Matrix<br/>15-16 lines supported<br/>Configurable rules<br/>No code changes] --> BLC2{Business Line?}
+
+                    BLC2 --> BLC3[CME Configuration<br/>dual_approval_required: true<br/>max_auth_limit: 1000000<br/>approval_timeout: 48hrs<br/>required_fields: email,phone,title]
+                    BLC2 --> BLC4[IT&C Configuration<br/>dual_approval_required: false<br/>max_auth_limit: 500000<br/>approval_timeout: 24hrs<br/>required_fields: email,address]
+                    BLC2 --> BLC5[GSF Configuration<br/>dual_approval_required: true<br/>max_auth_limit: 2500000<br/>approval_timeout: 72hrs<br/>compliance_level: enhanced]
+                    BLC2 --> BLC6[GCT Configuration<br/>dual_approval_required: varies<br/>trust_validation: required<br/>document_retention: permanent<br/>regulatory_reporting: quarterly]
+
+                    BLC3 --> BLC7[CME Workflow Rules<br/>• Client Manager approval always<br/>• Risk review for high amounts<br/>• Callback verification required<br/>• WebKYC integration enhanced]
+                    BLC4 --> BLC8[IT&C Workflow Rules<br/>• Product Ops single approval<br/>• Streamlined processing<br/>• Auto-approval thresholds<br/>• Simplified documentation]
+                    BLC5 --> BLC9[GSF Workflow Rules<br/>• Complex approval chains<br/>• Multiple stakeholder review<br/>• Enhanced documentation<br/>• Regulatory compliance checks]
+                    BLC6 --> BLC10[GCT Workflow Rules<br/>• Trust-specific validations<br/>• Fiduciary responsibility checks<br/>• Legal document requirements<br/>• Trustee approval workflows]
+
+                    BLC7 --> BLC11[Configuration Engine<br/>Key-value pair storage<br/>Runtime rule application<br/>Dynamic workflow routing<br/>Business logic adaptation]
+                    BLC8 --> BLC11
+                    BLC9 --> BLC11
+                    BLC10 --> BLC11
             `,
-            'api-architecture': `
+            'enhanced-data-model': `
                 graph TD
-                    API1["External Client APIs<br/>GET /api/v1/accounts/signers<br/>POST /api/v1/accounts/signers<br/>PUT /api/v1/accounts/signers<br/>DELETE /api/v1/accounts/signers<br/>POST /api/v1/accounts/attest<br/>GET /api/v1/accounts/export"]
-                    API2["Internal Banker APIs<br/>GET /api/v1/requests/pending<br/>PUT /api/v1/requests/approve<br/>POST /api/v1/ocr/process<br/>POST /api/v1/bulk/upload<br/>GET /api/v1/bulk/status"]
-                    API3["Integration APIs<br/>POST /api/v1/onboarding/import<br/>POST /api/v1/guest/provision<br/>GET /api/v1/guest/verify<br/>GET /api/v1/system/health<br/>POST /api/v1/webhooks/webkyc"]
-                    API4["System APIs<br/>GET /api/v1/signers/verify<br/>POST /api/v1/notifications/send<br/>GET /api/v1/audit/trail"]
-                    SVC1[AuthSignerService<br/>Core business logic<br/>Validation orchestration<br/>Workflow management]
-                    SVC2[ValidationEngine<br/>Business rule processor<br/>Approval workflow logic<br/>Compliance validation]
-                    SVC3[IntegrationOrchestrator<br/>WebKYC client<br/>FileNet client<br/>OCR service client<br/>Email service client]
-                    SVC4[SecurityService<br/>Authentication validation<br/>Authorization enforcement<br/>Token management<br/>Rate limiting]
-                    SVC5[BulkProcessingService<br/>File validation<br/>Kafka integration<br/>Batch processing logic]
-                    API1 --> SVC1
-                    API2 --> SVC1
-                    API3 --> SVC1
-                    API4 --> SVC1
-                    SVC1 --> SVC2
-                    SVC1 --> SVC3
-                    SVC1 --> SVC4
-                    SVC1 --> SVC5
+                    EDM1[accounts<br/>• account_id (PK)<br/>• business_line (CME,ITC,GSF,GCT)<br/>• client_id, account_name<br/>• account_type (deposits,investments,loans)<br/>• status, created_date]
+
+                    EDM2[authorized_signers<br/>• signer_id (PK)<br/>• account_id (FK)<br/>• first_name, last_name, middle_name<br/>• email, phone, title<br/>• business_address, entity_name<br/>• privilege_level, authorization_limit<br/>• effective_date, expiration_date<br/>• status, signature_on_file]
+
+                    EDM3[asl_requests<br/>• request_id (PK)<br/>• account_id (FK)<br/>• request_type (ADD,REMOVE,UPDATE,ATTEST)<br/>• initiated_by, initiated_date<br/>• status (DRAFT,PENDING,APPROVED,REJECTED)<br/>• approval_required, dual_approval_needed<br/>• business_justification<br/>• completed_date]
+
+                    EDM4[asl_request_details<br/>• detail_id (PK)<br/>• request_id (FK), signer_id (FK)<br/>• action (ADD,REMOVE,UPDATE)<br/>• before_data (JSON)<br/>• after_data (JSON)<br/>• change_reason<br/>• validation_status]
+
+                    EDM5[asl_approvals<br/>• approval_id (PK)<br/>• request_id (FK)<br/>• approver_id, approver_role<br/>• approval_level (1,2,3)<br/>• status (PENDING,APPROVED,DENIED)<br/>• comments, approved_date<br/>• delegation_info]
+
+                    EDM6[asl_audit_log<br/>• log_id (PK)<br/>• account_id, signer_id<br/>• action, changed_by<br/>• change_timestamp<br/>• before_state (JSON)<br/>• after_state (JSON)<br/>• source_system<br/>• ip_address, session_id<br/>• compliance_flags]
+
+                    EDM7[guest_tokens<br/>• token_id (PK)<br/>• account_id (FK)<br/>• email_address<br/>• token_hash, salt<br/>• expires_at, used_at<br/>• ip_address, user_agent<br/>• access_scope<br/>• created_date]
+
+                    EDM8[asl_documents<br/>• document_id (PK)<br/>• request_id (FK)<br/>• document_name, document_type<br/>• file_path, filenet_id<br/>• ocr_processed, ocr_confidence_score<br/>• manual_review_required<br/>• document_hash<br/>• uploaded_by, uploaded_date]
+
+                    EDM9[business_line_configs<br/>• config_id (PK)<br/>• business_line<br/>• config_key, config_value<br/>• data_type (STRING,BOOLEAN,NUMBER)<br/>• effective_date, expiration_date<br/>• created_by, modified_by]
+
+                    EDM10[digital_signatures<br/>• signature_id (PK)<br/>• signer_id (FK), request_id (FK)<br/>• signature_data (encrypted)<br/>• signature_type<br/>• certificate_id, timestamp<br/>• verification_status<br/>• legal_validity]
+
+                    EDM11[third_party_info<br/>• tp_id (PK)<br/>• signer_id (FK)<br/>• tp_name, tp_address<br/>• tp_contact_info<br/>• authorization_scope<br/>• verification_documents<br/>• status, created_date]
+
+                    EDM12[account_signer_associations<br/>• association_id (PK)<br/>• account_id (FK), signer_id (FK)<br/>• association_type<br/>• effective_date, expiration_date<br/>• permissions (JSON)<br/>• status]
+
+                    EDM1 --> EDM2
+                    EDM1 --> EDM3
+                    EDM1 --> EDM12
+                    EDM2 --> EDM4
+                    EDM2 --> EDM10
+                    EDM2 --> EDM11
+                    EDM3 --> EDM4
+                    EDM3 --> EDM5
+                    EDM3 --> EDM8
+                    EDM12 --> EDM2
             `,
-            'error-handling': `
+            'integration-dependencies': `
                 graph TD
-                    EH1[Error Detection<br/>Service: ErrorHandlingService<br/>Real-time monitoring] --> EH2{Error Type Classification}
-                    EH2 --> EH3[WebKYC API Failure<br/>Retry with exponential backoff<br/>Max 3 attempts<br/>Circuit breaker pattern]
-                    EH2 --> EH4[FileNet API Failure<br/>Queue for later processing<br/>Background retry jobs<br/>Manual intervention flags]
-                    EH2 --> EH5[Database Errors<br/>Transaction rollback<br/>Data integrity preservation<br/>Support team notification]
-                    EH2 --> EH6[OCR Processing Failure<br/>Fallback to manual processing<br/>Banker notification<br/>Manual review queue]
-                    EH3 --> EH7[Recovery Actions<br/>Automatic retry mechanisms<br/>Fallback procedures<br/>Escalation protocols]
-                    EH4 --> EH7
-                    EH5 --> EH7
-                    EH6 --> EH7
-                    EH7 --> EH8[Monitoring & Alerting<br/>Application Insights integration<br/>Business metrics dashboards<br/>SLA monitoring<br/>Performance tracking]
+                    ID1[Critical Path Dependencies<br/>Must resolve before development] --> ID2[WebKYC Team Integration<br/>• API documentation needed<br/>• Test environment access<br/>• Compliance validation rules<br/>• Retry/fallback procedures]
+
+                    ID1 --> ID3[Service Request Platform<br/>• Susie's team coordination<br/>• Workflow initiation APIs<br/>• Task management integration<br/>• Status synchronization]
+
+                    ID1 --> ID4[Guest User Provisioning<br/>• Jessica Roswell's team<br/>• Authentication requirements<br/>• OTP vs full account decision<br/>• Security team approval]
+
+                    ID2 --> ID5[Development Blockers<br/>• Cannot complete approval workflows<br/>• Compliance validation incomplete<br/>• Production deployment blocked]
+
+                    ID3 --> ID6[Parallel Development Options<br/>• Mock service implementation<br/>• Independent workflow testing<br/>• Future integration planning]
+
+                    ID4 --> ID7[Security Architecture Impact<br/>• Token management strategy<br/>• Authentication flow design<br/>• Guest access limitations]
+
+                    ID1 --> ID8[Onboarding Team Collaboration<br/>• GSF/GCT parallel development<br/>• Data format standardization<br/>• Future integration planning<br/>• CME independence confirmed]
+
+                    ID1 --> ID9[OCR/AI Partnership<br/>• Cognizant team engagement<br/>• Confidence threshold setting<br/>• Historical document processing<br/>• Parallel manual entry development]
+
+                    ID8 --> ID10[Strategic Alignment<br/>• Future data feed automation<br/>• Process standardization<br/>• Cross-business line consistency]
+
+                    ID9 --> ID11[Technical Risk Mitigation<br/>• Manual fallback always available<br/>• Confidence scoring requirements<br/>• Review workflow implementation]
             `,
-            'security-architecture': `
+            'epic-development': `
                 graph TD
-                    SEC1[Authentication Layer<br/>Corporate Connect SSO<br/>JWT validation]
-                    SEC2[Authorization Engine<br/>Role-based access]
-                    SEC3[Data Protection<br/>PII encryption<br/>TLS for data in transit]
-                    SEC4[API Security<br/>OAuth 2.0<br/>Rate limiting]
-                    SEC5[Audit & Compliance<br/>Immutable audit logs<br/>Change tracking]
-                    SEC6[Guest User Security<br/>Token-based access<br/>Automatic expiration]
-                    SEC1 --> SEC2
-                    SEC2 --> SEC3
-                    SEC3 --> SEC4
-                    SEC4 --> SEC5
-                    SEC5 --> SEC6
+                    ED1[Epic 1: Internal User Authentication<br/>• Corporate Connect SSO<br/>• Entitlement validation<br/>• Role-based access control<br/>• Session management<br/>Size: M (3-4 sprints)] --> ED2[Epic 2: Internal User Signer Management<br/>• Add/edit/remove signers<br/>• Approval workflows<br/>• Historical audit access<br/>• Document management<br/>Size: XL (5-6 sprints)]
+
+                    ED1 --> ED3[Epic 3: External User Onboarding<br/>• Guest token provisioning<br/>• OCR document processing<br/>• Email delivery system<br/>• Access validation<br/>Size: L (4-5 sprints)]
+
+                    ED3 --> ED4[Epic 4: External User Self-Service<br/>• ASL dashboard<br/>• Self-service forms<br/>• Real-time status tracking<br/>• Export capabilities<br/>Size: XL (5-6 sprints)]
+
+                    ED2 --> ED5[Foundational Services<br/>• Database schema complete<br/>• Core APIs functional<br/>• Authentication working<br/>• Basic CRUD operations]
+
+                    ED4 --> ED6[Client Experience Complete<br/>• Full self-service capability<br/>• Guest user support<br/>• Real-time notifications<br/>• Export/print functionality]
+
+                    ED5 --> ED7[Integration Phase<br/>• WebKYC connection<br/>• FileNet integration<br/>• OCR service setup<br/>• Bulk processing]
+
+                    ED6 --> ED7
+
+                    ED7 --> ED8[Production Readiness<br/>• Performance testing<br/>• Security validation<br/>• Compliance approval<br/>• Go-live preparation]
+
+                    ED8 --> ED9[CME MVP Launch<br/>• 500+ monthly changes<br/>• Weeks to hours improvement<br/>• Client satisfaction gains<br/>• Operational efficiency]
+
+                    ED9 --> ED10[Business Line Expansion<br/>• IT&C onboarding (Q1 2026)<br/>• GSF/GCT integration (Q2 2026)<br/>• Additional lines (2026+)<br/>• Platform scaling]
             `
         };
 
         window.onload = function() {
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'default',
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true
+                }
+            });
+
             for (const [id, code] of Object.entries(diagrams)) {
                 const element = document.getElementById(id);
                 if (element) {
