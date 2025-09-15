@@ -1,0 +1,17 @@
+Onboarding Service Functions and Use Cases
+In a general sense, an onboarding service is a dedicated system built to manage all the steps required to bring a new client into a company.
+
+Data Collection: The service provides forms and APIs to gather all the necessary information from a new client. This can include personal details, contact information, legal documents, and, in a banking context, details for a new account.
+
+Validation and Verification: The service automatically validates the information provided by the new client. This can involve checking a national ID number, verifying an address, or, in a banking context, running a Know Your Customer (KYC) check.
+
+Account Provisioning: Once the data is validated, the onboarding service can use APIs to create accounts and provision access for the new client across various internal systems.
+
+The Role of Onboarding APIs in the Auth Signer Project
+In the specific context of the Auth Signer project, the onboarding service and its APIs play a crucial, but distinct, role from the ongoing maintenance process.
+
+Initial Data Feed: The onboarding service is the front door for new clients. When a new account is opened, the onboarding process will capture the initial list of authorized signers. Instead of sending this information to the old, fragmented storage systems, the onboarding service will use an API to feed this new data directly into the new central Auth Signer service. This is the first step in ensuring all new data is clean and centrally stored from day one.
+
+Distinct from Maintenance: It's important to understand that the onboarding service handles new clients and accounts. The Auth Signer project is focused on maintenance—changes to an existing account's authorized signers.
+
+Eliminating Old Manual Processes: The onboarding API connection is designed to stop the manual process before it even starts. Instead of a new client's information being stored in a PDF and manually filed, it will be automatically sent to the new Auth Signer service via a modern, reliable API connection.

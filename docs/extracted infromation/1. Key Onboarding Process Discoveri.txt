@@ -1,0 +1,56 @@
+1. Key Onboarding Process Discoveries
+The conversation reveals a crucial missing piece of the puzzle: how authorized signer (ASL) data is collected during the onboarding process.
+
+Current Manual Process: The Auth Signer data is part of a larger WebKYC questionnaire.
+
+The questionnaire is a PDF that is sent to the client.
+
+The client fills out the PDF and sends it back.
+
+A bank employee manually keys the information from the PDF into the WebKYC system.
+
+The "To-Be" Onboarding Process: The onboarding team's goal for Q4 is to digitize this manual process using a system called Fargo.
+
+The client would receive a digital outreach task via Fargo.
+
+They would fill out the information online.
+
+The data would be automatically fed into WebKYC via an API, eliminating the manual keying.
+
+Onboarding's Scope: The onboarding team's immediate focus is to get this digital collection working and integrated into the CTUO (Commercial Treasury Unified Onboarding) and AO (Asset Operations) systems. They will be using GSF (Global Structured Finance) as their first business line.
+
+2. Critical Alignment and Inter-team Dependencies
+The Auth Signer team and the onboarding team must work together to ensure a seamless, end-to-end solution.
+
+Tying the Systems Together: The Auth Signer team will need to figure out how to leverage the data that the onboarding team is collecting digitally. The Auth Signer service will need to be able to "pull" this data in so it's a part of the master record.
+
+Separate vs. Unified ASLs: The Auth Signer project's goal is to create a single, central repository. The onboarding team raises a critical point: ASLs are often account-specific, not client-wide. A person who can sign for one trust may not be able to sign for another.
+
+Impact: The Auth Signer repository must be designed to handle these one-to-many relationships (one person tied to multiple accounts) while still allowing for a centralized view. This is a crucial data modeling consideration.
+
+The Pivot Connection: There is a discussion about how this project will interact with the Pivot platform. While onboarding is clearly moving to Corporate Connect, the servicing and maintenance side of the business is still a "gray space." The teams will need to work with Vince on the Pivot team to determine what functionality stays in Pivot and what moves to Corporate Connect.
+
+3. Strategic Decisions and Challenges
+Data Model: The team has confirmed the core data points that will be collected: name, title, email, phone, business address, authorization type, and the associated accounts. This provides a clear direction for the data modeling efforts.
+
+Volume Metrics: The team gets some initial volume numbers for two business lines.
+
+CME: Had over 10,000 deals in a 15-month period and about 2,400 Auth Signer maintenance requests in the first four months of the year.
+
+GSF: Had about 2,500 deals in the same period.
+
+Impact: The volume for CME is significantly higher than GSF, confirming the need for a scalable, automated solution.
+
+Immediate Focus for Q4: The Auth Signer team's goal for Q4 is to build the internal UI so that bank employees can begin manually feeding the new Auth Signer service. This is a pragmatic, immediate step that provides value even before the full API integrations are in place.
+
+Future Work: Long-term goals for the project include:
+
+API Integrations: Building APIs to automatically feed the Auth Signer data to downstream systems like SWP and STA, eliminating manual "swivel chair" activities.
+
+Trigger Notifications: Creating a notification service that alerts downstream systems or individuals when a new ASL is available.
+
+Contact Information Changes: Figuring out how to handle changes to basic contact information (phone, address, etc.) and tie those updates to the ASL.
+
+Suzie & WebKYC: The team needs to reconnect with Suzie to ensure the Auth Signer work aligns with the ongoing WebKYC refresh project.
+
+The overall takeaway from this meeting is that the project is no longer just a vague idea; it is being actively aligned with a related, parallel effort (the onboarding digitization project). This provides a clear starting point for the Auth Signer team, but also introduces new dependencies and complexities that must be carefully managed.

@@ -1,0 +1,106 @@
+validation and risk management. Here's exactly what it does and why it's critical:
+Primary Purpose: Identity & Risk Verification
+What WebKYC Validates:
+
+Sanctions Screening: Checks if the person is on government watchlists (OFAC, terrorism lists, etc.)
+PEP (Politically Exposed Person) Screening: Identifies high-risk political figures
+Identity Verification: Confirms the person is who they claim to be
+Anti-Money Laundering (AML) Checks: Screens for suspicious financial activity patterns
+
+When WebKYC is Called in Auth Signer System
+New Signer Addition:
+
+Every time someone is added as an authorized signer
+Required before they can access any accounts or approve transactions
+Cannot complete signer setup until WebKYC approval
+
+Ongoing Monitoring:
+
+WebKYC continuously monitors existing signers
+Alerts if someone appears on new watchlists
+Required for regulatory compliance
+
+Integration Flow in Auth Signer
+1. Banker adds new signer in system
+2. Signer data sent to WebKYC API
+3. WebKYC runs background checks
+4. Returns: APPROVED, DENIED, or REQUIRES_REVIEW
+5. If approved: Signer activated in system
+6. If denied: Signer blocked, manual review triggered
+Why It's Critical for Auth Signer
+Legal Requirement: Banks are legally required to verify identity of anyone with account access under:
+
+Bank Secrecy Act (BSA)
+USA PATRIOT Act
+Anti-Money Laundering regulations
+
+Risk Management: Prevents bad actors from gaining access to client funds
+Regulatory Compliance: Required for bank examinations and audits
+What Data WebKYC Needs
+From the transcripts, WebKYC requires:
+
+Full legal name
+Date of birth
+Address
+Phone number
+Email address
+Identification documents
+Business entity information (if applicable)
+
+The Challenge for Auth Signer
+Current Problem: Manual process where bankers have to separately submit signer info to WebKYC and track responses
+Solution: Automated API integration where:
+
+Auth Signer Service automatically sends new signer data to WebKYC
+WebKYC response determines if signer can be activated
+Status updates flow back to Auth Signer system
+No manual intervention needed for standard approvals
+
+WebKYC is essentially the security checkpoint that ensures only legitimate, non-risky individuals can become authorized signers on bank accounts. Without it, the bank would violate federal regulations and expose itself to money laundering and terrorism financing risks.
+
+
+
+WebKYC Integration Capabilities - What's Available
+Three Core APIs Already Implemented:
+
+Get Profile API - Retrieves beneficial owner data for display
+Update Profile API - Pushes data changes back to WebKYC system
+Recalculate Profile API - Updates profile status workflows
+
+Current Integration Pattern:
+
+Corporate Connect serves as frontend interface
+WebKYC is the official system of record (SOR)
+Data flows: WebKYC → Corporate Connect → User Updates → WebKYC
+Status-based workflow management (in process with customer → in process)
+
+Document Handling Approach
+Current Implementation:
+
+Documents uploaded to Corporate Connect (not directly to WebKYC)
+Files stored in Azure file storage
+WebKYC partners download documents manually from Corporate Connect
+No automated document exchange APIs being used
+
+
+
+Critical WebKYC Clarifications
+KYC Process Flexibility:
+
+WebKYC can handle authorized signers but they "may or may not have to run the KYC"
+The system supports adding signers first, then running KYC validation later
+Removing signer authorization is also supported through the system
+
+Validation Purpose:
+
+WebKYC checks new signers against sanctions lists and watchlists
+Performs compliance screening for financial regulations
+This aligns with Auth Signer's need for compliance validation
+
+Business Line Support
+Profile Type Limitations:
+
+WebKYC has different forms for different business lines
+The KYC team only worked with "USB type of forms"
+Need to verify: Which profile types support CME business line
+Action Required: Check with WebKYC team about business line compatibility

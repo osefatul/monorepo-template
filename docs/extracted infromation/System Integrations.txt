@@ -1,0 +1,8 @@
+System Integrations
+The service's value comes from its ability to interact with other critical bank systems.
+
+Integration with WebKYC: This is a crucial API integration. The Auth Signer Service makes a secure API call to the existing WebKYC Service once a request is fully approved. The API payload includes details like the client ID, signer ID, and the action (e.g., ADD_SIGNER, REMOVE_SIGNER). This ensures WebKYC, the system of record for privileges, is always in sync with the new Auth Signer service.
+
+Integration with Onboarding: This is an initial, strategic integration. The new Onboarding Service will be updated to make an API call directly to the Auth Signer Service when a new client is onboarded. This POST request will create the initial Auth Signer record in the new repository, ensuring clean, structured data from the very beginning of the client relationship.
+
+Integration with Downstream Systems: In future phases, other systems like the SWP and STA will be integrated via APIs. The Auth Signer Service will have a GET API that these systems can call to verify an Auth Signer's authority in real-time, eliminating manual verification.

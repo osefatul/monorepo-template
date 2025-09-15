@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auth Signer System Architecture - Awaiting Business Rule Clarification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .diagram-container {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+      .diagram-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 8px;
+        border-left: 4px solid #667eea;
+        padding-left: 12px;
+      }
+      .diagram-description {
+        color: #4a5568;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .mermaid {
+        overflow-x: auto;
+        background: #f7fafc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .key-point {
+        background: #edf2f7;
+        border-left: 3px solid #4299e1;
+        padding: 12px;
+        margin: 12px 0;
+        border-radius: 4px;
+      }
+      .critical-dependency {
+        background: #fff5f5;
+        border-left: 3px solid #f56565;
+        padding: 12px;
+        margin: 12px 0;
+        border-radius: 4px;
+      }
+      .approval-detail {
+        background: #f0fff4;
+        border-left: 3px solid #48bb78;
+        padding: 12px;
+        margin: 12px 0;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-4">Auth Signer System Architecture</h1>
+        <p class="text-xl text-gray-100">
+          Complete Architecture with Detailed Approval Workflows & OCR Integration
+        </p>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">1. The Big Picture - Complete System Overview</h2>
+        <p class="diagram-description">
+          This shows the complete transformation including where OCR fits into the overall flow.
+          Currently, CME processes 500+ changes monthly through email chains taking weeks. Our
+          solution creates multiple entry points: client self-service, banker-initiated requests,
+          and OCR document processing - all feeding into a single centralized system.
+        </p>
+        <div id="big-picture" class="mermaid"></div>
+        <div class="key-point">
+          <strong>Key Integration:</strong> OCR processes both new requests (when clients send paper
+          forms) AND historical documents (7+ years of backlog). It feeds directly into the main
+          workflow, not as a separate system.
+        </div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">2. Detailed Approval Process - The Heart of the System</h2>
+        <p class="diagram-description">
+          This is the complete approval workflow showing every step, decision point, and escalation
+          path. CME ALWAYS requires dual approval - this is non-negotiable. The workflow handles
+          timeouts, rejections, and escalations automatically.
+        </p>
+        <div id="approval-workflow" class="mermaid"></div>
+        <div class="approval-detail">
+          <strong>Approval Levels Explained:</strong><br />
+          • Level 1: Client Manager (always required) - validates business justification<br />
+          • Level 2: Risk/Trust Review (CME always needs) - compliance and risk assessment<br />
+          • Level 3: Risk Partners (escalation only) - handles timeouts and special cases<br />
+          • Timeout: Automatic escalation to prevent delays
+        </div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">3. Banker Complete Workflow - Including OCR Path</h2>
+        <p class="diagram-description">
+          This shows how bankers work with BOTH digital requests and paper documents. Notice how OCR
+          is integrated directly into the banker workflow - it's not a separate process but a way to
+          handle paper forms within the main system.
+        </p>
+        <div id="banker-complete-workflow" class="mermaid"></div>
+        <div class="key-point">
+          <strong>OCR Integration Point:</strong> When bankers receive paper forms, they upload them
+          for OCR processing. The extracted data then follows the same approval workflow as manually
+          entered data. This ensures consistency regardless of how data enters the system.
+        </div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">4. Client Self-Service - Complete Flow with Status Tracking</h2>
+        <p class="diagram-description">
+          Clients can submit requests and track them through the entire approval process. They see
+          real-time status updates as their request moves through each approval level. This
+          transparency reduces status inquiry calls by 90%.
+        </p>
+        <div id="client-complete-workflow" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">5. OCR Processing - Fully Integrated into Main Workflows</h2>
+        <p class="diagram-description">
+          OCR isn't standalone - it's woven throughout the system. This diagram shows all the
+          integration points where OCR connects to the main workflow, from initial document receipt
+          through final approval. It handles both new requests and historical migration.
+        </p>
+        <div id="ocr-integrated" class="mermaid"></div>
+        <div class="critical-dependency">
+          <strong>Critical Design Decision:</strong> OCR has THREE integration points:<br />
+          1. New paper requests from clients (feeds into banker workflow)<br />
+          2. Historical document migration (bulk processing into database)<br />
+          3. Annual attestation forms (validates and auto-processes)
+        </div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">6. Technical Architecture - Complete Data Flow</h2>
+        <p class="diagram-description">
+          This shows how data flows through the entire system, from initial entry (manual, OCR, or
+          self-service) through approvals, integrations, and final storage. Every arrow represents
+          actual data movement.
+        </p>
+        <div id="system-architecture-complete" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">7. Database Design - Complete with Approval Tracking</h2>
+        <p class="diagram-description">
+          The database tracks every aspect of the approval process. Notice the detailed approval
+          tables that record who approved what, when, at which level, with comments and escalation
+          tracking. This creates a complete audit trail for compliance.
+        </p>
+        <div id="database-complete" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">8. Approval Decision Tree - All Scenarios</h2>
+        <p class="diagram-description">
+          This decision tree shows every possible path through the approval process based on
+          business line, dollar amount, risk factors, and special conditions. It determines who must
+          approve each request.
+        </p>
+        <div id="approval-decision-tree" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">9. Request Lifecycle - All States and Transitions</h2>
+        <p class="diagram-description">
+          Every request moves through specific states from creation to completion. This shows all
+          possible states, valid transitions, and what triggers each state change. This state
+          machine drives the entire workflow engine.
+        </p>
+        <div id="request-lifecycle" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">10. Integration Orchestration - How Everything Connects</h2>
+        <p class="diagram-description">
+          This shows the complete integration architecture including when each system is called,
+          what data is exchanged, and fallback procedures. OCR is shown as an integrated service,
+          not standalone.
+        </p>
+        <div id="integration-orchestration" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">11. End-to-End Process Examples</h2>
+        <p class="diagram-description">
+          Three complete scenarios showing how different request types flow through the system from
+          start to finish, including all approval steps and integration points.
+        </p>
+        <div id="end-to-end-flows" class="mermaid"></div>
+      </div>
+
+      <div class="diagram-container">
+        <h2 class="diagram-title">12. Success Metrics & Monitoring</h2>
+        <p class="diagram-description">
+          Complete metrics showing how we measure success across all workflows, including approval
+          times, OCR accuracy, and self-service adoption. These metrics determine if the project
+          succeeds.
+        </p>
+        <div id="success-metrics-complete" class="mermaid"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
+
+      const diagrams = {
+        'big-picture': `
+                graph TB
+                    subgraph "Current State Problems"
+                        CS1[500+ Email Requests/Month]
+                        CS2[Paper Forms via Mail/Fax]
+                        CS3[No Tracking]
+                        CS4[Weeks to Process]
+                    end
+
+                    subgraph "Entry Points - How Requests Come In"
+                        EP1[Client Self-Service Portal<br/>70% target volume]
+                        EP2[Banker Manual Entry<br/>Email requests]
+                        EP3[OCR Document Processing<br/>Paper forms]
+                        EP4[Onboarding Integration<br/>Future - new accounts]
+                    end
+
+                    subgraph "Central Processing Engine"
+                        CPE1[Auth Signer Service]
+                        CPE2[Validation Engine]
+                        CPE3[Approval Workflow]
+                        CPE4[Integration Hub]
+                    end
+
+                    subgraph "Outputs"
+                        OUT1[Updated ASL]
+                        OUT2[FileNet Documents]
+                        OUT3[Client Notifications]
+                        OUT4[Audit Trail]
+                    end
+
+                    CS1 --> EP1
+                    CS1 --> EP2
+                    CS2 --> EP3
+
+                    EP1 --> CPE1
+                    EP2 --> CPE1
+                    EP3 --> CPE1
+                    EP4 -.->|Future| CPE1
+
+                    CPE1 --> CPE2
+                    CPE2 --> CPE3
+                    CPE3 --> CPE4
+
+                    CPE4 --> OUT1
+                    CPE4 --> OUT2
+                    CPE4 --> OUT3
+                    CPE4 --> OUT4
+
+                    style EP3 fill:#ffe4b5
+                    style CPE3 fill:#e6ffe6
+            `,
+        'approval-workflow': `
+                flowchart TD
+                    Start[Request Submitted] --> Val{Validation Check}
+                    Val -->|Failed| Reject1[Rejected - Bad Data<br/>Return to Initiator]
+                    Val -->|Passed| BusLine{"Business Line?"}
+
+                    BusLine -->|CME| CMEFlow[CME Approval Flow<br/>ALWAYS Dual Approval]
+                    BusLine -->|ITC| ITCFlow{"Amount Check"}
+                    BusLine -->|GSF| GSFFlow[Enhanced Compliance]
+                    BusLine -->|GCT| GCTFlow[Trust Validation]
+
+                    CMEFlow --> L1[Level 1: Client Manager<br/>Reviews business justification<br/>Confirms client relationship]
+
+                    ITCFlow -->|"Less than $X?"| SingleApp[Single Approval Only]
+                    ITCFlow -->|"Greater than $X?"| L1
+
+                    GSFFlow --> L1
+                    GCTFlow --> TrustCheck[Trust Officer Review]
+                    TrustCheck --> L1
+
+                    L1 --> Timer1{"Timeout?<br/>(What is the SLA?)"}
+                    Timer1 -->|Approved within SLA| L2[Level 2: Risk/Trust Review<br/>Compliance validation<br/>Risk assessment]
+                    Timer1 -->|No response| Escalate1[Escalate to Risk Partners<br/>Email notification<br/>High priority flag]
+
+                    SingleApp --> WebKYC[WebKYC Validation]
+
+                    L2 --> AmountCheck{"Amount > $Y?<br/>(What triggers enhanced review?)"}
+                    AmountCheck -->|Yes| L3[Level 3: Enhanced Review<br/>Senior Risk approval<br/>Additional documentation]
+                    AmountCheck -->|No| Timer2{"Timeout?<br/>(What is the SLA?)"}
+
+                    Timer2 -->|Approved| WebKYC
+                    Timer2 -->|No response| Escalate2[Escalate to Senior Risk]
+
+                    L3 --> Timer3{"Timeout?<br/>(What is the SLA?)"}
+                    Timer3 -->|Approved| WebKYC
+                    Timer3 -->|No response| Escalate3[Executive Escalation]
+
+                    Escalate1 --> EscReview1{Escalation Review}
+                    Escalate2 --> EscReview2{Escalation Review}
+                    Escalate3 --> ExecReview{Executive Decision}
+
+                    EscReview1 -->|Approved| L2
+                    EscReview1 -->|Rejected| FinalReject
+                    EscReview2 -->|Approved| WebKYC
+                    EscReview2 -->|Rejected| FinalReject
+                    ExecReview -->|Approved| WebKYC
+                    ExecReview -->|Rejected| FinalReject
+
+                    WebKYC --> KYCCheck{"KYC Pass?"}
+                    KYCCheck -->|Yes| SystemUpdate[Update All Systems<br/>Database, FileNet, Notifications]
+                    KYCCheck -->|No| ComplianceReview[Manual Compliance Review]
+
+                    ComplianceReview --> ManualDecision{Manual Decision}
+                    ManualDecision -->|Override Approved| SystemUpdate
+                    ManualDecision -->|Rejected| FinalReject[Final Rejection<br/>Detailed feedback<br/>Resubmission guidance]
+
+                    SystemUpdate --> Complete[Request Complete<br/>Audit trail created<br/>All parties notified]
+
+                    style CMEFlow fill:#ffcccc
+                    style L1 fill:#ffffcc
+                    style L2 fill:#ffffcc
+                    style L3 fill:#ffffcc
+                    style WebKYC fill:#ccffcc
+                    style Complete fill:#ccffcc
+                    style FinalReject fill:#ffcccc
+            `,
+        'banker-complete-workflow': `
+                flowchart TD
+                    BStart[Banker Login via SSO] --> Source{"Request Source?"}
+
+                    Source -->|Email/Phone| Manual[Manual Data Entry]
+                    Source -->|Paper Form| OCRPath[OCR Processing Path]
+                    Source -->|Service Request| SRP[Service Request Platform]
+
+                    OCRPath --> Scan[Scan Document]
+                    Scan --> Upload[Upload to System]
+                    Upload --> OCRProc[OCR Processing<br/>Cognizant AI Service]
+                    OCRProc --> Confidence{"Confidence Score?<br/>(What's the threshold?)"}
+
+                    Confidence -->|High| QuickReview[Quick Review<br/>Verify key fields]
+                    Confidence -->|Medium| DetailReview[Detailed Review<br/>Correct errors]
+                    Confidence -->|Low| ManualEntry[Full Manual Entry<br/>OCR unusable]
+
+                    QuickReview --> ExtractedData[Extracted Data Ready]
+                    DetailReview --> Corrections[Make Corrections]
+                    Corrections --> ExtractedData
+                    ManualEntry --> Manual
+
+                    Manual --> CollectInfo[Collect Required Info<br/>Name Email Phone<br/>Title Address<br/>Auth Level Limit]
+                    ExtractedData --> CollectInfo
+                    SRP --> CollectInfo
+
+                    CollectInfo --> AccountSel[Select Account<br/>Deposits/Loans/Investments]
+                    AccountSel --> CheckMin{"Check Minimums<br/>(What's the minimum #?)"}
+
+                    CheckMin -->|Below Min| Warning[Warning Message<br/>Cannot go below minimum]
+                    CheckMin -->|OK| ActionType{"Action Type?"}
+                    Warning --> ActionType
+
+                    ActionType --> Add[Add Signer]
+                    ActionType --> Remove[Remove Signer]
+                    ActionType --> Update[Update Info]
+
+                    Add --> DigSig[Capture Digital Signature<br/>If available]
+                    Remove --> Justify[Justification Required]
+                    Update --> Limited[Limited Fields Only<br/>Email Phone Title]
+
+                    DigSig --> Validation
+                    Justify --> Validation
+                    Limited --> Validation[Business Rule Validation]
+
+                    Validation --> ApprovalCheck{"Needs Approval?"}
+                    ApprovalCheck -->|Yes| InitApproval[Initiate Approval Workflow<br/>See Approval Process]
+                    ApprovalCheck -->|No| DirectProcess[Direct Processing]
+
+                    InitApproval --> Track[Track Status<br/>Monitor approvals<br/>Handle escalations]
+                    Track --> ApprovalComplete{"Approval Result?"}
+
+                    ApprovalComplete -->|Approved| DirectProcess
+                    ApprovalComplete -->|Rejected| HandleReject[Handle Rejection<br/>Notify client<br/>Document reason]
+
+                    DirectProcess --> UpdateSystems[Update Systems<br/>Database<br/>WebKYC<br/>FileNet]
+                    UpdateSystems --> Notify[Send Notifications<br/>Email confirmations]
+                    Notify --> AuditLog[Create Audit Log<br/>Complete trail]
+
+                    style OCRPath fill:#ffe4b5
+                    style OCRProc fill:#ffe4b5
+                    style ExtractedData fill:#ffe4b5
+                    style InitApproval fill:#e6ffe6
+            `,
+        'client-complete-workflow': `
+                flowchart TD
+                    CStart[Client Login<br/>Corporate Connect SSO] --> Dashboard[ASL Dashboard]
+                    Dashboard --> ViewCurrent[View Current Signers<br/>Real-time data]
+
+                    ViewCurrent --> ViewStatus[View Request Status<br/>Pending approvals<br/>Processing stage<br/>Expected completion]
+
+                    ViewStatus --> Action{Select Action}
+                    Action --> AddFlow[Add New Signer]
+                    Action --> RemoveFlow[Remove Signer]
+                    Action --> UpdateFlow[Update Info]
+                    Action --> AttestFlow[Annual Attestation]
+                    Action --> ExportFlow[Export/Print]
+
+                    AddFlow --> AddForm[Fill Complete Form<br/>Personal info<br/>Business details<br/>Authorization level]
+                    AddForm --> UploadDocs[Upload Documents<br/>If required]
+                    UploadDocs --> DigSignClient[Digital Signature]
+
+                    RemoveFlow --> SelectSigner[Select from List]
+                    SelectSigner --> ConfirmRemove[Confirm Removal<br/>Warning if below minimum]
+
+                    UpdateFlow --> EditForm[Edit Allowed Fields<br/>Email<br/>Phone<br/>Title only]
+
+                    AttestFlow --> ReviewList[Review Complete List]
+                    ReviewList --> AttestSign[Digital Attestation<br/>Legal signature]
+
+                    ExportFlow --> Format{Select Format}
+                    Format --> PDF[PDF with Template]
+                    Format --> Excel[Excel Spreadsheet]
+
+                    DigSignClient --> Submit[Submit Request]
+                    ConfirmRemove --> Submit
+                    EditForm --> Submit
+                    AttestSign --> Submit
+
+                    Submit --> GetTracking[Get Tracking Number]
+                    GetTracking --> RealTime[Real-Time Tracking]
+
+                    RealTime --> Status1[Status: Submitted<br/>Validation in progress]
+                    Status1 --> Status2[Status: Pending L1<br/>Awaiting Client Manager]
+                    Status2 --> Status3[Status: Pending L2<br/>Risk Review needed]
+                    Status3 --> Status4[Status: KYC Check<br/>Compliance validation]
+                    Status4 --> Status5[Status: Approved<br/>Processing updates]
+                    Status5 --> Status6[Status: Complete<br/>ASL updated]
+
+                    Status6 --> Notification[Email Notification<br/>Completion confirmation]
+                    Notification --> ViewUpdated[View Updated ASL]
+
+                    PDF --> Download[Download Document]
+                    Excel --> Download
+
+                    style RealTime fill:#e6ffe6
+                    style Status1 fill:#ffffcc
+                    style Status2 fill:#ffffcc
+                    style Status3 fill:#ffffcc
+                    style Status4 fill:#ffffcc
+                    style Status5 fill:#ccffcc
+                    style Status6 fill:#ccffcc
+            `,
+        'ocr-integrated': `
+                flowchart TD
+                    subgraph "OCR Entry Points"
+                        Entry1[New Request<br/>Paper form from client]
+                        Entry2[Historical Migration<br/>7+ years of documents]
+                        Entry3[Annual Attestation<br/>Signed forms]
+                    end
+
+                    subgraph "OCR Processing Engine"
+                        Upload[Document Upload]
+                        Quality[Quality Check<br/>Resolution readability]
+                        Process[OCR Processing<br/>Cognizant AI]
+                        Extract[Data Extraction<br/>Structured JSON]
+                        Score[Confidence Scoring<br/>Field-level accuracy]
+                    end
+
+                    subgraph "Integration Points"
+                        Int1[Banker Workflow<br/>New requests]
+                        Int2[Bulk Import<br/>Historical data]
+                        Int3[Attestation System<br/>Compliance docs]
+                    end
+
+                    subgraph "Main Workflow Integration"
+                        MainVal[Validation Engine]
+                        MainApp[Approval Workflow]
+                        MainDB[Database Update]
+                        MainAudit[Audit Trail]
+                    end
+
+                    Entry1 --> Upload
+                    Entry2 --> Upload
+                    Entry3 --> Upload
+
+                    Upload --> Quality
+                    Quality --> Process
+                    Process --> Extract
+                    Extract --> Score
+
+                    Score -->|High Confidence| Int1
+                    Score -->|Batch Processing| Int2
+                    Score -->|Attestation| Int3
+                    Score -->|Low Confidence| ManualInt[Manual Review Queue]
+
+                    Int1 --> MainVal
+                    Int2 --> BulkVal[Bulk Validation]
+                    Int3 --> AttestVal[Attestation Validation]
+                    ManualInt --> ManualEntry2[Manual Data Entry]
+
+                    ManualEntry2 --> MainVal
+                    BulkVal --> MainDB
+                    AttestVal --> MainDB
+
+                    MainVal --> MainApp
+                    MainApp --> MainDB
+                    MainDB --> MainAudit
+
+                    MainAudit --> CompleteInt[Integrated into<br/>Main System]
+
+                    style Process fill:#ffe4b5
+                    style Score fill:#ffe4b5
+                    style Int1 fill:#ccffcc
+                    style Int2 fill:#ccffcc
+                    style Int3 fill:#ccffcc
+            `,
+        'system-architecture-complete': `
+                graph TB
+                    subgraph "Data Entry Layer"
+                        DE1[Client Portal<br/>Self-service]
+                        DE2[Banker Portal<br/>Manual entry]
+                        DE3[OCR Service<br/>Paper forms]
+                        DE4[Service Request<br/>Platform]
+                    end
+
+                    subgraph "Authentication Layer"
+                        Auth1[Corporate Connect SSO]
+                        Auth2[JWT Tokens]
+                        Auth3[Role-Based Access]
+                    end
+
+                    subgraph "API Gateway"
+                        API1[Request Routing]
+                        API2[Rate Limiting]
+                        API3[Security Validation]
+                    end
+
+
+
+                    subgraph "Business Logic Layer"
+                        BL1[Auth Signer Service<br/>Spring Boot]
+                        BL2[Validation Engine<br/>Business rules]
+                        BL3[Approval Workflow<br/>State machine]
+                        BL4[Integration Orchestrator]
+                    end
+
+                    subgraph "Data Persistence Layer"
+                        DB1[SQL Server Primary]
+                        DB2[Read Replicas]
+                        DB3[Audit Log DB<br/>Immutable]
+                    end
+
+                    subgraph "Integration Services"
+                        IS1[WebKYC<br/>Compliance]
+                        IS2[FileNet<br/>Documents]
+                        IS3[Email Service<br/>Notifications]
+                        IS4[Kafka<br/>Bulk processing]
+                    end
+
+                    DE1 --> Auth1
+                    DE2 --> Auth1
+                    DE3 --> BL1
+                    DE4 --> API1
+
+                    Auth1 --> Auth2
+                    Auth2 --> Auth3
+                    Auth3 --> API1
+
+                    API1 --> API2
+                    API2 --> API3
+                    API3 --> BL1
+
+                    BL1 --> BL2
+                    BL2 --> BL3
+                    BL3 --> BL4
+
+                    BL1 --> DB1
+                    DB1 --> DB2
+                    BL3 --> DB3
+
+                    BL4 --> IS1
+                    BL4 --> IS2
+                    BL4 --> IS3
+                    BL4 --> IS4
+
+                    IS4 --> DE3
+
+                    style DE3 fill:#ffe4b5
+                    style BL3 fill:#e6ffe6
+            `,
+        'database-complete': `
+                graph LR
+                    subgraph "Account Management"
+                        A[accounts<br/>account_id PK<br/>business_line<br/>client_id<br/>account_type]
+                        S[authorized_signers<br/>signer_id PK<br/>name email phone<br/>privilege_level<br/>authorization_limit]
+                        AS[account_signer_associations<br/>Links many-to-many<br/>Different permissions<br/>per account]
+                    end
+
+                    subgraph "Request & Approval Tracking"
+                        R[asl_requests<br/>request_id PK<br/>request_type<br/>status<br/>initiated_by]
+                        RD[asl_request_details<br/>before_data JSON<br/>after_data JSON<br/>change_reason]
+                        AP[asl_approvals<br/>approval_id PK<br/>approver_id<br/>approval_level 1 2 3<br/>status PENDING/APPROVED<br/>comments<br/>timeout_flag]
+                        AE[approval_escalations<br/>escalation_id PK<br/>original_approver<br/>escalated_to<br/>escalation_reason<br/>escalation_time]
+                    end
+
+                    subgraph "Document & OCR"
+                        D[asl_documents<br/>document_id PK<br/>filenet_id<br/>ocr_processed<br/>confidence_score]
+                        OCR[ocr_results<br/>ocr_id PK<br/>document_id FK<br/>extracted_data JSON<br/>field_confidence JSON<br/>review_required]
+                    end
+
+                    subgraph "Compliance & Audit"
+                        AL[asl_audit_log<br/>IMMUTABLE<br/>every change<br/>who what when<br/>before/after state]
+                        WK[webkyc_validations<br/>validation_id PK<br/>signer_id FK<br/>kyc_status<br/>risk_score<br/>expiration_date]
+                    end
+
+                    subgraph "Configuration"
+                        BC[business_line_configs<br/>config_key<br/>config_value<br/>CME rules<br/>ITC rules]
+                        AT[approval_templates<br/>template_id PK<br/>business_line<br/>approval_chain JSON<br/>timeout_hours]
+                    end
+
+                    A --> AS
+                    S --> AS
+                    A --> R
+                    R --> RD
+                    R --> AP
+                    AP --> AE
+                    RD --> S
+                    R --> D
+                    D --> OCR
+                    S --> WK
+                    R --> AL
+                    BC --> AT
+                    AT --> AP
+
+                    style OCR fill:#ffe4b5
+                    style AP fill:#e6ffe6
+                    style AE fill:#e6ffe6
+                    style AL fill:#ffcccc
+            `,
+        'approval-decision-tree': `
+                graph TD
+                    Start[New Request] --> BL{"Business Line?"}
+
+                    BL -->|CME| CME[CME Rules<br/>ALWAYS Dual Approval]
+                    BL -->|ITC| ITC{"Amount?<br/>(What's the threshold?)"}
+                    BL -->|GSF| GSF[GSF Rules]
+                    BL -->|GCT| GCT[GCT Rules]
+
+                    ITC -->|"Less than threshold"| SingleApproval[Single Approval Path<br/>WebKYC Validation]
+                    ITC -->|"Greater than threshold"| DualApproval[Dual Approval Path<br/>L1 -> L2...]
+
+                    CME --> DualApproval
+                    GSF --> EnhancedReview[Enhanced Compliance Review]
+                    EnhancedReview --> DualApproval
+                    GCT --> TrustReview[Trust Officer Review]
+                    TrustReview --> DualApproval
+
+                    DualApproval --> Final[System Updates]
+                    SingleApproval --> Final
+
+                    style CME fill:#ffcccc
+                    style DualApproval fill:#e6ffe6
+            `,
+        'request-lifecycle': `
+                stateDiagram-v2
+                    [*] --> DRAFT
+                    DRAFT --> PENDING_VALIDATION: Submit
+                    PENDING_VALIDATION --> PENDING_L1_APPROVAL: Validated
+                    PENDING_VALIDATION --> DRAFT: Validation Failed
+
+                    PENDING_L1_APPROVAL --> PENDING_L2_APPROVAL: L1 Approved
+                    PENDING_L1_APPROVAL --> REJECTED: L1 Rejected
+                    PENDING_L1_APPROVAL --> ESCALATED_L1: L1 Timeout
+                    ESCALATED_L1 --> PENDING_L2_APPROVAL: Escalation Approved
+                    ESCALATED_L1 --> REJECTED: Escalation Rejected
+
+                    PENDING_L2_APPROVAL --> PENDING_KYC_CHECK: L2 Approved
+                    PENDING_L2_APPROVAL --> REJECTED: L2 Rejected
+                    PENDING_L2_APPROVAL --> ESCALATED_L2: L2 Timeout
+                    ESCALATED_L2 --> PENDING_KYC_CHECK: Escalation Approved
+                    ESCALATED_L2 --> REJECTED: Escalation Rejected
+
+                    PENDING_KYC_CHECK --> PROCESSING: KYC Passed
+                    PENDING_KYC_CHECK --> MANUAL_REVIEW: KYC Failed
+                    MANUAL_REVIEW --> PROCESSING: Override
+                    MANUAL_REVIEW --> REJECTED: Rejected
+
+                    PROCESSING --> COMPLETED: Systems Updated
+                    REJECTED --> [*]
+                    COMPLETED --> [*]
+            `,
+        'integration-orchestration': `
+                sequenceDiagram
+                    participant Client as Client Portal
+                    participant Banker as Banker Portal
+                    participant AuthSvc as Auth Signer Service
+                    participant OCR as OCR Service
+                    participant WebKYC as WebKYC
+                    participant FileNet as FileNet
+                    participant Email as Email Service
+
+                    alt New Request
+                        Client->>+AuthSvc: Submit Request (JSON)
+                        AuthSvc-->>-Client: Acknowledge (Request ID)
+                    else Paper Form
+                        Banker->>+OCR: Upload Scanned Doc
+                        OCR-->>-Banker: Acknowledge
+                        OCR->>AuthSvc: Send Extracted Data (JSON)
+                    end
+
+                    AuthSvc->>AuthSvc: Start Approval Workflow
+                    Note right of AuthSvc: Dual approval process...
+
+                    alt After Final Approval
+                        AuthSvc->>+WebKYC: Validate Signer
+                        WebKYC-->>-AuthSvc: KYC Status (OK/Fail)
+                    end
+
+                    alt KYC OK
+                        AuthSvc->>+FileNet: Archive Request & Docs
+                        FileNet-->>-AuthSvc: Document ID
+                        AuthSvc->>+Email: Send Completion Notice
+                        Email-->>-AuthSvc: Sent
+                    end
+            `,
+        'end-to-end-flows': `
+                gantt
+                    title End-to-End Process Timelines
+                    dateFormat HH:mm
+                    axisFormat %H:%M
+
+                    section Client Self-Service (Happy Path)
+                    Submit Request      : 00:00, 2m
+                    L1 Approval (auto)  : 00:02, 1h
+                    L2 Approval (manual): 01:02, 4h
+                    WebKYC & Updates    : 05:02, 10m
+
+                    section Banker OCR Request
+                    Scan & Upload       : 00:00, 5m
+                    OCR Processing      : 00:05, 1m
+                    Banker Review/Fix   : 00:06, 10m
+                    Approval Workflow   : 00:16, 24h
+                    Final Processing    : 24:16, 10m
+
+                    section Escalation Scenario
+                    Submit Request      : 00:00, 2m
+                    L1 Timeout (?? hrs) : 00:02, 48h
+                    Escalation to L3    : 48:02, 5m
+                    L3 Approval         : 48:07, 12h
+                    Final Processing    : 60:07, 10m
+            `,
+        'success-metrics-complete': `
+                graph TD
+                    subgraph "Efficiency"
+                        M1[Avg. Approval Time<br/>Target: < 24 hrs]
+                        M2[OCR Straight-Through<br/>Processing Rate<br/>Target: > 85%]
+                        M3[Manual Corrections<br/>per OCR doc<br/>Target: < 2 fields]
+                    end
+
+                    subgraph "Adoption & Impact"
+                        M4[Client Self-Service<br/>Adoption Rate<br/>Target: > 70%]
+                        M5[Reduction in<br/>Email Requests<br/>Target: 90%]
+                        M6[Reduction in<br/>Status Inquiries<br/>Target: 95%]
+                    end
+
+                    subgraph "Quality & Compliance"
+                        M7[OCR Accuracy<br/>Target: 99.5%]
+                        M8[Audit Trail<br/>Completeness<br/>Target: 100%]
+                        M9[KYC Failure Rate<br/>Target: < 0.1%]
+                    end
+
+                    M1 & M2 & M3 --> Efficiency
+                    M4 & M5 & M6 --> Adoption
+                    M7 & M8 & M9 --> Quality
+            `,
+      }
+
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables: {
+          primaryColor: '#F1F3F4',
+          primaryTextColor: '#202124',
+          lineColor: '#667eea',
+          textColor: '#2d3748',
+          fontSize: '14px',
+          pie1: '#667eea',
+          pie2: '#764ba2',
+          pie3: '#4299e1',
+          pie4: '#48bb78',
+          pie5: '#f56565',
+        },
+      })
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        for (const id in diagrams) {
+          const element = document.getElementById(id)
+          if (element) {
+            const { svg } = await mermaid.render(`svg-${id}`, diagrams[id])
+            element.innerHTML = svg
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

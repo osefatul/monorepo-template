@@ -1,0 +1,127 @@
+Based on this meeting transcript, here are the key details about the Auth Signer project:
+User Management & System Structure
+Internal User Interface Planning:
+
+Auth Signer management will be housed within existing "User Management" section
+Different signer types exist: contract signers, designers, etc.
+Display will show signer permissions, email, account associations, and status
+Question raised about how signers associate with different account types (deposits, investments, loans, credits)
+
+Data Model & Account Association
+Account-Level Management:
+
+Authorized signers are managed at individual account level, not customer level
+Single customer can have multiple accounts with different signer lists
+One account can have multiple authorized signers (10, 15, 20+ possible)
+Primary/admin user profiles may be common across accounts
+
+Onboarding Integration
+New Signer Setup Process:
+
+During onboarding, initial signer list established with KYC verification
+For existing accounts, new signers must go through KYC process
+Question about whether centralized signer database will allow reuse of existing verified signers
+Need to determine if signer types/permissions come from onboarding data
+
+Business Rules & Validation
+Approval Workflows:
+
+Some businesses allow single authorized signer to add others
+Other businesses require dual approval (two signers must approve additions)
+"Number of signers required" field determines approval workflow
+Approval based on authorization type, not specific individuals
+
+Editable Fields Discussion:
+
+Personal info (name, phone, email, address) - mostly editable
+Authorization type and permissions - editable
+Account numbers - not editable (add/remove accounts instead)
+Date of birth - generally not editable
+Third-party (TPA) information - needs verification
+
+Integration Requirements
+External System Updates:
+
+Changes must feed to multiple downstream systems
+WebKYC integration for compliance validation
+List of CME systems that need updates when signers change
+All edits should trigger WebKYC updates
+
+Digital Signature Capture:
+
+Still working on digital signature implementation
+Question about when signatures are captured in the workflow
+Integration with KMS/HSM for secure signature storage
+
+Workflow Clarifications
+Add/Remove vs Transfer:
+
+No separate "transfer" functionality needed
+Transfer is combination of add new signer + remove old signer
+Need minimum signer thresholds to prevent complete removal
+
+Edit vs Add/Remove:
+
+Most changes handled through add/remove rather than edit
+Only basic personal info changes (phone, email) should be editable
+Account associations changed through add/remove account process
+
+Technical Implementation
+Database & Development Setup:
+
+Database provisioning and UI repository setup in progress
+CI/CD pipeline configuration
+Access controls and permissions being defined
+Documentation completion planned
+
+The transcript reveals this is an internal team planning session working through user interface design, business rules, and technical implementation details for the Auth Signer system's internal banking user experience.
+
+
+
+Critical Dependencies & Integration Points
+Onboarding Team Collaboration:
+
+Onboarding team (different from Auth Signer team) is collecting basic signer data: name, title, email, phone
+They're starting with GSF (Global Structured Finance), not CME
+Auth Signer team starting with CME - parallel tracks
+Future goal: onboarding feeds Auth Signer Service directly
+Current reality: manual digitization process needed for existing data
+
+OCR/Digitization Dependency:
+
+Separate "Digital Document" team exists at the bank for OCR capabilities
+Team is analyzing sample forms to determine feasibility
+High uncertainty about confidence scores and implementation timeline
+Decision: Skip OCR dependency for initial development, build manual input capabilities
+OCR integration will be parallel/future enhancement
+
+Technical Architecture Decisions
+Corporate Connect Integration:
+
+Auth Signer will be federated application within Corporate Connect
+No standalone authentication - leveraging CC's existing auth/session management
+Entitlement-based access control for different business lines
+Users will have role-based permissions (view, edit, specific business line access)
+
+Data Integration Strategy:
+
+Need account and organization data from existing systems
+Manual form digitization required due to inconsistent formats across business lines
+No standardized forms - every business line uses different formats
+Fields vary significantly between business lines and even within same business line
+
+Form Processing Challenges
+Document Inconsistency:
+
+No standard form templates across business lines
+Forms can be typed or handwritten (mostly typed except signatures)
+Required fields vary by business line
+Historical data spans different time periods and formats
+
+Manual Input Requirements:
+
+Parallel manual input process needed regardless of OCR success
+Confidence scoring critical for OCR validation
+Manual review workflow required for low-confidence extractions
+
+

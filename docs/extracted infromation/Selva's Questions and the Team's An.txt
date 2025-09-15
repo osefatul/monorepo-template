@@ -1,0 +1,102 @@
+Selva's Questions and the Team's Answers
+"How do we maintain [the authorized signers]? And [how can they be] maintained by the end customers?"
+
+Answer: The team's vision is to have a one-time conversion of paper documents to digital records. After this is done, the end customers would be set up as "Corporate Connect" users, allowing them to log in and manage their own changes. The bank's internal users would no longer be responsible for receiving paper forms and making the edits themselves.
+
+"How do these internal users be notified about the change? Are we planning to continue with the paper form...?"
+
+Answer: The goal is to move away from paper forms. In the future, the internal users would be notified by the system, likely through a notification, that an end customer has made a change to their authorized signer list.
+
+"When the user signs [in], how do they... put the AE account [number] incorporate to assigned corporate assigners...?"
+
+Answer: The response acknowledges that the user needs to be able to "align the auth signer to the account." This is a known, unsolved problem.
+
+"How do they know which account to be pulled? ... How do I know which account number I should be tagging is to?"
+
+Answer: This is the core challenge. The team admits they don't have a solution yet. The current manual process involves reading through documents and emails to find the appropriate person and account. The goal of the new service is to build a repository that can make this association, but the method for doing so has not yet been defined.
+
+"How are we going to maintain these many authorized signers for these many accounts? ... How is this going to be visualized in Corporate Connect, and how are we going to let the user edit it?"
+
+Answer: The conversation confirms that this is a "big question." They acknowledge the complexity of visualizing a single record that may be tied to multiple accounts and the need for a well-structured database to support this. The team recognizes that a simple database and API won't be enough; they need a solution that can uniquely identify loans or accounts across different systems.
+
+
+
+
+Based on the transcript, here are the direct answers to the questions being discussed:
+
+1. What are the three use cases?
+The three use cases being discussed are:
+
+Initial Onboarding: How to digitize the existing, paper-based authorized signer lists (ASLs).
+
+Maintenance: How to handle ongoing changes to ASLs for internal users.
+
+End-Customer Maintenance: How to allow end customers to perform their own updates to their ASLs.
+
+2. Is it a new customer or existing customer onboarding?
+The conversation clarifies that both new and existing customers are part of the onboarding process. The primary focus for the first use case is on how to handle the existing customer base, whose ASLs are currently on paper. The new service will need to get them "onboarded" by digitizing their information.
+
+3. How many documents are they talking about?
+The conversation states that for CME alone, they process an average of 500 changes per month. The total number of existing ASLs for CME is estimated to be "in the thousands." This number is even higher when you consider all lines of business.
+
+4. What is the biggest challenge with these forms?
+The most significant problem identified is the lack of consistency in the forms. The biggest challenge is that they often do not contain specific account numbers. This means it is difficult to programmatically link an authorized signer to the correct accounts. Today, this is done manually by internal users who read through the documents and emails to make the connection.
+
+5. What is the plan to handle these challenges?
+The plan is to build a new service or repository that can store and manage the authorized signer lists digitally. This service will need to solve the core problem of associating signers with accounts, even when that information isn't explicit on the form. The ultimate goal is to facilitate a workflow where:
+
+Paper documents are converted to digital data (using a tool or a manual process).
+
+The data is stored in a centralized repository that correctly maps signers to accounts.
+
+The end customer can eventually log into Corporate Connect and make their own updates, which are then automatically processed by the bank.
+
+
+
+
+
+proposed solution:
+
+Based on the challenges identified in the transcript, here are my proposed solutions to address the key pain points of onboarding, maintenance, and data association.
+
+Proposed Solution: The "Auth Signer AI" Workflow
+My proposed solution is a three-phased approach that leverages AI and a centralized database to streamline the entire process, from initial digitization to ongoing customer-managed maintenance.
+
+Phase 1: AI-Powered Onboarding and Data Grounding
+The most critical problem is the initial digitization and grounding of data that lacks explicit account numbers.
+
+Document Ingestion: The workflow would begin with the team scanning and ingesting all historical paper ASLs.
+
+Intelligent Document Processing (IDP): The documents would be fed into an IDP system, an AI model specifically trained to recognize and extract key fields from financial documents. The model would identify the signer's name, institution, and any visible account numbers.
+
+Knowledge Graph Creation: For documents without clear account numbers, the IDP would identify the associated institution (e.g., "Alaska Student Loan Corporation"). This information, along with the signer's name and other details, would be stored in a knowledge graph database. This graph-based structure is ideal for representing complex, non-linear relationships. It would link the institution to known accounts by cross-referencing against existing client databases (like a database of all CME accounts).
+
+Confidence Scoring: The AI would assign a "confidence score" to each match. For low-confidence matches, the system would flag the record for manual review by an internal user, who can confirm the association and "train" the AI for future documents.
+
+Phase 2: Building the Centralized Repository
+The new service, as mentioned in the transcript, would be a centralized, flexible database that acts as the single source of truth for all authorized signer data.
+
+Database Structure: The database would be designed to handle the one-to-many relationship (one signer linked to multiple accounts) and the many-to-one relationship (multiple signers for a single institution). This flexible structure would use a document-based or graph-based model instead of a rigid relational database, making it easier to expand to other business lines.
+
+API Layer: A set of secure APIs would be built on top of this repository. These APIs would allow different systems to access and update signer information. For example, a "GetSignersByAccountID" API and a "UpdateSignerDetails" API would be essential.
+
+Phase 3: A Streamlined Corporate Connect User Experience
+This phase focuses on empowering both internal users and end customers to interact with the new service seamlessly.
+
+End-Customer Portal: The Corporate Connect portal would be enhanced with a new module for Authorized Signer management. The customer would be able to:
+
+Search for their existing ASL by institution or account.
+
+View a clean, consolidated list of all associated signers and accounts.
+
+Add, remove, or modify signers through a user-friendly interface.
+
+Crucially, the UI would handle the complexity of the underlying data, displaying a single signer record even if it is linked to multiple accounts.
+
+Internal User Dashboard: Internal users would have a new dashboard that provides a consolidated view of all pending ASL changes. It would include the "flagged" records from the AI system that require manual review. This dashboard would replace the current manual, paper-based process.
+
+Automated Notifications: The system would automatically send notifications (via email or within the Corporate Connect platform) to both internal users and customers, confirming when a change has been submitted, reviewed, or approved.
+
+
+
+

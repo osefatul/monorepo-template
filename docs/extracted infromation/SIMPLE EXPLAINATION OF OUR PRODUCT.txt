@@ -1,0 +1,68 @@
+SIMPLE EXPLAINATION OF OUR PRODUCT:
+
+
+
+1. The Business Problem: Why This Project Exists
+Imagine you own a company that banks with a huge financial institution. To keep your company's money safe, only a few people (like you, your CFO, or your Head of Operations) are allowed to access the accounts, make changes, or approve transactions. These people are your "Authorized Signers".
+
+Now imagine you need to change your list of signers. Maybe your CFO just retired, and you need to add their replacement. Right now, this process is a complete mess for the bank.
+
+It's manual: You have to call or email someone at the bank.
+
+It's inconsistent: Every business unit at the bank has its own forms, its own rules, and its own process. Some use email, others use a physical letter.
+
+It's a huge risk: With so many manual steps, it's easy for errors to creep in. A wrong name or an outdated list could lead to a fraudulent transaction.
+
+It's a pain for everyone: It takes days, weeks, or even months to get a simple change processed. Neither the client nor the bank employees can see where the request is in the process.
+
+This project exists to fix all of that. Our goal is to create a single, automated, and secure system that works for everyone.
+
+2. The Product: What We Are Building
+The final product is a digital service that allows the bank's clients to manage their authorized signer lists themselves. It has two main parts: a client-facing portal and an internal interface for bank employees.
+
+Client-Facing Portal
+This is a new section that will be added to the bank's main online banking site for corporate clients, called Corporate Connect.
+
+Self-Service Dashboard: The moment a client logs in, they'll see a clean dashboard showing a complete and up-to-date list of all their authorized signers.
+
+Easy Updates: They can simply click a button to add a new signer, remove a retired one, or update someone's contact information.
+
+Real-Time Status: After submitting a request, they can see exactly where it is in the process, eliminating the need to call the bank for updates. For example, the status could say "Pending Review," "Awaiting Second Approval," or "Completed."
+
+Digital Attestation: The system will allow clients to digitally confirm that their authorized signer list is accurate. This automates a crucial compliance step that's currently done manually.
+
+Internal Interface
+This is for the bank's employees who need to manage or verify authorized signer information.
+
+Single Source of Truth: Instead of searching through emails, shared drives, and different systems, an employee can simply go to a single page to see the latest, verified list for any client.
+
+Task Management: If a client's request requires a second signature or validation from a risk partner, the system will automatically create a task for that employee to review and approve.
+
+3. The Technology and Architecture: How We Are Building It
+This isn't a simple website; it's a foundational service for the bank. The system is designed with a "microservice" approach, meaning it's a small, independent service that does one thing very well and can be reused by many other parts of the bank.
+
+Core Components
+The Backend (The Engine): We'll build a Spring Boot application, which is a powerful tool for creating robust backend services. This service will contain all the business logic, security rules, and APIs. Think of it as the brain of the entire system.
+
+The Database (The Memory): All of the authorized signer information will be stored in a SQL Server database. This is our "single source of truth" that everyone will rely on.
+
+The Frontend (The Face): The client-facing portal will be built with React, a popular technology for creating fast, modern, and user-friendly web interfaces. It will be integrated directly into the existing Corporate Connect application.
+
+How It Connects to Other Services
+Our new service won't live in a silo. It needs to talk to other systems in the bank.
+
+WebKYC: This is the bank's existing system for "Know Your Customer" compliance. Our service will automatically send new signer information to WebKYC to perform background checks and other verifications.
+
+Service Request Platform: We'll integrate with this platform so that bank employees can initiate a request on a client's behalf, which then kicks off our digital workflow.
+
+FileNet: Many business lines currently store documents in FileNet. Our service will push the final, digitally signed authorized signer documents into this system for long-term storage and compliance.
+
+Kafka: If we have to handle thousands of updates at once (for example, if a large client wants to update their entire list of signers in one go), we'll use a service like Kafka. It's a "message broker" that can handle huge volumes of data without slowing down our main service.
+
+Key Projects & Partnerships
+Onboarding: We're not just building this for existing clients. We're partnering with other teams to ensure that new clients, as they open their accounts, can have their authorized signer lists captured digitally from the very beginning.
+
+Cognizant AI Project: We may partner with an AI team from Cognizant. They are exploring using AI to read and extract data from existing physical documents (like old PDFs of authorized signer lists). This could help us migrate decades of old data into our new system.
+
+This project is a perfect example of a digital transformation initiative. We're not just building a new tool; we're fundamentally changing a core business process to make it faster, safer, and more efficient for both our clients and our
+ employees.

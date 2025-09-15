@@ -1,0 +1,27 @@
+The Solution: A Unified, Digital Approach
+The proposed solution is a centralized Auth Signer service that acts as the single source of truth for all ASL data.
+
+User Interface: The plan is to create both an external interface for clients and an internal interface for bank employees within the existing Corporate Connect platform.
+
+User Personas: The project focuses on four key personas:
+
+Client/User: The authorized individual who initiates a change request.
+
+Request Recipient: The bank employee (e.g., client manager, product ops) who receives the initial request.
+
+Risk & Fraud: The team that assists with validation when a request is unclear or suspect.
+
+WebKYC: The existing system that flags and validates individuals as authorized signers.
+
+3. The End-to-End User Journey (The "Happy Path")
+Client Initiation: A client is directed to the Auth Signer section in Corporate Connect. They authenticate and access the section.
+
+Request Submission: The client uses the system to either add, remove, or attest to a signer on an existing list.
+
+Automated Validation: The Auth Signer service validates the request. The simplest path is a straight-through process where the request is approved automatically if a single person has the authority.
+
+Multi-Person Approval: For more complex scenarios, the service can create a task for another authorized signer or internal team to provide a secondary approval. The system won't proceed until all required approvals are collected.
+
+System of Record Update: Once the request is approved, the Auth Signer service becomes the single source of truth. It updates itself and then uses APIs to push the new information to other systems of record, like WebKYC and FileNet.
+
+Internal Visibility: Bank employees can access the internal interface to quickly and easily see the latest ASL for any client, eliminating the need to search through disparate systems.
