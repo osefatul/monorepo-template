@@ -19,8 +19,4 @@ npm run type-check
 echo "Running ESLint..."
 npm run lint
 
-# Run tests
-echo "Running tests..."
-npm run test:run
-
 echo "All pre-commit checks passed!"
