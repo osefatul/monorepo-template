@@ -1,4 +1,3 @@
 export * from './components'
-export * from './utils'
 export * from './types'
-export * from './config/env'
+export * from './utils'

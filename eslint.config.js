@@ -1,39 +1,52 @@
 import js from '@eslint/js'
-import globals from 'globals'
+import importPlugin from 'eslint-plugin-import'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import react from 'eslint-plugin-react'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
-import importPlugin from 'eslint-plugin-import'
 import unusedImports from 'eslint-plugin-unused-imports'
-import preferArrow from 'eslint-plugin-prefer-arrow'
+import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', '**/*.d.ts', '**/coverage'] },
+  // Base JavaScript recommended rules
+  js.configs.recommended,
+
+  // Global configuration for all files
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.strictTypeChecked,
-      react.configs.flat.recommended,
-      react.configs.flat['jsx-runtime'],
-      jsxA11y.configs.strict,
-    ],
-    files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      ecmaVersion: 2022,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2024,
+      },
       parserOptions: {
-        project: ['./tsconfig.json', './apps/*/tsconfig.json', './packages/*/tsconfig.json'],
+        ecmaVersion: 2024,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
+
+  // TypeScript source files only (with type checking)
+  {
+    files: ['**/src/**/*.{ts,tsx}', '**/packages/**/src/**/*.{ts,tsx}'],
+    extends: [...tseslint.configs.recommendedTypeChecked, ...tseslint.configs.stylisticTypeChecked],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
+      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      'import': importPlugin,
+      'jsx-a11y': jsxA11y,
+      import: importPlugin,
       'unused-imports': unusedImports,
-      'prefer-arrow': preferArrow,
     },
     settings: {
       react: {
@@ -42,18 +55,153 @@ export default tseslint.config(
       'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
-          project: ['./tsconfig.json', './apps/*/tsconfig.json', './packages/*/tsconfig.json'],
+        },
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
     },
     rules: {
-      // React Rules
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // ===== JAVASCRIPT/TYPESCRIPT CORE RULES =====
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+      'prefer-const': 'error',
+      'no-var': 'error',
+
+      // Code Quality (Balanced)
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      curly: ['warn', 'all'],
+      'brace-style': ['error', '1tbs', { allowSingleLine: true }],
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+      'no-script-url': 'error',
+      'no-alert': 'error',
+      'no-console': 'warn',
+      'no-debugger': 'error',
+      'no-empty': ['error', { allowEmptyCatch: true }],
+      'no-extra-boolean-cast': 'error',
+      'no-extra-semi': 'error',
+      'no-irregular-whitespace': 'error',
+      'no-unreachable': 'error',
+      'valid-typeof': 'error',
+
+      // Modern JavaScript
+      'prefer-arrow-callback': 'error',
+      'prefer-template': 'error',
+      'prefer-spread': 'error',
+      'prefer-rest-params': 'error',
+      'prefer-destructuring': [
+        'error',
+        {
+          VariableDeclarator: { array: false, object: true },
+          AssignmentExpression: { array: false, object: false },
+        },
+      ],
+      'object-shorthand': 'error',
+      'quote-props': ['error', 'as-needed'],
+
+      // ===== TYPESCRIPT SPECIFIC RULES (Balanced) =====
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'off', // Allow when necessary
+      '@typescript-eslint/prefer-as-const': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/strict-boolean-expressions': [
+        'warn',
+        {
+          allowString: true,
+          allowNumber: true,
+          allowNullableObject: true,
+          allowNullableBoolean: false,
+          allowNullableString: true,
+          allowNullableNumber: true,
+          allowAny: false,
+        },
+      ],
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-misused-promises': 'off', // Allow async event handlers
+      '@typescript-eslint/await-thenable': 'error',
+      '@typescript-eslint/require-await': 'error',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-expect-error': 'allow-with-description',
+          'ts-ignore': false,
+          'ts-nocheck': false,
+          'ts-check': false,
+        },
+      ],
+      '@typescript-eslint/prefer-readonly': 'error',
+
+      // Naming Conventions (Essential only)
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'variable',
+          format: ['camelCase'],
+          leadingUnderscore: 'allow',
+          trailingUnderscore: 'forbid',
+        },
+        {
+          selector: 'variable',
+          modifiers: ['const'],
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+        },
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+        },
+        {
+          selector: 'interface',
+          format: ['PascalCase'],
+          custom: {
+            regex: '^I[A-Z]',
+            match: false,
+          },
+        },
+        {
+          selector: 'typeAlias',
+          format: ['PascalCase'],
+        },
+        {
+          selector: 'class',
+          format: ['PascalCase'],
+        },
+      ],
+
+      // ===== REACT RULES (Balanced) =====
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      'react/jsx-key': 'error',
+      'react/display-name': 'error',
+      'react/jsx-key': [
+        'error',
+        {
+          checkFragmentShorthand: true,
+          checkKeyMustBeforeSpread: true,
+          warnOnDuplicates: true,
+        },
+      ],
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-undef': 'error',
       'react/no-children-prop': 'error',
@@ -67,94 +215,53 @@ export default tseslint.config(
       'react/no-unescaped-entities': 'error',
       'react/no-unknown-property': 'error',
       'react/require-render-return': 'error',
+
+      // React Best Practices (Balanced)
       'react/jsx-boolean-value': ['error', 'never'],
       'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
       'react/jsx-fragments': ['error', 'syntax'],
-      'react/jsx-no-leaked-render': 'error',
-      'react/jsx-no-useless-fragment': 'error',
+      'react/jsx-no-leaked-render': 'warn',
+      'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
       'react/jsx-pascal-case': 'error',
-      'react/jsx-sort-props': ['error', { callbacksLast: true, shorthandFirst: true }],
       'react/no-array-index-key': 'warn',
       'react/no-unstable-nested-components': 'error',
       'react/self-closing-comp': 'error',
+      'react/jsx-sort-props': 'off',
+      'react/function-component-definition': 'off',
+      'react/hook-use-state': 'warn',
+      'react/jsx-no-constructed-context-values': 'error',
 
-      // TypeScript Rules - Enforcing Best Practices
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unused-vars': 'off', // Handled by unused-imports
-      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-      '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
-      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
-      '@typescript-eslint/no-import-type-side-effects': 'error',
-      '@typescript-eslint/prefer-nullish-coalescing': 'error',
-      '@typescript-eslint/prefer-optional-chain': 'error',
-      '@typescript-eslint/strict-boolean-expressions': 'error',
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-misused-promises': 'error',
-      '@typescript-eslint/await-thenable': 'error',
-      '@typescript-eslint/require-await': 'error',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-      '@typescript-eslint/prefer-as-const': 'error',
-      '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-non-null-assertion': 'error',
+      // React Hooks
+      ...reactHooks.configs.recommended.rules,
+      'react-hooks/exhaustive-deps': 'error',
 
-      // Naming Conventions - Enforcing Best Practices
-      '@typescript-eslint/naming-convention': [
-        'error',
-        {
-          selector: 'variableLike',
-          format: ['camelCase'],
-          leadingUnderscore: 'allow',
-        },
-        {
-          selector: 'variable',
-          modifiers: ['const'],
-          format: ['camelCase', 'UPPER_CASE'],
-        },
-        {
-          selector: 'typeLike',
-          format: ['PascalCase'],
-        },
-        {
-          selector: 'interface',
-          format: ['PascalCase'],
-          custom: {
-            regex: '^I[A-Z]',
-            match: false,
-          },
-        },
-        {
-          selector: 'enum',
-          format: ['PascalCase'],
-        },
-        {
-          selector: 'enumMember',
-          format: ['UPPER_CASE'],
-        },
-        {
-          selector: 'function',
-          format: ['camelCase', 'PascalCase'], // PascalCase for React components
-        },
-        {
-          selector: 'parameter',
-          format: ['camelCase'],
-          leadingUnderscore: 'allow',
-        },
-      ],
+      // React Refresh
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
-      // Import/Export Rules - Enforcing Import Organization
+      // ===== ACCESSIBILITY RULES (Essential) =====
+      'jsx-a11y/alt-text': 'error',
+      'jsx-a11y/anchor-has-content': 'error',
+      'jsx-a11y/anchor-is-valid': 'error',
+      'jsx-a11y/aria-props': 'error',
+      'jsx-a11y/aria-proptypes': 'error',
+      'jsx-a11y/aria-role': 'error',
+      'jsx-a11y/aria-unsupported-elements': 'error',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/heading-has-content': 'error',
+      'jsx-a11y/interactive-supports-focus': 'error',
+      'jsx-a11y/label-has-associated-control': 'error',
+      'jsx-a11y/no-access-key': 'error',
+      'jsx-a11y/no-autofocus': 'error',
+      'jsx-a11y/no-distracting-elements': 'error',
+      'jsx-a11y/role-has-required-aria-props': 'error',
+      'jsx-a11y/role-supports-aria-props': 'error',
+      'jsx-a11y/tabindex-no-positive': 'error',
+
+      // ===== IMPORT/EXPORT RULES =====
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'type'],
           pathGroups: [
             {
               pattern: 'react',
@@ -162,29 +269,9 @@ export default tseslint.config(
               position: 'before',
             },
             {
-              pattern: 'react/**',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              pattern: 'next',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              pattern: 'next/**',
-              group: 'external',
-              position: 'before',
-            },
-            {
               pattern: '@shared/**',
               group: 'internal',
               position: 'before',
-            },
-            {
-              pattern: '@/**',
-              group: 'internal',
-              position: 'after',
             },
           ],
           pathGroupsExcludedImportTypes: ['react'],
@@ -198,84 +285,104 @@ export default tseslint.config(
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
-      'import/no-unresolved': 'error',
       'import/no-cycle': 'error',
       'import/no-self-import': 'error',
       'import/no-useless-path-segments': 'error',
-      'import/prefer-default-export': 'off',
-      'import/no-default-export': 'off',
+      'import/no-unresolved': 'error',
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
 
-      // Unused Imports - Clean Code
+      // ===== UNUSED IMPORTS =====
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'error',
-        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
-      ],
-
-      // General Code Quality Rules
-      'prefer-const': 'error',
-      'no-var': 'error',
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-alert': 'error',
-      'no-eval': 'error',
-      'no-implied-eval': 'error',
-      'no-script-url': 'error',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
-      'brace-style': ['error', '1tbs'],
-      'prefer-template': 'error',
-      'object-shorthand': 'error',
-      'prefer-destructuring': ['error', { object: true, array: false }],
-
-      // Arrow Functions - Enforcing Modern JavaScript
-      'prefer-arrow/prefer-arrow-functions': [
-        'error',
         {
-          disallowPrototype: true,
-          singleReturnOnly: false,
-          classPropertiesAllowed: false,
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
         },
       ],
-      'arrow-body-style': ['error', 'as-needed'],
-      'arrow-parens': ['error', 'avoid'],
-
-      // File Naming and Component Structure (Custom Rules)
-      'react/jsx-filename-extension': [
-        'error',
-        { extensions: ['.tsx'] },
-      ],
-
-      // Performance Rules
-      'react-hooks/exhaustive-deps': 'error',
-      'react-hooks/rules-of-hooks': 'error',
-
-      // Accessibility Rules (from jsx-a11y)
-      'jsx-a11y/alt-text': 'error',
-      'jsx-a11y/anchor-has-content': 'error',
-      'jsx-a11y/anchor-is-valid': 'error',
-      'jsx-a11y/aria-props': 'error',
-      'jsx-a11y/aria-proptypes': 'error',
-      'jsx-a11y/aria-role': 'error',
-      'jsx-a11y/aria-unsupported-elements': 'error',
-      'jsx-a11y/click-events-have-key-events': 'error',
-      'jsx-a11y/heading-has-content': 'error',
-      'jsx-a11y/interactive-supports-focus': 'error',
-      'jsx-a11y/label-has-associated-control': 'error',
-      'jsx-a11y/media-has-caption': 'error',
-      'jsx-a11y/mouse-events-have-key-events': 'error',
-      'jsx-a11y/no-access-key': 'error',
-      'jsx-a11y/no-autofocus': 'error',
-      'jsx-a11y/no-distracting-elements': 'error',
-      'jsx-a11y/no-interactive-element-to-noninteractive-role': 'error',
-      'jsx-a11y/no-noninteractive-element-interactions': 'error',
-      'jsx-a11y/no-noninteractive-element-to-interactive-role': 'error',
-      'jsx-a11y/no-redundant-roles': 'error',
-      'jsx-a11y/no-static-element-interactions': 'error',
-      'jsx-a11y/role-has-required-aria-props': 'error',
-      'jsx-a11y/role-supports-aria-props': 'error',
-      'jsx-a11y/scope': 'error',
-      'jsx-a11y/tabindex-no-positive': 'error',
     },
   },
+
+  // General configuration for all JS/TS files (without type checking)
+  {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      import: importPlugin,
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      // Basic rules that don't require type information
+      'no-unused-vars': 'off',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'no-console': 'warn',
+      'unused-imports/no-unused-imports': 'error',
+    },
+  },
+
+  // Ignores
+  {
+    ignores: [
+      '**/dist/**',
+      '**/build/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '**/*.d.ts',
+      '**/.next/**',
+      '**/.nuxt/**',
+      '**/.output/**',
+      '**/.vscode/**',
+      '**/.husky/**',
+      '**/generated/**',
+    ],
+  },
+
+  // Test files
+  {
+    files: ['**/*.{test,spec}.{ts,tsx,js,jsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      'react/display-name': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
+
+  // Configuration files (JavaScript)
+  {
+    files: ['**/*.config.{js,mjs,cjs}', '**/eslint.config.{js,mjs,cjs}'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+
+  // Configuration files (TypeScript) - Basic rules only
+  {
+    files: ['**/*.config.ts', '**/vite.config.ts', '**/vitest.config.ts', '**/vitest.setup.ts'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
+  // Script files
+  {
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-console': 'off',
+    },
+  }
 )

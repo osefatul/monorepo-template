@@ -1,10 +1,12 @@
 import { useState } from 'react'
+
 import { Button, Card, LoadingSpinner } from '@shared/components'
+import type { User } from '@shared/types'
 import { formatDate, validateEmail } from '@shared/utils'
-import { User } from '@shared/types'
+
 import './App.css'
 
-function App() {
+const App = () => {
   const [email, setEmail] = useState('')
   const [isValidEmail, setIsValidEmail] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -13,17 +15,19 @@ function App() {
     id: 'ext-001',
     email: 'external@partner.com',
     name: 'External Partner',
-    role: 'external'
+    role: 'external',
   }
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
+    const { value } = e.target
     setEmail(value)
     setIsValidEmail(validateEmail(value))
   }
 
   const handleSignIn = async () => {
-    if (!isValidEmail) return
+    if (!isValidEmail) {
+      return
+    }
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 1500))
     setLoading(false)
@@ -33,35 +37,33 @@ function App() {
     <>
       <div>
         <h1>Corp Auth Signer - External UI</h1>
-        <p>Welcome, {user.name} ({user.role})</p>
+        <p>
+          Welcome, {user.name} ({user.role})
+        </p>
         <p>Session started: {formatDate(new Date())}</p>
       </div>
-      
-      <Card title="External Authentication" className="max-w-md mx-auto">
+
+      <Card className="max-w-md mx-auto" title="External Authentication">
         <div className="space-y-4">
           <div className="card">
             <input
-              type="email"
+              className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter email address"
+              type="email"
               value={email}
               onChange={handleEmailChange}
-              className="w-full p-2 border border-gray-300 rounded"
             />
             <p className={`text-sm mt-1 ${isValidEmail ? 'text-green-600' : 'text-red-600'}`}>
-              {email && (isValidEmail ? 'Valid email' : 'Invalid email format')}
+              {email ? (isValidEmail ? 'Valid email' : 'Invalid email format') : null}
             </p>
           </div>
-          
+
           <div className="flex gap-2">
-            <Button 
-              onClick={handleSignIn}
-              disabled={!isValidEmail}
-              loading={loading}
-            >
+            <Button disabled={!isValidEmail} loading={loading} onClick={handleSignIn}>
               Sign In
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => {
                 setEmail('')
                 setIsValidEmail(false)
@@ -70,22 +72,20 @@ function App() {
               Clear
             </Button>
           </div>
-          
-          {loading && (
+
+          {loading ? (
             <div className="flex justify-center">
               <LoadingSpinner />
             </div>
-          )}
-          
+          ) : null}
+
           <p>
             Edit <code>src/App.tsx</code> and save to test HMR
           </p>
         </div>
       </Card>
-      
-      <p className="read-the-docs">
-        External application for corporate authentication signing
-      </p>
+
+      <p className="read-the-docs">External application for corporate authentication signing</p>
     </>
   )
 }

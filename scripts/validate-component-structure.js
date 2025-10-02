@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-
 import { readFile } from 'fs/promises'
-import { join } from 'path'
 import { glob } from 'glob'
 
 /**
@@ -18,7 +16,7 @@ const addViolation = (type, filePath, line, message, suggestion = '') => {
     line,
     message,
     suggestion,
-    severity: type === 'error' ? 'ERROR' : 'WARNING'
+    severity: type === 'error' ? 'ERROR' : 'WARNING',
   })
 }
 
@@ -26,25 +24,27 @@ const validateComponentStructure = (content, filePath) => {
   const lines = content.split('\n')
 
   // Check for React import
-  const hasReactImport = content.includes('import') &&
-    (content.includes('from \'react\'') || content.includes('from "react"'))
+  const hasReactImport =
+    content.includes('import') &&
+    (content.includes("from 'react'") || content.includes('from "react"'))
 
   if (!hasReactImport && content.includes('React.')) {
-    addViolation('error', filePath, 1,
-      'Missing React import',
-      'Add: import { ... } from \'react\''
-    )
+    addViolation('error', filePath, 1, 'Missing React import', "Add: import { ... } from 'react'")
   }
 
   // Check for TypeScript interface for props
   const hasInterface = content.includes('interface ') && content.includes('Props')
   const hasType = content.includes('type ') && content.includes('Props')
-  const isComponent = content.includes('export') &&
+  const isComponent =
+    content.includes('export') &&
     (content.includes('const ') || content.includes('function ')) &&
     content.includes('return')
 
   if (isComponent && !hasInterface && !hasType) {
-    addViolation('error', filePath, 1,
+    addViolation(
+      'error',
+      filePath,
+      1,
       'Component missing TypeScript props interface/type',
       'Add interface ComponentNameProps { ... } for component props'
     )
@@ -56,7 +56,10 @@ const validateComponentStructure = (content, filePath) => {
     componentMatches.forEach(match => {
       const componentName = match.match(/export\s+const\s+(\w+)\s*=/)[1]
       if (!/^[A-Z][a-zA-Z0-9]*$/.test(componentName)) {
-        addViolation('error', filePath, 1,
+        addViolation(
+          'error',
+          filePath,
+          1,
           `Component name must be PascalCase: ${componentName}`,
           `Rename to: ${componentName.charAt(0).toUpperCase() + componentName.slice(1)}`
         )
@@ -72,7 +75,10 @@ const validateComponentStructure = (content, filePath) => {
     }
 
     if (line.includes('function ') && line.includes('props') && !line.includes('{')) {
-      addViolation('warning', filePath, index + 1,
+      addViolation(
+        'warning',
+        filePath,
+        index + 1,
         'Consider destructuring props in function parameters',
         'Use: ({ prop1, prop2 }: Props) instead of (props: Props)'
       )
@@ -82,7 +88,10 @@ const validateComponentStructure = (content, filePath) => {
   // Check for proper JSX return
   const hasReturn = content.includes('return (') || content.includes('return <')
   if (isComponent && !hasReturn) {
-    addViolation('error', filePath, 1,
+    addViolation(
+      'error',
+      filePath,
+      1,
       'Component must return JSX',
       'Add proper return statement with JSX'
     )
@@ -96,8 +105,14 @@ const validateComponentStructure = (content, filePath) => {
       const imports = importMatch[1].split(',').map(imp => imp.trim())
       imports.forEach(imp => {
         const cleanImport = imp.replace(/\s+as\s+\w+/, '') // Remove 'as' aliases
-        if (!content.includes(cleanImport) || content.indexOf(cleanImport) === content.indexOf(line)) {
-          addViolation('warning', filePath, index + 1,
+        if (
+          !content.includes(cleanImport) ||
+          content.indexOf(cleanImport) === content.indexOf(line)
+        ) {
+          addViolation(
+            'warning',
+            filePath,
+            index + 1,
             `Unused import: ${cleanImport}`,
             'Remove unused import'
           )
@@ -108,8 +123,15 @@ const validateComponentStructure = (content, filePath) => {
 
   // Check for console.log (should be removed in production)
   lines.forEach((line, index) => {
-    if (line.includes('console.log') || line.includes('console.warn') || line.includes('console.error')) {
-      addViolation('warning', filePath, index + 1,
+    if (
+      line.includes('console.log') ||
+      line.includes('console.warn') ||
+      line.includes('console.error')
+    ) {
+      addViolation(
+        'warning',
+        filePath,
+        index + 1,
         'Console statements found',
         'Remove console statements before committing'
       )
@@ -121,7 +143,10 @@ const validateComponentStructure = (content, filePath) => {
   const hasNamedExport = content.includes('export const') || content.includes('export function')
 
   if (!hasDefaultExport && !hasNamedExport) {
-    addViolation('error', filePath, 1,
+    addViolation(
+      'error',
+      filePath,
+      1,
       'Component must be exported',
       'Add export statement for your component'
     )
@@ -129,14 +154,20 @@ const validateComponentStructure = (content, filePath) => {
 
   // Check for accessibility attributes
   if (content.includes('<button') && !content.includes('aria-') && !content.includes('role=')) {
-    addViolation('warning', filePath, 1,
+    addViolation(
+      'warning',
+      filePath,
+      1,
       'Consider adding accessibility attributes to interactive elements',
       'Add aria-label, role, or other accessibility attributes'
     )
   }
 
   if (content.includes('<img') && !content.includes('alt=')) {
-    addViolation('error', filePath, 1,
+    addViolation(
+      'error',
+      filePath,
+      1,
       'Images must have alt attributes',
       'Add alt="" or alt="description" to <img> tags'
     )
@@ -144,7 +175,10 @@ const validateComponentStructure = (content, filePath) => {
 
   // Check for key prop in lists
   if (content.includes('.map(') && content.includes('<') && !content.includes('key=')) {
-    addViolation('error', filePath, 1,
+    addViolation(
+      'error',
+      filePath,
+      1,
       'Missing key prop in list items',
       'Add unique key prop to elements in .map()'
     )
@@ -156,7 +190,10 @@ const validateComponentStructure = (content, filePath) => {
     const stateLines = lines.filter(line => line.includes('set') && line.includes('('))
     stateLines.forEach((line, index) => {
       if (line.includes('.push(') || line.includes('.pop(') || line.includes('.splice(')) {
-        addViolation('error', filePath, index + 1,
+        addViolation(
+          'error',
+          filePath,
+          index + 1,
           'Direct state mutation detected',
           'Use immutable updates: setState([...state, newItem])'
         )
@@ -177,7 +214,10 @@ const validateComponentStructure = (content, filePath) => {
 
         // This is a simplified check - a real implementation would be more sophisticated
         if (match.includes('state') && !deps.includes('state')) {
-          addViolation('warning', filePath, 1,
+          addViolation(
+            'warning',
+            filePath,
+            1,
             'useEffect may be missing dependencies',
             'Ensure all used variables are in the dependency array'
           )
@@ -205,20 +245,22 @@ const scanComponentFiles = async () => {
 
 const generateReport = () => {
   if (VIOLATIONS.length === 0) {
-    console.log('✅ All components follow the best practices!')
+    console.log(' All components follow the best practices!')
     return true
   }
 
-  console.log('📋 Component Structure Validation Report\n')
-  console.log('=' .repeat(60))
+  console.log(' Component Structure Validation Report\n')
+  console.log('='.repeat(60))
 
   const errors = VIOLATIONS.filter(v => v.severity === 'ERROR')
   const warnings = VIOLATIONS.filter(v => v.severity === 'WARNING')
 
   if (errors.length > 0) {
-    console.log(`\n❌ ERRORS (${errors.length}):\n`)
+    console.log(`\n ERRORS (${errors.length}):\n`)
     errors.forEach((violation, index) => {
-      console.log(`${index + 1}. ${violation.filePath}${violation.line ? `:${violation.line}` : ''}`)
+      console.log(
+        `${index + 1}. ${violation.filePath}${violation.line ? `:${violation.line}` : ''}`
+      )
       console.log(`   ${violation.message}`)
       if (violation.suggestion) {
         console.log(`   💡 Suggestion: ${violation.suggestion}`)
@@ -228,9 +270,11 @@ const generateReport = () => {
   }
 
   if (warnings.length > 0) {
-    console.log(`\n⚠️  WARNINGS (${warnings.length}):\n`)
+    console.log(`\n  WARNINGS (${warnings.length}):\n`)
     warnings.forEach((violation, index) => {
-      console.log(`${index + 1}. ${violation.filePath}${violation.line ? `:${violation.line}` : ''}`)
+      console.log(
+        `${index + 1}. ${violation.filePath}${violation.line ? `:${violation.line}` : ''}`
+      )
       console.log(`   ${violation.message}`)
       if (violation.suggestion) {
         console.log(`   💡 Suggestion: ${violation.suggestion}`)
@@ -239,7 +283,7 @@ const generateReport = () => {
     })
   }
 
-  console.log('=' .repeat(60))
+  console.log('='.repeat(60))
   console.log(`\nSummary: ${errors.length} errors, ${warnings.length} warnings`)
   console.log('\nPlease fix the errors before committing your changes.')
   console.log('Refer to DEVELOPMENT_BEST_PRACTICES.md for detailed guidelines.\n')
@@ -249,7 +293,7 @@ const generateReport = () => {
 
 // Main execution
 const main = async () => {
-  console.log('🔍 Validating React component structure and best practices...\n')
+  console.log(' Validating React component structure and best practices...\n')
 
   await scanComponentFiles()
   const success = generateReport()

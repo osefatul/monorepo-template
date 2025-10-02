@@ -1,16 +1,32 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    // === TARGET AND MODULE CONFIGURATION (2025 Standards) ===
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "useDefineForClassFields": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    // === JAVASCRIPT SUPPORT ===
     "allowJs": false,
+    "checkJs": false,
+
+    // === INTEROP AND COMPATIBILITY ===
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
 
-    // Strict Type Checking Options - Enforcing Best Practices
+    // === JSX CONFIGURATION ===
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    // === STRICT TYPE CHECKING (Latest Industry Standards) ===
     "strict": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
@@ -21,29 +37,45 @@
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
 
-    // Additional Checks
+    // === ADDITIONAL TYPE CHECKS (Enhanced 2025) ===
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
 
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+    // === EMIT CONFIGURATION ===
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "importHelpers": true,
+    "downlevelIteration": true,
+
+    // === MODULE DETECTION (Latest) ===
+    "moduleDetection": "force",
+
+    // === PERFORMANCE AND DEBUGGING ===
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+
+    // === PATH MAPPING ===
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["packages/shared/src/*"],
       "@shared": ["packages/shared/src"],
       "@internal/*": ["apps/corp-authsigner-ui-internal/src/*"],
       "@external/*": ["apps/corp-authsigner-ui-external/src/*"]
-    }
+    },
+
+    // === ADVANCED OPTIONS (2025 Standards) ===
+    "preserveConstEnums": true,
+    "verbatimModuleSyntax": false,
+    "allowArbitraryExtensions": false,
+    "noErrorTruncation": true,
+    "assumeChangesOnlyAffectDirectDependencies": true
   },
   "references": [
     {
