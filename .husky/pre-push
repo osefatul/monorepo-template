@@ -1,0 +1,35 @@
+echo "🚀 Running pre-push checks..."
+
+# Build all packages to ensure they compile correctly
+echo "Building all packages..."
+npm run build:all
+
+# Run comprehensive linting across the entire codebase
+echo "🔍 Running comprehensive linting..."
+npm run lint
+
+# Run all tests to ensure nothing is broken
+echo "Running all tests..."
+npm run test
+
+# Run type checking across all workspaces
+echo "Running TypeScript type checking..."
+npm run type-check
+
+# Validate file structure across entire project
+echo "Validating file structure..."
+npm run validate:structure
+
+# Validate component structure across entire project
+echo "Validating component structure..."
+npm run validate:components
+
+# Validate test structure and coverage
+echo "Validating test structure and coverage..."
+npm run validate:tests
+
+# Run full CI-like validation
+echo "Running full CI validation..."
+npm run check-all
+
+echo "All pre-push checks passed! Ready to push."

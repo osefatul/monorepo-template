@@ -4,12 +4,27 @@ echo "Running pre-commit checks..."
 echo "Running lint-staged..."
 npx lint-staged
 
+# Build all packages to ensure they compile correctly
+echo "Building all packages..."
+npm run build:all
+
+# Run comprehensive linting across the entire codebase
+echo "🔍 Running comprehensive linting..."
+npm run lint
+
+# Run all tests to ensure nothing is broken
+echo "Running all tests..."
+npm run test
+
 # Run comprehensive validation
 echo "Running structure validation..."
 npm run validate:structure
 
 echo "Running component validation..."
 npm run validate:components
+
+echo "Running test structure validation..."
+npm run validate:tests
 
 # Run type checking
 echo "Running TypeScript checks..."

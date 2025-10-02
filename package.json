@@ -32,7 +32,8 @@
     "test:coverage": "npm run coverage --workspaces --if-present",
     "validate:structure": "node scripts/validate-file-structure.js",
     "validate:components": "node scripts/validate-component-structure.js",
-    "validate:all": "npm run validate:structure && npm run validate:components",
+    "validate:tests": "node scripts/validate-test-structure.js",
+    "validate:all": "npm run validate:structure && npm run validate:components && npm run validate:tests",
     "check-all": "npm run type-check && npm run lint && npm run format:check && npm run validate:all && npm run test:run",
     "fix-all": "npm run lint:fix && npm run format",
     "pre-commit": "npm run type-check && npm run lint && npm run validate:all",
@@ -81,6 +82,9 @@
       "eslint --fix --max-warnings 0",
       "prettier --write",
       "bash -c 'npm run validate:components'"
+    ],
+    "**/*.{test,spec}.{ts,tsx,js,jsx}": [
+      "bash -c 'npm run validate:tests'"
     ],
     "*.{json,css,md}": [
       "prettier --write"

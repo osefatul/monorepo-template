@@ -14,7 +14,9 @@
       "Bash(git reset:*)",
       "Bash(npm run validate:all:*)",
       "Bash(npm run type-check:*)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(npm run validate:tests:*)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }
