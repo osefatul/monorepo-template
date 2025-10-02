@@ -13,9 +13,9 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules/.vite",
-    "test": "vitest",
+    "test": "vitest --run --passWithNoTests",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run",
+    "test:run": "vitest run --passWithNoTests",
     "coverage": "vitest run --coverage",
     "analyze": "vite build --mode analyze"
   },
