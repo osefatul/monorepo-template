@@ -13,12 +13,14 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 ### 1.1 What We're Building
 
 **Primary System: Auth Signer Service**
+
 - Spring Boot 3.x microservice with RESTful APIs
 - SQL Server database as centralized repository
 - React UI embedded within Corporate Connect portal
 - Comprehensive audit trails for regulatory compliance
 
 **Key Components:**
+
 1. **Internal UI**: Banker-facing dashboard for request management and approvals
 2. **External UI**: Client-facing self-service portal for ASL maintenance
 3. **Integration Layer**: APIs connecting to WebKYC, FileNet, OCR services
@@ -28,6 +30,7 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 ### 1.2 Business Problem Solved
 
 **Current State Issues:**
+
 - Email-driven workflows with high failure rate (requests get lost)
 - Manual validation processes varying by Client Manager
 - Scattered data storage (FileNet, Chorus, SharePoint, email)
@@ -36,6 +39,7 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 - Weeks-long processing times with multiple manual handoffs
 
 **Target State Benefits:**
+
 - Single source of truth for all ASL data
 - Real-time status tracking and notifications
 - Automated compliance validation through WebKYC
@@ -85,6 +89,7 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 ### 2.2 Technology Stack
 
 **Backend Technologies:**
+
 - **Language**: Java 17+
 - **Framework**: Spring Boot 3.x
 - **Database**: SQL Server 2019+ with clustering
@@ -93,12 +98,14 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 - **Build Tool**: Maven
 
 **Frontend Technologies:**
+
 - **Framework**: React 18+ with TypeScript
 - **UI Library**: Material-UI (Corporate Connect standards)
 - **State Management**: React Context API + useReducer
 - **Build Tool**: Vite
 
 **Infrastructure:**
+
 - **Authentication**: Corporate Connect SSO
 - **Monitoring**: Application Insights
 - **Security**: TLS 1.3, AES-256 encryption
@@ -113,6 +120,7 @@ The Auth Signer project transforms manual, email-driven authorized signer list (
 **Purpose**: Compliance validation and sanctions screening for authorized signers
 
 **Integration Details:**
+
 ```yaml
 Service: WebKYC APIs
 Authentication: API Key + OAuth 2.0
@@ -124,17 +132,19 @@ Endpoints:
 ```
 
 **Data Flow:**
+
 1. **New Signer Addition** → Auth Signer Service → WebKYC validation → Response processing
 2. **Existing Signer Update** → Optional re-validation → Status synchronization
 3. **Signer Removal** → WebKYC notification → Privilege revocation
 
 **Data Passed TO WebKYC:**
+
 ```json
 {
   "signerId": "unique_identifier",
   "personalInfo": {
     "firstName": "John",
-    "lastName": "Doe", 
+    "lastName": "Doe",
     "dateOfBirth": "1980-01-01",
     "email": "john.doe@company.com",
     "phone": "+1-555-0123"
@@ -146,13 +156,14 @@ Endpoints:
   },
   "authorizationInfo": {
     "privilegeLevel": "SINGLE_SIGNER",
-    "authorizationLimit": 1000000.00,
+    "authorizationLimit": 1000000.0,
     "accountNumbers": ["ACC123456"]
   }
 }
 ```
 
 **Data Received FROM WebKYC:**
+
 ```json
 {
   "validationResult": "APPROVED|DENIED|PENDING",
@@ -169,12 +180,14 @@ Endpoints:
 ```
 
 **Error Handling:**
+
 - **Timeout**: 30-second timeout with 3 retry attempts
 - **Rate Limiting**: Queue requests if limits exceeded
 - **Service Down**: Manual review queue activation
 - **Data Errors**: Validation error logging and notification
 
 **Open Questions:**
+
 - Are WebKYC APIs compatible with authorized signers vs. beneficial owners only?
 - What profile types support CME business line?
 - Can the system handle 500+ monthly requests without rate limiting issues?
@@ -184,6 +197,7 @@ Endpoints:
 **Purpose**: SSO authentication and UI hosting platform
 
 **Integration Details:**
+
 ```yaml
 Service: Corporate Connect Portal
 Authentication: Federated SSO
@@ -192,6 +206,7 @@ UI Integration: Embedded React application
 ```
 
 **Authentication Flow:**
+
 1. User logs into Corporate Connect
 2. JWT token generated with role claims
 3. Auth Signer Service validates token
@@ -199,11 +214,13 @@ UI Integration: Embedded React application
 5. Role-based UI rendering
 
 **Data Passed TO Corporate Connect:**
+
 - User activity logs for audit
 - Session management events
 - Error notifications for support
 
 **Data Received FROM Corporate Connect:**
+
 ```json
 {
   "userInfo": {
@@ -226,6 +243,7 @@ UI Integration: Embedded React application
 **Purpose**: Official document storage and retrieval
 
 **Integration Details:**
+
 ```yaml
 Service: FileNet Document Management
 Authentication: Service Account + Certificates
@@ -234,6 +252,7 @@ Storage Structure: /BusinessLine/Year/AccountId/
 ```
 
 **Document Workflow:**
+
 1. **Document Generation**: Auth Signer creates official ASL document
 2. **Template Processing**: Business line-specific formatting applied
 3. **Digital Signature**: KMS-signed document creation
@@ -241,6 +260,7 @@ Storage Structure: /BusinessLine/Year/AccountId/
 5. **Reference Storage**: FileNet ID stored in Auth Signer database
 
 **Data Passed TO FileNet:**
+
 ```json
 {
   "documentMetadata": {
@@ -261,6 +281,7 @@ Storage Structure: /BusinessLine/Year/AccountId/
 ```
 
 **Data Received FROM FileNet:**
+
 ```json
 {
   "documentId": "FN_DOC_789456",
@@ -280,6 +301,7 @@ Storage Structure: /BusinessLine/Year/AccountId/
 **Purpose**: Historical document digitization and form processing
 
 **Integration Details:**
+
 ```yaml
 Service: Cognizant AI Document Processing
 Authentication: API Key + Secure Channel
@@ -288,6 +310,7 @@ Confidence Scoring: Field-level accuracy assessment
 ```
 
 **Document Processing Workflow:**
+
 1. **Document Upload**: Banker uploads scanned form
 2. **Pre-processing**: Image quality assessment and enhancement
 3. **OCR Processing**: AI model extracts structured data
@@ -295,6 +318,7 @@ Confidence Scoring: Field-level accuracy assessment
 5. **Review Interface**: Banker validates/corrects extracted data
 
 **Data Passed TO OCR Service:**
+
 ```json
 {
   "documentInfo": {
@@ -310,7 +334,7 @@ Confidence Scoring: Field-level accuracy assessment
     "pages": 1
   },
   "processingOptions": {
-    "confidenceThreshold": 0.80,
+    "confidenceThreshold": 0.8,
     "languageHint": "EN",
     "formTemplate": "STANDARD_ASL"
   }
@@ -318,6 +342,7 @@ Confidence Scoring: Field-level accuracy assessment
 ```
 
 **Data Received FROM OCR Service:**
+
 ```json
 {
   "extractedData": {
@@ -350,6 +375,7 @@ Confidence Scoring: Field-level accuracy assessment
 ```
 
 **Confidence Score Handling:**
+
 - **High Confidence (>90%)**: Auto-accept with minimal review
 - **Medium Confidence (70-90%)**: Banker review required
 - **Low Confidence (<70%)**: Manual data entry recommended
@@ -359,6 +385,7 @@ Confidence Scoring: Field-level accuracy assessment
 **Purpose**: Workflow initiation and task management
 
 **Integration Details:**
+
 ```yaml
 Service: Service Request Platform (Susie's Team)
 Authentication: Internal service authentication
@@ -367,12 +394,14 @@ Status: Dependency - API specifications needed
 ```
 
 **Expected Integration Flow:**
+
 1. **Request Initiation**: Banker creates service request
 2. **Workflow Trigger**: Service Request Platform calls Auth Signer
 3. **Status Updates**: Bidirectional status synchronization
 4. **Task Management**: Approval task routing
 
 **Data Exchange (Proposed):**
+
 ```json
 {
   "serviceRequest": {
@@ -395,6 +424,7 @@ Status: Dependency - API specifications needed
 **Purpose**: Secure temporary access for non-Corporate Connect clients
 
 **Integration Details:**
+
 ```yaml
 Service: Guest User Provisioning (Jessica Roswell's Team)
 Authentication: Token-based temporary access
@@ -404,6 +434,7 @@ Status: Dependency - security approval needed
 ```
 
 **Token Generation Workflow:**
+
 1. **Banker Request**: Initiate guest access for client
 2. **Token Generation**: Secure token with embedded permissions
 3. **Email Delivery**: Secure link sent to client
@@ -411,6 +442,7 @@ Status: Dependency - security approval needed
 5. **Limited Access**: Scoped permissions for ASL review
 
 **Data Passed FOR Token Generation:**
+
 ```json
 {
   "guestAccessRequest": {
@@ -425,6 +457,7 @@ Status: Dependency - security approval needed
 ```
 
 **Token Response:**
+
 ```json
 {
   "guestToken": {
@@ -444,6 +477,7 @@ Status: Dependency - security approval needed
 **Purpose**: Stakeholder communication and status updates
 
 **Integration Details:**
+
 ```yaml
 Service: Bank Email Service
 Authentication: Service account
@@ -452,11 +486,13 @@ Delivery: Real-time and batch processing
 ```
 
 **Notification Types:**
+
 1. **Client Notifications**: Request status updates, completion alerts
 2. **Banker Notifications**: Approval tasks, escalations
 3. **System Alerts**: Integration failures, security events
 
 **Email Template Data:**
+
 ```json
 {
   "emailRequest": {
@@ -483,6 +519,7 @@ Delivery: Real-time and batch processing
 ### 4.1 Core Tables Structure
 
 **Primary Entities:**
+
 ```sql
 -- Master account information
 accounts (
@@ -495,7 +532,7 @@ accounts (
   created_date DATETIME2 DEFAULT GETDATE()
 )
 
--- Authorized signer master records  
+-- Authorized signer master records
 authorized_signers (
   signer_id UNIQUEIDENTIFIER PRIMARY KEY,
   first_name VARCHAR(100) NOT NULL,
@@ -529,6 +566,7 @@ account_signer_associations (
 ```
 
 **Request Management:**
+
 ```sql
 -- Change request tracking
 asl_requests (
@@ -567,6 +605,7 @@ asl_approvals (
 ```
 
 **Audit & Compliance:**
+
 ```sql
 -- Immutable audit trail
 asl_audit_log (
@@ -600,6 +639,7 @@ digital_signatures (
 ### 4.2 Configuration & Security
 
 **Business Line Configuration:**
+
 ```sql
 business_line_configs (
   config_id UNIQUEIDENTIFIER PRIMARY KEY,
@@ -619,6 +659,7 @@ business_line_configs (
 ```
 
 **Guest Access Management:**
+
 ```sql
 guest_tokens (
   token_id UNIQUEIDENTIFIER PRIMARY KEY,
@@ -640,13 +681,14 @@ guest_tokens (
 ### 5.1 Core API Endpoints
 
 **Account & Signer Management:**
+
 ```yaml
 GET /api/v1/accounts/{accountId}/signers
   Description: Retrieve current authorized signer list
   Security: JWT token + account entitlement
   Response: List of active signers with permissions
 
-POST /api/v1/accounts/{accountId}/signers  
+POST /api/v1/accounts/{accountId}/signers
   Description: Add new authorized signer
   Security: JWT token + edit entitlement
   Payload: Signer details + digital signature
@@ -654,7 +696,7 @@ POST /api/v1/accounts/{accountId}/signers
 
 PUT /api/v1/accounts/{accountId}/signers/{signerId}
   Description: Update existing signer information
-  Security: JWT token + edit entitlement  
+  Security: JWT token + edit entitlement
   Payload: Updated fields + change justification
   Response: Request ID + validation status
 
@@ -666,6 +708,7 @@ DELETE /api/v1/accounts/{accountId}/signers/{signerId}
 ```
 
 **Request Management:**
+
 ```yaml
 GET /api/v1/requests/{requestId}
   Description: Get request status and details
@@ -685,6 +728,7 @@ GET /api/v1/requests/pending
 ```
 
 **Self-Service Operations:**
+
 ```yaml
 POST /api/v1/accounts/{accountId}/attest
   Description: Annual attestation submission
@@ -702,6 +746,7 @@ GET /api/v1/accounts/{accountId}/export
 ### 5.2 Integration APIs
 
 **Guest User Management:**
+
 ```yaml
 POST /api/v1/guest/provision
   Description: Generate guest access token
@@ -716,6 +761,7 @@ GET /api/v1/guest/verify/{token}
 ```
 
 **Bulk Processing:**
+
 ```yaml
 POST /api/v1/bulk/upload
   Description: Submit bulk signer changes
@@ -730,6 +776,7 @@ GET /api/v1/bulk/status/{jobId}
 ```
 
 **System Integration:**
+
 ```yaml
 POST /api/v1/webhooks/webkyc
   Description: Receive WebKYC validation updates
@@ -750,6 +797,7 @@ GET /api/v1/system/health
 ### 6.1 CME-Specific Business Rules
 
 **Approval Requirements:**
+
 ```yaml
 Dual Approval Required: true
 Conditions:
@@ -765,6 +813,7 @@ Exception Handling: Manual override with enhanced documentation
 ```
 
 **Validation Rules:**
+
 ```yaml
 Required Fields:
   - Personal: first_name, last_name, email, phone
@@ -783,6 +832,7 @@ Editable Fields (Post-Addition):
 ```
 
 **WebKYC Integration Rules:**
+
 ```yaml
 Validation Triggers:
   - New Signer Addition: Mandatory validation
@@ -798,6 +848,7 @@ Processing:
 ### 6.2 Workflow State Management
 
 **Request Lifecycle:**
+
 ```
 DRAFT → PENDING → APPROVED/REJECTED → COMPLETED
 
@@ -809,6 +860,7 @@ State Transitions:
 ```
 
 **Approval Workflow:**
+
 ```yaml
 Level 1: Client Manager (Primary)
   - Validates business justification
@@ -833,12 +885,14 @@ Level 3: Trust Review (Special Cases)
 ### 7.1 Data Protection
 
 **Encryption Standards:**
+
 - **Data at Rest**: AES-256 encryption for all PII
 - **Data in Transit**: TLS 1.3 for all communications
 - **Digital Signatures**: KMS/HSM integration for cryptographic signing
 - **Database**: Transparent Data Encryption (TDE)
 
 **Access Controls:**
+
 - **Authentication**: Corporate Connect SSO integration
 - **Authorization**: Role-based access control (RBAC)
 - **API Security**: OAuth 2.0 with JWT tokens
@@ -847,12 +901,14 @@ Level 3: Trust Review (Special Cases)
 ### 7.2 Audit & Compliance
 
 **Audit Trail Requirements:**
+
 - **Immutable Logging**: All changes recorded with user context
 - **Retention Period**: 7+ years for regulatory compliance
 - **Data Elements**: Who, what, when, where, how, why
 - **Integrity Protection**: Cryptographic checksums
 
 **Regulatory Compliance:**
+
 - **KYC Requirements**: Automated validation through WebKYC
 - **BSA Compliance**: Suspicious activity monitoring
 - **SOX Requirements**: Change management controls
@@ -861,12 +917,14 @@ Level 3: Trust Review (Special Cases)
 ### 7.3 Guest User Security
 
 **Token Management:**
+
 - **Expiration**: 24-hour maximum session duration
 - **Single-Use**: Sensitive operations require new tokens
 - **IP Validation**: Optional IP address binding
 - **Scope Limitation**: Restricted to specific account/operations
 
 **Access Controls:**
+
 - **Limited Permissions**: Review and basic edit only
 - **No Direct Updates**: All changes require banker approval
 - **Session Monitoring**: Activity logging and anomaly detection
@@ -879,24 +937,28 @@ Level 3: Trust Review (Special Cases)
 ### 8.1 Epic Structure & Timeline
 
 **Epic 1: Internal User Authentication & Dashboard** (Sprints 1-3)
+
 - Corporate Connect SSO integration
-- Role-based access control implementation  
+- Role-based access control implementation
 - User management dashboard development
 - Entitlement validation system
 
 **Epic 2: Internal User Signer Management** (Sprints 4-8)
+
 - Account-level signer CRUD operations
 - Multi-person approval workflow engine
 - Business rules validation framework
 - Historical audit access interface
 
 **Epic 3: External User Onboarding** (Sprints 6-9)
+
 - Guest user provisioning system
 - OCR document processing integration
 - Email delivery and token management
 - Limited access dashboard
 
 **Epic 4: External User Self-Service** (Sprints 10-14)
+
 - Full client portal development
 - Real-time status tracking
 - Digital signature capabilities
@@ -905,24 +967,28 @@ Level 3: Trust Review (Special Cases)
 ### 8.2 Integration Development Sequence
 
 **Phase 1: Foundation** (Sprints 1-5)
+
 1. Database schema implementation
 2. Core API development
 3. Authentication integration
 4. Basic UI components
 
 **Phase 2: Core Integrations** (Sprints 6-10)
+
 1. WebKYC API integration
 2. FileNet document management
 3. Email notification service
 4. Basic workflow engine
 
 **Phase 3: Advanced Features** (Sprints 11-15)
+
 1. OCR service integration
 2. Bulk processing with Kafka
 3. Digital signature framework
 4. Guest user provisioning
 
 **Phase 4: Production Readiness** (Sprints 16-18)
+
 1. Performance optimization
 2. Security hardening
 3. Monitoring implementation
@@ -931,12 +997,14 @@ Level 3: Trust Review (Special Cases)
 ### 8.3 Risk Mitigation Strategies
 
 **Critical Dependencies:**
+
 - **WebKYC Integration**: Develop mock service for parallel development
 - **OCR Partnership**: Build manual fallback workflows first
 - **Guest User Provisioning**: Implement simplified token approach
 - **Service Request Platform**: Create independent workflow capability
 
 **Technical Risks:**
+
 - **Performance**: Load testing with projected volumes
 - **Security**: Penetration testing and vulnerability assessment
 - **Data Migration**: Phased approach with validation checkpoints
@@ -949,12 +1017,14 @@ Level 3: Trust Review (Special Cases)
 ### 9.1 Business Metrics
 
 **Operational Efficiency:**
+
 - Processing time reduction: Target 80% improvement (weeks → hours)
 - Error rate reduction: Target <0.1% system errors
 - Self-service adoption: Target 70% of requests via client portal
 - Banker productivity: 3x increase in requests processed per hour
 
 **Client Satisfaction:**
+
 - Status inquiry calls: Target 90% reduction
 - Client satisfaction score: Target 25% improvement
 - Processing transparency: Real-time visibility for 100% of requests
@@ -963,12 +1033,14 @@ Level 3: Trust Review (Special Cases)
 ### 9.2 Technical Performance Metrics
 
 **System Performance:**
+
 - API response time: <500ms for 95% of requests
 - System uptime: >99.5% availability
 - Database query performance: <100ms average
 - Integration reliability: <1% failure rate for external calls
 
 **Security & Compliance:**
+
 - Authentication success rate: >99.9%
 - Audit trail completeness: 100% of transactions logged
 - Digital signature verification: 100% integrity maintained
@@ -977,6 +1049,7 @@ Level 3: Trust Review (Special Cases)
 ### 9.3 Integration Health Monitoring
 
 **WebKYC Integration:**
+
 ```yaml
 Health Checks:
   - API availability monitoring
@@ -992,6 +1065,7 @@ Alerts:
 ```
 
 **FileNet Integration:**
+
 ```yaml
 Document Processing:
   - Upload success rates
@@ -1007,6 +1081,7 @@ Monitoring:
 ```
 
 **OCR Service Integration:**
+
 ```yaml
 Processing Metrics:
   - Confidence score distribution
@@ -1028,12 +1103,14 @@ Quality Assurance:
 ### 10.1 Historical Data Migration
 
 **Scope Assessment:**
+
 - **CME Historical Records**: 7+ years of FileNet documents
 - **Document Types**: ASL forms, signature cards, approval documents
 - **Volume Estimation**: Thousands of documents across multiple formats
 - **Data Quality**: Varies significantly by vintage and source
 
 **Migration Approach:**
+
 ```yaml
 Phase 1: Data Discovery (Weeks 1-2)
   - FileNet repository analysis
@@ -1061,6 +1138,7 @@ Phase 4: System Population (Weeks 13-16)
 ```
 
 **Quality Control:**
+
 ```yaml
 Validation Checkpoints:
   - OCR confidence thresholds
@@ -1078,12 +1156,14 @@ Error Handling:
 ### 10.2 New Client Onboarding Integration
 
 **Current State Challenges:**
+
 - Onboarding team collecting ASL data manually
 - Data captured but not flowing to centralized system
 - Multiple business lines with different processes
 - CME independent from other onboarding initiatives
 
 **Integration Strategy:**
+
 ```yaml
 Immediate (CME MVP):
   - Manual data entry from onboarding documents
@@ -1105,6 +1185,7 @@ Long-term (Enterprise):
 ```
 
 **Data Flow Design:**
+
 ```json
 {
   "onboardingIntegration": {
@@ -1142,6 +1223,7 @@ Long-term (Enterprise):
 ### 11.1 System Failure Scenarios
 
 **High Availability Architecture:**
+
 ```yaml
 Application Tier:
   - Load-balanced Spring Boot instances
@@ -1163,6 +1245,7 @@ Integration Tier:
 ```
 
 **Failure Response Procedures:**
+
 ```yaml
 WebKYC Service Down:
   - Immediate: Queue requests for later processing
@@ -1191,6 +1274,7 @@ Corporate Connect Issues:
 ### 11.2 Manual Process Backup
 
 **Emergency Procedures:**
+
 ```yaml
 Complete System Outage:
   - Email-based request receipt
@@ -1218,6 +1302,7 @@ Recovery Procedures:
 ### 12.1 Business Line Expansion
 
 **Phase 2: IT&C Integration (Q1 2026)**
+
 ```yaml
 Configuration Changes:
   - Streamlined approval workflows
@@ -1233,6 +1318,7 @@ Technical Adaptations:
 ```
 
 **Phase 3: GSF & GCT Integration (Q2-Q3 2026)**
+
 ```yaml
 GSF Requirements:
   - Enhanced compliance validation
@@ -1250,6 +1336,7 @@ GCT Requirements:
 ### 12.2 Technology Evolution
 
 **Platform Enhancements:**
+
 ```yaml
 Advanced Analytics:
   - Predictive risk assessment
@@ -1271,6 +1358,7 @@ Mobile Optimization:
 ```
 
 **Integration Expansion:**
+
 ```yaml
 Additional System Connections:
   - Transaction monitoring systems
@@ -1292,12 +1380,14 @@ API Ecosystem:
 ### 13.1 Technical Success Factors
 
 **Architecture Quality:**
+
 - Microservice design enabling independent scaling
 - Database optimization for performance and compliance
 - Integration resilience with fallback mechanisms
 - Security framework meeting banking standards
 
 **Development Excellence:**
+
 - Comprehensive testing strategy (unit, integration, performance)
 - Code quality standards and review processes
 - Documentation completeness and maintenance
@@ -1306,12 +1396,14 @@ API Ecosystem:
 ### 13.2 Business Success Factors
 
 **User Adoption:**
+
 - Intuitive user interface design
 - Comprehensive training programs
 - Change management support
 - Continuous feedback incorporation
 
 **Process Improvement:**
+
 - Measurable efficiency gains
 - Error reduction demonstration
 - Client satisfaction improvement
@@ -1320,12 +1412,14 @@ API Ecosystem:
 ### 13.3 Organizational Success Factors
 
 **Stakeholder Alignment:**
+
 - Clear communication of benefits and changes
 - Regular progress updates and milestone celebrations
 - Issue escalation and resolution procedures
 - Success metric tracking and reporting
 
 **Change Management:**
+
 - Phased rollout with pilot groups
 - Training and support resources
 - Process documentation updates
@@ -1338,6 +1432,7 @@ API Ecosystem:
 The Auth Signer project represents a comprehensive digital transformation initiative that will modernize authorized signer management across US Bank's commercial business lines. By establishing a centralized, automated platform with robust integration capabilities, the system will eliminate current inefficiencies while providing enhanced security, compliance, and user experience.
 
 **Key Deliverables:**
+
 - Single source of truth for all ASL data
 - Self-service client portal reducing operational burden
 - Automated compliance validation through WebKYC integration
@@ -1345,6 +1440,7 @@ The Auth Signer project represents a comprehensive digital transformation initia
 - Comprehensive audit trails for regulatory compliance
 
 **Success Measurement:**
+
 - 80% reduction in processing time (weeks to hours)
 - 70% self-service adoption rate
 - <0.1% system error rate

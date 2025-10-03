@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+
 import type {
+  AddNotificationPayload,
   BaseUIState,
   Notification,
-  SetLoadingPayload,
-  AddNotificationPayload,
   RemoveNotificationPayload,
+  SetLoadingPayload,
 } from '../types'
 
 // Initial state

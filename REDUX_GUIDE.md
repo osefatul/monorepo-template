@@ -5,6 +5,7 @@ This guide explains how to use Redux Toolkit and RTK Query in our monorepo struc
 ## Architecture Overview
 
 ### 📁 File Structure
+
 ```
 packages/shared/src/store/
 ├── api/
@@ -32,14 +33,18 @@ apps/[app-name]/src/store/
 ## 🔄 When to Use Shared vs App-Specific
 
 ### ✅ SHARED (packages/shared/src/store/)
+
 Use shared store for:
+
 - **Authentication** (login, logout, user profile)
 - **UI State** (theme, global notifications, loading states)
 - **Common API endpoints** (auth, user management)
 - **Cross-app features** (settings, preferences)
 
 ### 🏠 APP-SPECIFIC (apps/[app]/src/store/)
+
 Use app-specific store for:
+
 - **Business logic specific to one app**
 - **App-specific API endpoints**
 - **Feature-specific state**
@@ -54,7 +59,7 @@ Use app-specific store for:
 Create in `packages/shared/src/store/slices/newFeatureSlice.ts`:
 
 ```typescript
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface NewFeatureState {
   data: any[]
@@ -89,11 +94,13 @@ export default newFeatureSlice.reducer
 ```
 
 Add to `packages/shared/src/store/slices/index.ts`:
+
 ```typescript
 export * from './newFeatureSlice'
 ```
 
 Update `packages/shared/src/store/utils.ts`:
+
 ```typescript
 import { newFeatureSlice } from './slices'
 
@@ -112,7 +119,7 @@ reducer: {
 Create in `apps/[app]/src/store/slices/appFeatureSlice.ts`:
 
 ```typescript
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 interface AppFeatureState {
   items: any[]
@@ -142,6 +149,7 @@ export default appFeatureSlice.reducer
 ```
 
 Add to app store configuration `apps/[app]/src/store/index.ts`:
+
 ```typescript
 import { appFeatureSlice } from './slices/appFeatureSlice'
 
@@ -165,14 +173,14 @@ Add to existing API slice or create new one in `packages/shared/src/store/api/`:
 import { baseApi } from './baseApi'
 
 export const commonApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getSettings: builder.query<Settings, void>({
       query: () => 'settings',
       providesTags: ['Settings'],
     }),
 
     updateSettings: builder.mutation<Settings, Partial<Settings>>({
-      query: (settings) => ({
+      query: settings => ({
         url: 'settings',
         method: 'PATCH',
         body: settings,
@@ -182,10 +190,7 @@ export const commonApi = baseApi.injectEndpoints({
   }),
 })
 
-export const {
-  useGetSettingsQuery,
-  useUpdateSettingsMutation,
-} = commonApi
+export const { useGetSettingsQuery, useUpdateSettingsMutation } = commonApi
 ```
 
 ### 2. App-Specific API Endpoints
@@ -202,9 +207,9 @@ export interface MyData {
 }
 
 export const myFeatureApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getMyData: builder.query<MyData[], { page?: number }>({
-      query: (params) => ({
+      query: params => ({
         url: 'my-feature/data',
         params,
       }),
@@ -212,7 +217,7 @@ export const myFeatureApi = baseApi.injectEndpoints({
     }),
 
     createMyData: builder.mutation<MyData, Omit<MyData, 'id'>>({
-      query: (newData) => ({
+      query: newData => ({
         url: 'my-feature/data',
         method: 'POST',
         body: newData,
@@ -226,14 +231,11 @@ export const myFeatureApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: 'MyData', id },
-        'MyData',
-      ],
+      invalidatesTags: (result, error, { id }) => [{ type: 'MyData', id }, 'MyData'],
     }),
 
     deleteMyData: builder.mutation<void, string>({
-      query: (id) => ({
+      query: id => ({
         url: `my-feature/data/${id}`,
         method: 'DELETE',
       }),
@@ -399,6 +401,7 @@ export const MyFeatureComponent = () => {
 ## 🔧 Advanced Patterns
 
 ### 1. Conditional Queries
+
 ```typescript
 const { data } = useGetUserProfileQuery(userId, {
   skip: !userId, // Only run query when userId exists
@@ -406,6 +409,7 @@ const { data } = useGetUserProfileQuery(userId, {
 ```
 
 ### 2. Polling
+
 ```typescript
 const { data } = useGetLiveDataQuery(undefined, {
   pollingInterval: 5000, // Poll every 5 seconds
@@ -413,6 +417,7 @@ const { data } = useGetLiveDataQuery(undefined, {
 ```
 
 ### 3. Optimistic Updates
+
 ```typescript
 const [updateItem] = useUpdateItemMutation()
 
@@ -427,8 +432,10 @@ const handleUpdate = async (id: string, changes: Partial<Item>) => {
 ```
 
 ### 4. Manual Cache Management
+
 ```typescript
 import { useAppDispatch } from '@shared/store'
+
 import { myFeatureApi } from '../store/api/myFeatureApi'
 
 const dispatch = useAppDispatch()
@@ -437,13 +444,11 @@ const dispatch = useAppDispatch()
 dispatch(myFeatureApi.util.invalidateTags(['MyData']))
 
 // Manually update cache
-dispatch(myFeatureApi.util.updateQueryData(
-  'getMyData',
-  { page: 1 },
-  (draft) => {
+dispatch(
+  myFeatureApi.util.updateQueryData('getMyData', { page: 1 }, draft => {
     draft.push(newItem)
-  }
-))
+  })
+)
 ```
 
 ---
@@ -451,6 +456,7 @@ dispatch(myFeatureApi.util.updateQueryData(
 ## 📋 Best Practices
 
 ### ✅ DO:
+
 - Use RTK Query for all API calls
 - Keep shared state minimal and focused
 - Use TypeScript for all slice and API definitions
@@ -459,6 +465,7 @@ dispatch(myFeatureApi.util.updateQueryData(
 - Keep slice reducers pure and simple
 
 ### ❌ DON'T:
+
 - Put app-specific logic in shared slices
 - Bypass RTK Query for API calls
 - Store derived data in state (use selectors instead)
@@ -466,6 +473,7 @@ dispatch(myFeatureApi.util.updateQueryData(
 - Put non-serializable data in Redux state
 
 ### 🎯 Tips:
+
 - Use `providesTags` and `invalidatesTags` for smart cache management
 - Leverage RTK Query's automatic background refetching
 - Use `skip` option to conditionally run queries

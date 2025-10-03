@@ -1,12 +1,12 @@
+import type { BaseUser, LoginPayload, LoginSuccessPayload } from '../types'
 import { baseApi } from './baseApi'
-import type { LoginPayload, LoginSuccessPayload, BaseUser } from '../types'
 
 // Authentication API endpoints
 export const authApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // Login endpoint
     login: builder.mutation<LoginSuccessPayload, LoginPayload>({
-      query: (credentials) => ({
+      query: credentials => ({
         url: 'auth/login',
         method: 'POST',
         body: credentials,
@@ -40,7 +40,7 @@ export const authApi = baseApi.injectEndpoints({
 
     // Update user profile
     updateProfile: builder.mutation<BaseUser, Partial<BaseUser>>({
-      query: (updates) => ({
+      query: updates => ({
         url: 'auth/profile',
         method: 'PATCH',
         body: updates,
@@ -53,7 +53,7 @@ export const authApi = baseApi.injectEndpoints({
       { success: boolean },
       { currentPassword: string; newPassword: string }
     >({
-      query: (passwords) => ({
+      query: passwords => ({
         url: 'auth/change-password',
         method: 'POST',
         body: passwords,
@@ -62,7 +62,7 @@ export const authApi = baseApi.injectEndpoints({
 
     // Request password reset
     requestPasswordReset: builder.mutation<{ success: boolean }, { email: string }>({
-      query: (data) => ({
+      query: data => ({
         url: 'auth/reset-password-request',
         method: 'POST',
         body: data,
@@ -70,11 +70,8 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     // Reset password with token
-    resetPassword: builder.mutation<
-      { success: boolean },
-      { token: string; newPassword: string }
-    >({
-      query: (data) => ({
+    resetPassword: builder.mutation<{ success: boolean }, { token: string; newPassword: string }>({
+      query: data => ({
         url: 'auth/reset-password',
         method: 'POST',
         body: data,

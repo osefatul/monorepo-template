@@ -35,23 +35,25 @@ corp-authsigner-monorepo/
 
 ## 🛠 Technology Stack
 
-| Category | Technologies |
-|----------|-------------|
-| **Frontend** | TypeScript 5.6+, React 18.3+, Vite 5.4+ |
-| **Testing** | Vitest, React Testing Library, jsdom |
-| **Code Quality** | ESLint, Prettier, Husky, lint-staged |
-| **CI/CD** | GitLab CI/CD, Security Scanning |
-| **Deployment** | Docker, nginx, docker-compose |
-| **Monorepo** | npm workspaces, TypeScript project references |
+| Category         | Technologies                                  |
+| ---------------- | --------------------------------------------- |
+| **Frontend**     | TypeScript 5.6+, React 18.3+, Vite 5.4+       |
+| **Testing**      | Vitest, React Testing Library, jsdom          |
+| **Code Quality** | ESLint, Prettier, Husky, lint-staged          |
+| **CI/CD**        | GitLab CI/CD, Security Scanning               |
+| **Deployment**   | Docker, nginx, docker-compose                 |
+| **Monorepo**     | npm workspaces, TypeScript project references |
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - npm 9+
 - Docker (optional, for deployment)
 
 ### Installation
+
 ```bash
 # Clone and install dependencies
 git clone <repository-url>
@@ -60,6 +62,7 @@ npm install
 ```
 
 ### Development
+
 ```bash
 # Start both apps concurrently
 npm run dev:both
@@ -70,6 +73,7 @@ npm run dev:external    # http://localhost:3002
 ```
 
 ### Building
+
 ```bash
 # Build everything (shared → internal → external)
 npm run build:all
@@ -99,6 +103,7 @@ npm run test --workspace=shared
 ## 🔧 Code Quality
 
 ### Linting & Formatting
+
 ```bash
 # Check and fix all issues
 npm run fix-all
@@ -111,7 +116,9 @@ npm run format:check   # Check formatting
 ```
 
 ### Pre-commit Hooks
+
 Automatic validation on commit:
+
 - ✅ Linting with auto-fix
 - ✅ Code formatting
 - ✅ Type checking
@@ -121,6 +128,7 @@ Automatic validation on commit:
 ## 📦 Shared Package
 
 ### Components
+
 ```typescript
 import { Button, Card, LoadingSpinner } from '@shared/components'
 
@@ -130,8 +138,9 @@ import { Button, Card, LoadingSpinner } from '@shared/components'
 ```
 
 ### Utilities
+
 ```typescript
-import { formatDate, validateEmail, debounce } from '@shared/utils'
+import { debounce, formatDate, validateEmail } from '@shared/utils'
 
 const isValid = validateEmail('user@example.com')
 const formatted = formatDate(new Date())
@@ -139,16 +148,18 @@ const debouncedSearch = debounce(searchFn, 300)
 ```
 
 ### Environment Configuration
+
 ```typescript
-import { getEnvVar, getEnvBool, isProduction } from '@shared/config'
+import { getEnvBool, getEnvVar, isProduction } from '@shared/config'
 
 const apiUrl = getEnvVar('API_BASE_URL', 'http://localhost:8000')
 const debugMode = getEnvBool('ENABLE_DEBUGGING', !isProduction())
 ```
 
 ### Types
+
 ```typescript
-import { User, AuthSignature, ApiResponse } from '@shared/types'
+import { ApiResponse, AuthSignature, User } from '@shared/types'
 
 const user: User = { id: '1', email: 'user@corp.com', role: 'internal' }
 ```
@@ -156,6 +167,7 @@ const user: User = { id: '1', email: 'user@corp.com', role: 'internal' }
 ## 🚢 Docker Deployment
 
 ### Build Images
+
 ```bash
 # Build both applications
 docker-compose build
@@ -165,6 +177,7 @@ docker build -f Dockerfile.internal -t corp-internal .
 ```
 
 ### Run with Docker Compose
+
 ```bash
 # Start all services
 docker-compose up -d
@@ -176,6 +189,7 @@ docker-compose up -d
 ```
 
 ### Individual Containers
+
 ```bash
 # Run internal app
 docker run -p 8080:80 corp-internal
@@ -187,37 +201,41 @@ docker run -p 8081:80 corp-external
 ## 📝 Available Scripts
 
 ### Root Level Scripts
-| Script | Description |
-|--------|-------------|
-| `dev:both` | Start both apps concurrently |
-| `dev:internal` | Start internal app only |
-| `dev:external` | Start external app only |
-| `build:all` | Build all packages in order |
-| `check-all` | Run all quality checks |
-| `fix-all` | Fix linting and formatting |
-| `clean` | Clean build artifacts |
-| `reset` | Full cleanup and reinstall |
-| `ci` | Complete CI pipeline locally |
+
+| Script         | Description                  |
+| -------------- | ---------------------------- |
+| `dev:both`     | Start both apps concurrently |
+| `dev:internal` | Start internal app only      |
+| `dev:external` | Start external app only      |
+| `build:all`    | Build all packages in order  |
+| `check-all`    | Run all quality checks       |
+| `fix-all`      | Fix linting and formatting   |
+| `clean`        | Clean build artifacts        |
+| `reset`        | Full cleanup and reinstall   |
+| `ci`           | Complete CI pipeline locally |
 
 ### Quality Assurance
-| Script | Description |
-|--------|-------------|
-| `type-check` | TypeScript validation |
-| `lint` / `lint:fix` | ESLint checks |
-| `format` / `format:check` | Prettier formatting |
-| `test:run` | Run all tests |
-| `test:coverage` | Generate coverage reports |
+
+| Script                    | Description               |
+| ------------------------- | ------------------------- |
+| `type-check`              | TypeScript validation     |
+| `lint` / `lint:fix`       | ESLint checks             |
+| `format` / `format:check` | Prettier formatting       |
+| `test:run`                | Run all tests             |
+| `test:coverage`           | Generate coverage reports |
 
 ### Maintenance
-| Script | Description |
-|--------|-------------|
-| `deps:check` | Check for outdated packages |
-| `deps:update` | Update dependencies |
-| `analyze` | Bundle size analysis |
+
+| Script        | Description                 |
+| ------------- | --------------------------- |
+| `deps:check`  | Check for outdated packages |
+| `deps:update` | Update dependencies         |
+| `analyze`     | Bundle size analysis        |
 
 ## ⚙️ Environment Configuration
 
 ### Setup Environment Files
+
 ```bash
 # Copy example files
 cp .env.example .env
@@ -226,14 +244,17 @@ cp apps/corp-authsigner-ui-external/.env.example apps/corp-authsigner-ui-externa
 ```
 
 ### Environment Variables
+
 Key variables for each application:
 
 **Internal App:**
+
 - `VITE_AUTH_DOMAIN` - Internal authentication domain
 - `VITE_API_BASE_URL` - Internal API endpoint
 - `VITE_ENABLE_DEBUGGING` - Debug mode toggle
 
 **External App:**
+
 - `VITE_AUTH_DOMAIN` - External authentication domain
 - `VITE_API_BASE_URL` - External API endpoint
 - `VITE_RATE_LIMIT_ENABLED` - Rate limiting toggle
@@ -248,6 +269,7 @@ The repository includes optimized VS Code configuration:
 - **Launch** - Debug configurations for apps and tests
 
 ### Recommended Extensions
+
 - ESLint & Prettier
 - TypeScript & React support
 - Vitest Explorer
@@ -257,6 +279,7 @@ The repository includes optimized VS Code configuration:
 ## 🔄 CI/CD Pipeline
 
 ### GitLab CI/CD Workflow
+
 - ✅ **Quality Checks** - Linting, formatting, type checking
 - ✅ **Testing** - Unit tests with coverage reporting
 - ✅ **Build Validation** - Ensure all packages build successfully
@@ -265,11 +288,13 @@ The repository includes optimized VS Code configuration:
 - ✅ **Automated Deployment** - Staging and production deployments
 
 ### Branch Strategy
+
 - `main` - Production deployments
 - `develop` - Staging deployments
 - Feature branches - Merge requests with full validation
 
 ### GitLab Features
+
 - **Container Registry** - Built-in Docker image storage
 - **Security Dashboard** - Vulnerability management
 - **Merge Request Templates** - Standardized review process
@@ -279,6 +304,7 @@ The repository includes optimized VS Code configuration:
 ## 🏗 Development Workflow
 
 1. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/new-feature
    ```
@@ -289,6 +315,7 @@ The repository includes optimized VS Code configuration:
    - Pre-commit hooks ensure quality
 
 3. **Commit Changes**
+
    ```bash
    git commit -m "feat: add new authentication feature"
    # Conventional commits enforced
@@ -304,24 +331,28 @@ The repository includes optimized VS Code configuration:
 ### Common Issues
 
 **Build Failures:**
+
 ```bash
 # Clear all caches and rebuild
 npm run reset
 ```
 
 **Type Errors:**
+
 ```bash
 # Rebuild shared package
 npm run build:shared
 ```
 
 **Port Conflicts:**
+
 ```bash
 # Kill processes on ports
 npx kill-port 3001 3002
 ```
 
 **Docker Issues:**
+
 ```bash
 # Clean Docker cache
 docker system prune -a
@@ -330,6 +361,7 @@ docker system prune -a
 ## 📈 Performance
 
 ### Bundle Analysis
+
 ```bash
 # Analyze bundle sizes
 npm run analyze --workspace=corp-authsigner-ui-internal
@@ -337,6 +369,7 @@ npm run analyze --workspace=corp-authsigner-ui-external
 ```
 
 ### Optimization Features
+
 - ✅ Code splitting with manual chunks
 - ✅ Tree shaking for unused code elimination
 - ✅ Asset optimization and compression

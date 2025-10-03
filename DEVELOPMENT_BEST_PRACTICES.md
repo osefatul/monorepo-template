@@ -86,17 +86,18 @@ export const Button = ({
 }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false)
 
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md transition-colors'
+  const baseClasses =
+    'inline-flex items-center justify-center font-medium rounded-md transition-colors'
   const variantClasses = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
     secondary: 'bg-gray-600 text-white hover:bg-gray-700',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
   }
 
   const sizeClasses = {
     small: 'px-3 py-2 text-sm',
     medium: 'px-4 py-2 text-base',
-    large: 'px-6 py-3 text-lg'
+    large: 'px-6 py-3 text-lg',
   }
 
   return (
@@ -146,13 +147,7 @@ const UserProfileContainer = () => {
     }
   }
 
-  return (
-    <UserProfile
-      user={user}
-      loading={loading}
-      onRefresh={fetchUser}
-    />
-  )
+  return <UserProfile user={user} loading={loading} onRefresh={fetchUser} />
 }
 
 // Presentation Component (UI only)
@@ -195,12 +190,16 @@ const UserProfile = ({ user, loading, onRefresh }: UserProfileProps) => {
 
 ```tsx
 // ✅ Good: Descriptive camelCase
-const getUserProfile = async (userId: string) => { /* ... */ }
+const getUserProfile = async (userId: string) => {
+  /* ... */
+}
 const isEmailValid = validateEmail(email)
 const currentUserData = await fetchCurrentUser()
 
 // ❌ Avoid: Abbreviated or unclear names
-const getUsrProf = async (id: string) => { /* ... */ }
+const getUsrProf = async (id: string) => {
+  /* ... */
+}
 const isValid = validate(email)
 const data = await fetch()
 ```
@@ -212,7 +211,7 @@ const data = await fetch()
 const API_ENDPOINTS = {
   USERS: '/api/users',
   AUTHENTICATION: '/api/auth',
-  PAYMENTS: '/api/payments'
+  PAYMENTS: '/api/payments',
 } as const
 
 const MAX_RETRY_ATTEMPTS = 3
@@ -222,7 +221,7 @@ const DEFAULT_TIMEOUT = 5000
 enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
-  GUEST = 'guest'
+  GUEST = 'guest',
 }
 ```
 
@@ -293,10 +292,10 @@ const fetchUser = async (id: string): Promise<ApiResponse<User>> => {
 
 ```tsx
 // ✅ Leverage TypeScript utility types
-type PartialUser = Partial<User>                    // All properties optional
-type UserWithoutId = Omit<User, 'id'>              // User without id property
+type PartialUser = Partial<User> // All properties optional
+type UserWithoutId = Omit<User, 'id'> // User without id property
 type UserEmailAndName = Pick<User, 'email' | 'name'> // Only email and name
-type UserKeys = keyof User                          // 'id' | 'email' | 'name' | 'role'
+type UserKeys = keyof User // 'id' | 'email' | 'name' | 'role'
 ```
 
 ### Type Guards
@@ -371,14 +370,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     user,
     login,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 // Custom hook for consuming context
@@ -406,16 +401,16 @@ interface AppState {
   addNotification: (notification: Notification) => void
 }
 
-const useAppStore = create<AppState>((set) => ({
+const useAppStore = create<AppState>(set => ({
   user: null,
   theme: 'light',
   notifications: [],
-  setUser: (user) => set({ user }),
-  setTheme: (theme) => set({ theme }),
-  addNotification: (notification) =>
-    set((state) => ({
-      notifications: [...state.notifications, notification]
-    }))
+  setUser: user => set({ user }),
+  setTheme: theme => set({ theme }),
+  addNotification: notification =>
+    set(state => ({
+      notifications: [...state.notifications, notification],
+    })),
 }))
 ```
 
@@ -440,8 +435,9 @@ pages/
 ### Route-based Code Splitting
 
 ```tsx
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
+
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'))
@@ -487,7 +483,7 @@ const ProtectedRoute = ({ children, requireAuth = true, requiredRole }: Protecte
 }
 
 // Usage
-<Route
+;<Route
   path="/admin"
   element={
     <ProtectedRoute requiredRole={UserRole.ADMIN}>
@@ -502,8 +498,9 @@ const ProtectedRoute = ({ children, requireAuth = true, requiredRole }: Protecte
 ### Unit Testing
 
 ```tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+
 import { Button } from './Button'
 
 describe('Button Component', () => {
@@ -536,8 +533,9 @@ describe('Button Component', () => {
 ### Custom Hook Testing
 
 ```tsx
-import { renderHook, act } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { act, renderHook } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
 import { useCounter } from './useCounter'
 
 describe('useCounter Hook', () => {
@@ -595,7 +593,7 @@ Follow the import order defined in `.prettierrc.json`:
 
 ```tsx
 // 1. React imports
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createContext } from 'react'
 
 // 2. Next.js imports (if applicable)
@@ -607,17 +605,17 @@ import { z } from 'zod'
 
 // 4. Shared package imports
 import { Button, Card } from '@shared/components'
-import { validateEmail } from '@shared/utils'
 import { User } from '@shared/types'
+import { validateEmail } from '@shared/utils'
 
 // 5. Internal app imports
 import { useAuth } from '@/hooks/useAuth'
 import { userService } from '@/services/userService'
 
-// 6. Relative imports
-import './Component.css'
 import { helperFunction } from '../utils'
 import { ChildComponent } from './ChildComponent'
+// 6. Relative imports
+import './Component.css'
 ```
 
 ## Performance Guidelines
@@ -636,8 +634,8 @@ const ExpensiveComponent = React.memo(({ data }: { data: ComplexData }) => {
 
 ```tsx
 const SearchResults = ({ query, items }: Props) => {
-  const filteredItems = useMemo(() =>
-    items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())),
+  const filteredItems = useMemo(
+    () => items.filter(item => item.name.toLowerCase().includes(query.toLowerCase())),
     [items, query]
   )
 
@@ -648,11 +646,7 @@ const SearchResults = ({ query, items }: Props) => {
   return (
     <div>
       {filteredItems.map(item => (
-        <Item
-          key={item.id}
-          item={item}
-          onClick={handleItemClick}
-        />
+        <Item key={item.id} item={item} onClick={handleItemClick} />
       ))}
     </div>
   )
@@ -663,14 +657,14 @@ const SearchResults = ({ query, items }: Props) => {
 
 ```tsx
 // ✅ Good: Stable, unique keys
-{users.map(user => (
-  <UserCard key={user.id} user={user} />
-))}
+{
+  users.map(user => <UserCard key={user.id} user={user} />)
+}
 
 // ❌ Avoid: Index as key for dynamic lists
-{users.map((user, index) => (
-  <UserCard key={index} user={user} />
-))}
+{
+  users.map((user, index) => <UserCard key={index} user={user} />)
+}
 ```
 
 ### Bundle Optimization
@@ -690,13 +684,7 @@ const LazyComponent = lazy(() =>
 
 ```tsx
 // Use appropriate image formats and sizes
-<img
-  src="/images/hero.webp"
-  alt="Hero image"
-  loading="lazy"
-  width={800}
-  height={600}
-/>
+<img src="/images/hero.webp" alt="Hero image" loading="lazy" width={800} height={600} />
 ```
 
 ## Security Best Practices
@@ -715,7 +703,7 @@ const UserContent = ({ content }: { content: string }) => {
   return (
     <div
       dangerouslySetInnerHTML={{
-        __html: sanitizeHtml(content)
+        __html: sanitizeHtml(content),
       }}
     />
   )
@@ -749,7 +737,7 @@ const authService = {
 
   removeToken: () => {
     localStorage.removeItem('authToken')
-  }
+  },
 }
 ```
 

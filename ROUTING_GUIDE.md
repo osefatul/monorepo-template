@@ -5,6 +5,7 @@ This guide explains how to use React Router in our monorepo structure for naviga
 ## 🏗️ **Architecture Overview**
 
 ### 📁 File Structure
+
 ```
 packages/shared/src/routing/
 ├── types.ts               # Routing types and interfaces
@@ -26,6 +27,7 @@ apps/[app-name]/src/
 ## 🚀 **Current Implementation**
 
 ### ✅ **What's Working:**
+
 1. **✅ React Router DOM** installed and configured
 2. **✅ Shared navigation components** (Navbar, Breadcrumbs)
 3. **✅ Page-based routing** for both apps
@@ -35,6 +37,7 @@ apps/[app-name]/src/
 ### 🔄 **App Routing Structure:**
 
 #### **Internal App Routes:**
+
 - `/` → Redirects to `/dashboard`
 - `/login` → Login page
 - `/dashboard` → Main dashboard
@@ -42,6 +45,7 @@ apps/[app-name]/src/
 - `/users` → User management (admin only)
 
 #### **External App Routes:**
+
 - `/` → Home page (public)
 - `/login` → Login page
 - `/contact` → Contact form (public)
@@ -431,6 +435,7 @@ export const DocumentDetail: React.FC = () => {
 ## 📋 **Best Practices**
 
 ### ✅ **DO:**
+
 - Use `NavLink` for navigation menus to show active states
 - Implement proper loading states for route changes
 - Use breadcrumbs for deep navigation hierarchies
@@ -439,6 +444,7 @@ export const DocumentDetail: React.FC = () => {
 - Keep route configurations organized and documented
 
 ### ❌ **DON'T:**
+
 - Don't use `<a>` tags for internal navigation (breaks SPA)
 - Don't implement route guards that cause loading flashes
 - Don't forget to handle 404 cases
@@ -446,6 +452,7 @@ export const DocumentDetail: React.FC = () => {
 - Don't mix authentication logic with routing logic
 
 ### 🎯 **Tips:**
+
 - Use `replace: true` for redirects to avoid back button issues
 - Implement skeleton screens for better perceived performance
 - Use route-based code splitting for large applications
@@ -464,9 +471,10 @@ The routing system is fully integrated with our Redux store:
 - **Route changes** can trigger data fetching
 
 Example of integrated usage:
+
 ```typescript
-import { useAuth, useTheme, useAppDispatch } from '@shared/store'
 import { useAppNavigation } from '@shared/routing'
+import { useAppDispatch, useAuth, useTheme } from '@shared/store'
 
 export const AuthenticatedRoute: React.FC = () => {
   const auth = useAuth()

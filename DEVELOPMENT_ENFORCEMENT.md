@@ -20,33 +20,37 @@ Our development workflow includes multiple layers of enforcement to ensure code 
 Our ESLint configuration enforces:
 
 #### Naming Conventions
+
 ```typescript
 // ✅ Correct
-const userProfile = 'data'              // camelCase variables
-const MAX_RETRIES = 3                   // UPPER_CASE constants
-interface UserProfile { }               // PascalCase interfaces
-enum UserRole { }                       // PascalCase enums
-const UserComponent = () => { }         // PascalCase components
+const userProfile = 'data' // camelCase variables
+const MAX_RETRIES = 3 // UPPER_CASE constants
+interface UserProfile {} // PascalCase interfaces
+enum UserRole {} // PascalCase enums
+const UserComponent = () => {} // PascalCase components
 
 // ❌ Will cause errors
-const user_profile = 'data'             // snake_case not allowed
-const maxRetries = 3                    // constants should be UPPER_CASE
-interface IUserProfile { }              // Hungarian notation not allowed
+const user_profile = 'data' // snake_case not allowed
+const maxRetries = 3 // constants should be UPPER_CASE
+interface IUserProfile {} // Hungarian notation not allowed
 ```
 
 #### TypeScript Strict Rules
+
 - `@typescript-eslint/no-explicit-any`: Prevents `any` type usage
 - `@typescript-eslint/strict-boolean-expressions`: Enforces explicit boolean checks
 - `@typescript-eslint/no-floating-promises`: Requires Promise handling
 - `@typescript-eslint/consistent-type-imports`: Enforces type-only imports
 
 #### React Best Practices
+
 - `react/jsx-key`: Requires key props in lists
 - `react/no-array-index-key`: Warns against using array indices as keys
 - `react/jsx-pascal-case`: Enforces PascalCase for components
 - `react-hooks/exhaustive-deps`: Enforces complete dependency arrays
 
 #### Import Organization
+
 - Automatic import sorting by groups:
   1. React imports
   2. Next.js imports (if applicable)
@@ -60,6 +64,7 @@ interface IUserProfile { }              // Hungarian notation not allowed
 **Location**: `tsconfig.json`
 
 Enhanced TypeScript settings include:
+
 - `strictNullChecks`: Prevents null/undefined errors
 - `noUncheckedIndexedAccess`: Requires index checking
 - `exactOptionalPropertyTypes`: Strict optional property handling
@@ -72,6 +77,7 @@ Enhanced TypeScript settings include:
 Automatically validates:
 
 #### File Naming
+
 ```bash
 # ✅ Correct naming
 UserProfile.tsx           # PascalCase components
@@ -86,6 +92,7 @@ userProfile/              # Directories should be kebab-case
 ```
 
 #### Directory Structure
+
 ```
 src/
 ├── components/           # ✅ Components in components folder
@@ -101,6 +108,7 @@ src/
 Enforces React component best practices:
 
 #### Required Structure
+
 ```typescript
 // ✅ Correct component structure
 import { ReactNode } from 'react'
@@ -121,6 +129,7 @@ export const Button = ({ children, onClick, variant = 'primary' }: ButtonProps) 
 ```
 
 #### Common Violations Detected
+
 - Missing TypeScript interfaces for props
 - Missing key props in lists
 - Console statements (warns for removal)
@@ -152,6 +161,7 @@ Before each commit, the following checks run automatically:
 **Location**: `.husky/commit-msg`
 
 Enforces conventional commit format:
+
 ```bash
 # ✅ Valid formats
 feat(auth): add user login functionality
@@ -168,6 +178,7 @@ FEAT: add feature               # Wrong case
 ## 📋 Available Commands
 
 ### Validation Commands
+
 ```bash
 # Run all validations
 npm run validate:all
@@ -183,6 +194,7 @@ npm run check-all
 ```
 
 ### Fixing Commands
+
 ```bash
 # Auto-fix linting issues
 npm run lint:fix
@@ -195,6 +207,7 @@ npm run fix-all
 ```
 
 ### Development Commands
+
 ```bash
 # Run with validation on save
 npm run dev:internal
@@ -207,12 +220,14 @@ npm run build:all
 ## 🚨 What Happens When Rules Are Violated
 
 ### During Development (IDE)
+
 - **Red underlines** for errors
 - **Yellow underlines** for warnings
 - **Auto-fix suggestions** on save
 - **Import organization** on save
 
 ### During Commit
+
 1. **Lint-staged** runs and tries to auto-fix issues
 2. **Structure validation** checks file/directory naming
 3. **Component validation** checks React patterns
@@ -221,11 +236,13 @@ npm run build:all
 6. **Tests** must pass
 
 **If any step fails:**
+
 - Commit is **blocked**
 - Detailed error messages are shown
 - Suggestions for fixes are provided
 
 ### Example Error Output
+
 ```bash
 ❌ ERRORS (3):
 
@@ -245,7 +262,9 @@ npm run build:all
 ## 🛠 Developer Setup
 
 ### Required VSCode Extensions
+
 The repository includes recommended extensions in `.vscode/extensions.json`:
+
 - ESLint
 - Prettier
 - TypeScript and JavaScript Language Features
@@ -253,7 +272,9 @@ The repository includes recommended extensions in `.vscode/extensions.json`:
 - Bracket Pair Colorizer
 
 ### VSCode Settings
+
 The repository automatically configures VSCode with:
+
 - Format on save
 - Auto-fix on save
 - Import organization
@@ -263,6 +284,7 @@ The repository automatically configures VSCode with:
 ## 🔍 Troubleshooting Common Issues
 
 ### ESLint Errors
+
 ```bash
 # If ESLint shows errors in IDE but not in terminal
 npm run lint
@@ -272,6 +294,7 @@ npx eslint --cache-location node_modules/.cache/eslint --cache
 ```
 
 ### TypeScript Errors
+
 ```bash
 # If TypeScript shows errors
 npm run type-check
@@ -281,6 +304,7 @@ npx tsc --build --clean
 ```
 
 ### Pre-commit Hook Issues
+
 ```bash
 # If pre-commit hooks fail to run
 npx husky install
@@ -290,6 +314,7 @@ npm run pre-commit
 ```
 
 ### Import/Path Issues
+
 ```bash
 # Check TypeScript path mapping in tsconfig.json
 # Ensure @shared/* paths are correctly configured

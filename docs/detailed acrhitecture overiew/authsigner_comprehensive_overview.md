@@ -6,13 +6,14 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 
 **Project Timeline**: Q4 2025 MVP for CME, followed by IT&C, GSF, GCT expansion  
 **Team**: Torrent Team (development), multiple business line partnerships  
-**Investment**: Enterprise-grade platform with reusable architecture  
+**Investment**: Enterprise-grade platform with reusable architecture
 
 ---
 
 ## Business Problem & Current State
 
 ### Critical Pain Points
+
 **Fragmented Data Storage**: ASL information scattered across FileNet, Chorus, SharePoint, shared drives, and email inboxes with no centralized repository.
 
 **Manual Process Inefficiencies**: Email-driven workflows with multiple handoffs between Client Managers, Product Operations, Trust Review, and Risk partners leading to lost requests and processing delays ranging from minutes to months.
@@ -24,6 +25,7 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 **Operational Burden**: Bankers spend significant time on administrative tasks rather than relationship management, with some Client Managers having streamlined processes while others rely on manual research for each request.
 
 ### Current Volume & Impact
+
 - **CME Business Line**: 500+ monthly changes with weeks-long processing times
 - **Total Enterprise Scope**: 15-16 business lines requiring similar capabilities
 - **Client Experience**: No self-service options, limited visibility, inconsistent service levels
@@ -36,6 +38,7 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 ### Core System Components
 
 **Auth Signer Service (Backend)**
+
 - Spring Boot 3.x microservice with Java 17+
 - RESTful API architecture with OAuth 2.0 security
 - SQL Server database serving as single source of truth
@@ -43,6 +46,7 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 - Business rule engine with configurable workflows
 
 **Client Portal (Frontend)**
+
 - React 18+ application with TypeScript
 - Embedded within Corporate Connect portal
 - Material-UI components following bank design standards
@@ -50,6 +54,7 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 - Real-time status updates and notifications
 
 **Integration Platform**
+
 - WebKYC for compliance validation and privilege management
 - FileNet for document storage and retrieval
 - OCR/AI service (Cognizant partnership) for document digitization
@@ -59,6 +64,7 @@ The Auth Signer project is a digital transformation initiative to modernize auth
 ### Data Architecture
 
 **Centralized Repository Design**
+
 ```
 Core Entities:
 - accounts: Master account information with business line classification
@@ -73,6 +79,7 @@ Core Entities:
 ```
 
 **Key Design Principles**
+
 - Complete audit trail for regulatory compliance
 - Configurable business rules without code changes
 - Support for complex approval workflows
@@ -86,6 +93,7 @@ Core Entities:
 ### Client Self-Service Portal
 
 **Existing Corporate Connect Users**
+
 - Single sign-on access to ASL management section
 - Dashboard view of current signers with real-time status
 - Add/remove/update signer functionality with guided forms
@@ -94,6 +102,7 @@ Core Entities:
 - Request status tracking with progress indicators
 
 **Guest Users (No Corporate Connect Account)**
+
 - Secure token-based temporary access (24-hour expiration)
 - Banker-initiated workflow via OCR document processing
 - Email-delivered secure links for client access
@@ -103,6 +112,7 @@ Core Entities:
 ### Internal Banker Experience
 
 **Request Management Dashboard**
+
 - Centralized view of all pending approvals and tasks
 - Client account search with entitlement verification
 - OCR document upload and review interface
@@ -110,6 +120,7 @@ Core Entities:
 - Historical audit trail access for compliance reporting
 
 **Approval Workflows**
+
 - Automated task routing based on business line rules
 - Multi-person approval coordination for complex requests
 - Comments and feedback capability for rejected requests
@@ -118,6 +129,7 @@ Core Entities:
 ### Operational Workflows
 
 **Standard Processing Flow**
+
 1. Client initiates request via self-service portal
 2. Automated validation against business line rules
 3. Conditional approval routing (auto-approve vs. manual review)
@@ -126,6 +138,7 @@ Core Entities:
 6. Stakeholder notifications and audit trail creation
 
 **Guest User Processing Flow**
+
 1. Banker receives paper/email request
 2. Document upload and OCR processing with confidence scoring
 3. Banker review and correction of extracted data
@@ -134,6 +147,7 @@ Core Entities:
 6. Banker final approval and standard processing continuation
 
 **Bulk Processing Flow**
+
 1. File upload with format validation
 2. Kafka-based asynchronous processing
 3. Individual request generation with batch tracking
@@ -145,6 +159,7 @@ Core Entities:
 ## Technology Stack & Architecture
 
 ### Backend Technology
+
 ```
 Language: Java 17+
 Framework: Spring Boot 3.x with Maven build
@@ -155,6 +170,7 @@ APIs: RESTful with OpenAPI 3.0 documentation
 ```
 
 ### Frontend Technology
+
 ```
 Framework: React 18+ with TypeScript
 UI Library: Material-UI (Corporate Connect standards)
@@ -164,6 +180,7 @@ Integration: Embedded within Corporate Connect portal
 ```
 
 ### Infrastructure Requirements
+
 ```
 Deployment: Kubernetes/Docker containers
 Monitoring: Application Insights with custom dashboards
@@ -173,6 +190,7 @@ Backup: Point-in-time recovery with geo-redundancy
 ```
 
 ### Integration Architecture
+
 ```
 WebKYC: REST API for compliance validation
 FileNet: Document storage and retrieval APIs
@@ -187,9 +205,11 @@ Email Service: Notifications and guest user communications
 ## Business Line Configuration
 
 ### Configurable Business Rules
+
 The system supports business line-specific configurations without code changes:
 
 **CME Configuration Example**
+
 - Dual approval required for all changes
 - Maximum authorization limit: $1,000,000
 - Approval timeout: 48 hours
@@ -197,6 +217,7 @@ The system supports business line-specific configurations without code changes:
 - Custom export template with CME-specific verbiage
 
 **IT&C Configuration Example**
+
 - Single approval sufficient for most changes
 - Maximum authorization limit: $500,000
 - Approval timeout: 24 hours
@@ -204,6 +225,7 @@ The system supports business line-specific configurations without code changes:
 - Streamlined template for faster processing
 
 ### Approval Workflow Matrix
+
 ```
 Business Line | Single Approval | Dual Approval | Auto-Approval
 CME          | Never          | Always        | Attestation only
@@ -217,6 +239,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Security & Compliance
 
 ### Authentication & Authorization
+
 - Corporate Connect SSO integration with role-based access
 - JWT token validation with automatic refresh
 - Account-level entitlements preventing unauthorized access
@@ -224,6 +247,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 - Guest user token security with IP validation
 
 ### Data Protection
+
 - PII encryption at rest using AES-256 with KMS
 - TLS 1.3 encryption for all data in transit
 - Role-based data access with field-level permissions
@@ -231,6 +255,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 - Data retention policies aligned with regulatory requirements
 
 ### Regulatory Compliance
+
 - Immutable audit trail for all changes
 - Digital signature capability with HSM integration
 - Regulatory reporting interfaces for examinations
@@ -244,24 +269,28 @@ GCT          | Standard       | High-risk     | Low-risk only
 ### External System Dependencies
 
 **WebKYC Integration**
+
 - Purpose: Compliance validation and privilege management
 - Method: REST API with retry mechanisms and circuit breaker
 - Fallback: Manual review queue for system unavailability
 - SLA: 99.5% uptime with <2 second response time
 
 **FileNet Integration**
+
 - Purpose: Official document storage and retrieval
 - Method: Asynchronous document upload with status tracking
 - Fallback: Local storage with delayed sync
 - Features: Version control and metadata management
 
 **OCR/AI Service (Cognizant Partnership)**
+
 - Purpose: Historical document digitization and new form processing
 - Method: ML models with confidence scoring and validation
 - Fallback: Manual data entry for low-confidence extractions
 - Scope: 7+ years of historical CME documents
 
 ### Future Integration Roadmap
+
 - Onboarding Service: Direct ASL data feed for new accounts
 - Transaction Systems: Real-time signer verification for fund releases
 - Risk Management: Enhanced fraud detection and monitoring
@@ -272,21 +301,25 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Implementation Roadmap
 
 ### Phase 1: Foundation (Sprints 1-3, 6 weeks)
+
 **Sprint 1**: Infrastructure setup, database schema, basic Spring Boot service
 **Sprint 2**: Core CRUD APIs, business logic, validation engine
 **Sprint 3**: Authentication integration, security implementation, API documentation
 
 ### Phase 2: Client Experience (Sprints 4-6, 6 weeks)
+
 **Sprint 4**: React application foundation, Corporate Connect integration
 **Sprint 5**: Self-service forms, dashboard, status tracking
 **Sprint 6**: Attestation workflow, export functionality, bulk upload interface
 
 ### Phase 3: Integrations (Sprints 7-9, 6 weeks)
+
 **Sprint 7**: WebKYC and FileNet integrations, approval workflow engine
 **Sprint 8**: Guest user system, Kafka bulk processing, OCR integration
 **Sprint 9**: End-to-end testing, monitoring, production readiness
 
 ### Post-MVP Expansion
+
 - IT&C business line onboarding (Q1 2026)
 - GSF/GCT integration with onboarding services (Q2 2026)
 - Advanced analytics and reporting capabilities (Q3 2026)
@@ -297,23 +330,31 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Risk Management & Mitigation
 
 ### Technical Risks
+
 **Integration Dependencies**: WebKYC, Corporate Connect, OCR services
+
 - Mitigation: Mock services for parallel development, fallback procedures
 
 **Performance & Scalability**: High-volume bulk processing, concurrent users
+
 - Mitigation: Kafka implementation, load testing, auto-scaling
 
 **Data Migration**: Historical document quality, OCR accuracy
+
 - Mitigation: Multiple validation layers, manual review processes
 
 ### Business Risks
+
 **User Adoption**: Client and banker resistance to new processes
+
 - Mitigation: Training programs, gradual rollout, change management
 
 **Regulatory Compliance**: Audit requirements, data retention
+
 - Mitigation: Legal review, compliance testing, immutable audit trails
 
 **Business Continuity**: System downtime, disaster recovery
+
 - Mitigation: High availability architecture, manual fallback procedures
 
 ---
@@ -321,24 +362,28 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Success Metrics & KPIs
 
 ### Operational Metrics
+
 - Processing time reduction: weeks → hours (target: 80% improvement)
 - Error rate reduction: current manual errors → <0.1% system errors
 - Self-service adoption: target 70% of requests via client portal
 - Banker productivity: 3x increase in requests processed per hour
 
 ### Technical Metrics
+
 - System uptime: >99.5% availability
 - API response time: <500ms for 95% of requests
 - Database performance: <100ms average query time
 - Integration reliability: <1% failure rate for external calls
 
 ### Business Impact
+
 - Client satisfaction score improvement: target 25% increase
 - Operational cost reduction: banker time savings quantification
 - Compliance risk reduction: audit finding elimination
 - Revenue impact: banker time redeployment to relationship management
 
 ### Adoption Metrics
+
 - User engagement: daily/monthly active users
 - Feature utilization: adoption rates for different capabilities
 - Mobile usage: responsive design effectiveness
@@ -349,6 +394,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Team Structure & Governance
 
 ### Development Team (Torrent Team)
+
 - **Tech Lead (1)**: Architecture decisions, integration coordination
 - **Backend Developers (2-3)**: Spring Boot service, database, integrations
 - **Frontend Developers (2)**: React application, Corporate Connect integration
@@ -356,6 +402,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 - **QA Engineers (2)**: Test automation, performance testing, security validation
 
 ### Business Stakeholders
+
 - **Product Manager**: Requirements definition, stakeholder coordination
 - **CME Business Line**: MVP validation, user acceptance testing
 - **IT&C/GSF/GCT**: Future phase requirements and rollout planning
@@ -363,6 +410,7 @@ GCT          | Standard       | High-risk     | Low-risk only
 - **Architecture Review Board**: Technical governance and standards compliance
 
 ### External Partners
+
 - **Cognizant AI Team**: OCR/ML document processing partnership
 - **WebKYC Team**: Integration specifications and testing coordination
 - **Corporate Connect Team**: Portal integration and authentication
@@ -373,18 +421,21 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Financial Investment & ROI
 
 ### Development Investment
+
 - Team costs for 18-week development cycle
 - Infrastructure provisioning and tooling
 - External integration costs and partnerships
 - Training and change management programs
 
 ### Operational Savings
+
 - Banker time reduction: administrative → relationship management
 - Error reduction: manual process mistakes and rework elimination
 - Client service improvement: reduced inquiry calls and escalations
 - Compliance risk mitigation: audit finding prevention
 
 ### Revenue Impact
+
 - Client satisfaction improvement leading to retention
 - Banker capacity increase enabling portfolio growth
 - Process efficiency enabling new business opportunities
@@ -395,18 +446,21 @@ GCT          | Standard       | High-risk     | Low-risk only
 ## Future Vision & Expansion
 
 ### Enterprise Platform Evolution
+
 - Template for additional process digitization initiatives
 - API ecosystem enabling innovation and integration
 - Data analytics platform for business intelligence
 - Machine learning enhancement for predictive capabilities
 
 ### Business Line Expansion Strategy
+
 - Standardized onboarding process for new business lines
 - Configurable workflows supporting diverse requirements
 - Integration marketplace for third-party services
 - Self-service administration for business line managers
 
 ### Innovation Opportunities
+
 - AI-powered risk assessment and fraud detection
 - Predictive analytics for proactive client service
 - Mobile-first design for next-generation user experience

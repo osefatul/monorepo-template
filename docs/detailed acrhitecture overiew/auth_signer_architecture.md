@@ -3,9 +3,11 @@
 ## 1. System Overview
 
 ### 1.1 Mission Statement
+
 Build a centralized, automated, and auditable system for managing authorized signers that serves as the single source of truth for all business lines, starting with CME (Client Manager Enterprise) and expanding to IT&C and others.
 
 ### 1.2 Key Metrics
+
 - **Current Volume**: 500+ changes per month (CME only)
 - **Target Timeline**: MVP by Q4 2025
 - **Business Lines**: CME (MVP), IT&C (Phase 2), GSF/GCT (Future)
@@ -68,18 +70,21 @@ com.usbank.authsigner/
 #### 3.1.2 Key Service Components
 
 **AuthSignerService**: Core business logic
+
 - CRUD operations for ASL management
 - Validation rule enforcement
 - Workflow orchestration
 - Audit trail management
 
 **ValidationEngine**: Business rule processor
+
 - Single-signer validation
 - Multi-person approval workflows
 - Business line specific rules
 - Compliance checks
 
 **IntegrationOrchestrator**: External service coordinator
+
 - WebKYC updates
 - FileNet document management
 - OCR service communication
@@ -262,6 +267,7 @@ CREATE INDEX IX_guest_tokens_expires ON guest_tokens(expires_at) WHERE used_at I
 **Integration**: Embedded within Corporate Connect portal
 
 **Core Components**:
+
 ```typescript
 // Component Structure
 src/
@@ -301,6 +307,7 @@ src/
 **Technology**: React 18+, TypeScript, Ant Design
 
 **Core Components**:
+
 ```typescript
 // Component Structure for Internal UI
 src/
@@ -334,6 +341,7 @@ src/
 **Purpose**: Digitize historical documents and process new paper submissions
 
 **Flow**:
+
 1. Banker uploads document via Internal UI
 2. Document sent to OCR service with metadata
 3. OCR service processes using ML models
@@ -341,6 +349,7 @@ src/
 5. Banker reviews and validates extracted data
 
 **API Contract**:
+
 ```json
 {
   "processDocument": {
@@ -372,12 +381,14 @@ src/
 **Purpose**: Update official privilege management system
 
 **Flow**:
+
 1. Request approved in Auth Signer Service
 2. Service calls WebKYC API with signer changes
 3. WebKYC performs compliance checks
 4. Confirmation returned to Auth Signer Service
 
 **API Contract**:
+
 ```json
 {
   "updateSignerPrivileges": {
@@ -401,6 +412,7 @@ src/
 **Purpose**: Provide secure, temporary access for clients without CC accounts
 
 **Flow**:
+
 1. Banker initiates guest access request
 2. System generates secure token with expiration
 3. Email sent to client with unique URL
@@ -408,6 +420,7 @@ src/
 5. Token validates and provides scoped access
 
 **Security Considerations**:
+
 - Tokens expire in 24 hours
 - Single-use tokens for sensitive operations
 - IP address validation
@@ -519,6 +532,7 @@ graph TD
 **Guest Users**: Token-based temporary access
 
 **Authorization Levels**:
+
 - **Client User**: Can view/modify own account ASL
 - **Banker**: Can view/modify client accounts in their portfolio
 - **Risk Officer**: Can approve high-risk changes
@@ -547,16 +561,16 @@ graph TD
 Application Servers:
   - 3x Spring Boot instances (load balanced)
   - CPU: 4 cores, RAM: 8GB per instance
-  
+
 Database:
   - SQL Server 2019 (HA cluster)
   - Primary + 2 replicas
   - Storage: 500GB initial, auto-growth enabled
-  
+
 Load Balancer:
   - Application Gateway with SSL termination
   - Health check endpoints configured
-  
+
 Monitoring:
   - Application Insights integration
   - Custom dashboards for business metrics
@@ -567,16 +581,19 @@ Monitoring:
 ### 8.1 Historical Data Migration
 
 **Phase 1**: Cognizant AI Processing
+
 - Process 7+ years of FileNet documents
 - Extract structured data using OCR/AI
 - Validate extracted data against known records
 
 **Phase 2**: Data Quality Validation
+
 - Business users review extracted data
 - Reconcile discrepancies
 - Flag incomplete records for manual review
 
 **Phase 3**: System Population
+
 - Bulk import validated data
 - Create audit trail for migrated records
 - Generate reports for business validation
@@ -590,16 +607,19 @@ Monitoring:
 ## 9. Testing Strategy
 
 ### 9.1 Unit Testing
+
 - Service layer: 90%+ code coverage
 - Repository layer: All CRUD operations tested
 - Validation logic: All business rules covered
 
 ### 9.2 Integration Testing
+
 - External service integrations mocked
 - End-to-end API testing with Postman
 - Database integration testing with test containers
 
 ### 9.3 User Acceptance Testing
+
 - CME business users validate workflows
 - Client users test self-service functionality
 - Performance testing with projected volumes
@@ -607,11 +627,13 @@ Monitoring:
 ## 10. Monitoring & Operations
 
 ### 10.1 Application Monitoring
+
 - Response time metrics for all APIs
 - Error rate tracking and alerting
 - Custom business metrics (requests processed, approval rates)
 
 ### 10.2 Business Metrics Dashboard
+
 - Daily/weekly/monthly request volumes
 - Processing time analytics
 - User adoption metrics
@@ -620,11 +642,13 @@ Monitoring:
 ## 11. Risk Mitigation
 
 ### 11.1 Technical Risks
+
 - **Integration Failures**: Circuit breaker patterns, fallback mechanisms
 - **Data Corruption**: Immutable audit trail, point-in-time recovery
 - **Performance Issues**: Caching strategy, database optimization
 
 ### 11.2 Business Risks
+
 - **User Adoption**: Comprehensive training program, gradual rollout
 - **Data Quality**: Multiple validation layers, business user review
 - **Regulatory Compliance**: Legal team review, audit trail requirements
