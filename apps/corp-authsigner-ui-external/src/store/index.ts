@@ -1,23 +1,13 @@
-import { createBaseStore } from '@shared/store'
-import type { BaseRootState } from '@shared/store'
+import { store as sharedStore } from '@shared/store'
+import type { AppDispatch, RootState } from '@shared/store'
 
-// External app specific reducers (can be added later)
-const externalReducers = {
-  // Add external-specific reducers here
-  // publicApi: publicApiSlice.reducer,
-  // forms: formsSlice.reducer,
-}
+// Use the shared store for the external app
+export const store = sharedStore
 
-// Create the store for the external app
-export const store = createBaseStore(externalReducers)
+// Re-export types
+export type { RootState, AppDispatch }
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = BaseRootState & {
-  // Add external-specific state types here
-}
-export type AppDispatch = typeof store.dispatch
-
-// Export API hooks for easy access
-export * from './api'
+// Export shared API hooks and selectors for easy access
+export * from '@shared/store'
 
 export default store

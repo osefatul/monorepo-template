@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-import type { Middleware, ThunkMiddleware } from '@reduxjs/toolkit'
-import { authSlice, uiSlice } from './slices'
-import { listenerMiddleware } from './middleware'
+import type { Middleware } from '@reduxjs/toolkit'
+
 import { baseApi } from './api'
-import type { BaseRootState } from './types'
+import { uiSlice } from './slices'
 
 // Base store configuration that can be extended by apps
-export const createBaseStore = (additionalReducers = {}, additionalMiddleware: Middleware[] = []) => {
+export const createBaseStore = (
+  additionalReducers = {},
+  additionalMiddleware: Middleware[] = []
+) => {
   return configureStore({
     reducer: {
-      auth: authSlice.reducer,
       ui: uiSlice.reducer,
       [baseApi.reducerPath]: baseApi.reducer,
       ...additionalReducers,
@@ -22,7 +23,6 @@ export const createBaseStore = (additionalReducers = {}, additionalMiddleware: M
         },
       })
         .concat(baseApi.middleware)
-        .prepend(listenerMiddleware.middleware)
         .concat(...additionalMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
   })

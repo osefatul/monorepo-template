@@ -1,23 +1,13 @@
-import { createBaseStore } from '@shared/store'
-import type { BaseRootState } from '@shared/store'
+import { store as sharedStore } from '@shared/store'
+import type { AppDispatch, RootState } from '@shared/store'
 
-// Internal app specific reducers (can be added later)
-const internalReducers = {
-  // Add internal-specific reducers here
-  // dashboard: dashboardSlice.reducer,
-  // reports: reportsSlice.reducer,
-}
+// Use the shared store for the internal app
+export const store = sharedStore
 
-// Create the store for the internal app
-export const store = createBaseStore(internalReducers)
+// Re-export types
+export type { RootState, AppDispatch }
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = BaseRootState & {
-  // Add internal-specific state types here
-}
-export type AppDispatch = typeof store.dispatch
-
-// Export API hooks for easy access
-export * from './api'
+// Export shared API hooks and selectors for easy access
+export * from '@shared/store'
 
 export default store

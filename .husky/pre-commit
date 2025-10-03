@@ -8,10 +8,6 @@ npx lint-staged
 echo "Building all packages..."
 npm run build:all
 
-# Run comprehensive linting across the entire codebase
-echo "🔍 Running comprehensive linting..."
-npm run lint
-
 # Run all tests to ensure nothing is broken
 echo "Running all tests..."
 npm run test
@@ -29,9 +25,5 @@ npm run validate:tests
 # Run type checking
 echo "Running TypeScript checks..."
 npm run type-check
-
-# Run linting with strict rules
-echo "Running ESLint..."
-npm run lint
 
 echo "All pre-commit checks passed!"

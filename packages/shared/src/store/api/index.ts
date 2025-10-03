@@ -1,9 +1,7 @@
-// Export base API and all API slices
-export { baseApi } from './baseApi'
 export * from './authApi'
+export { baseApi } from './baseApi'
 
-// Common API types and utilities
-export type RTKApiResponse<T> = {
+export interface RTKApiResponse<T> {
   data: T
   message?: string
   status: 'success' | 'error'
@@ -19,7 +17,7 @@ export type PaginatedResponse<T> = RTKApiResponse<{
   }
 }>
 
-export type ApiError = {
+export interface ApiError {
   status: number
   data: {
     message: string

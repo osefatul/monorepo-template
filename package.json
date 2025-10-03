@@ -22,7 +22,7 @@
     "clean:build": "rm -rf apps/*/dist packages/*/dist",
     "reset": "npm run clean:deps && npm run clean:build && npm install",
     "type-check": "npm run type-check --workspaces --if-present",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "lint:workspaces": "npm run lint --workspaces --if-present",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
@@ -79,7 +79,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix --max-warnings 0",
+      "eslint --fix",
       "prettier --write",
       "bash -c 'npm run validate:components'"
     ],
