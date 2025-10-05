@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
     "ignoreDeprecations": "5.0",
-
-    // === TARGET AND MODULE CONFIGURATION (2025 Standards) ===
     "target": "ES2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -12,21 +10,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-
-    // === JAVASCRIPT SUPPORT ===
     "allowJs": false,
     "checkJs": false,
-
-    // === INTEROP AND COMPATIBILITY ===
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-
-    // === JSX CONFIGURATION ===
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-
-    // === STRICT TYPE CHECKING (Latest Industry Standards) ===
     "strict": true,
     "alwaysStrict": true,
     "strictNullChecks": true,
@@ -40,30 +30,20 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noPropertyAccessFromIndexSignature": true,
-
-    // === ADDITIONAL TYPE CHECKS (Enhanced 2025) ===
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-
-    // === EMIT CONFIGURATION ===
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
     "importHelpers": true,
     "downlevelIteration": true,
-
-    // === MODULE DETECTION (Latest) ===
     "moduleDetection": "force",
-
-    // === PERFORMANCE AND DEBUGGING ===
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-
-    // === PATH MAPPING ===
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["packages/shared/src/*"],
@@ -71,8 +51,6 @@
       "@internal/*": ["apps/corp-authsigner-ui-internal/src/*"],
       "@external/*": ["apps/corp-authsigner-ui-external/src/*"]
     },
-
-    // === ADVANCED OPTIONS (2025 Standards) ===
     "preserveConstEnums": true,
     "verbatimModuleSyntax": false,
     "allowArbitraryExtensions": false,
@@ -91,5 +69,5 @@
     }
   ],
   "include": [],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "./packages/shared/@types"]
 }

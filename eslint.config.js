@@ -12,15 +12,12 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Common rules configuration that can be reused
 const commonRules = {
-  // ===== JAVASCRIPT/TYPESCRIPT CORE RULES =====
   'no-unused-vars': 'off',
   'no-undef': 'off',
   'prefer-const': 'error',
   'no-var': 'error',
 
-  // Code Quality (Balanced)
   eqeqeq: ['error', 'always', { null: 'ignore' }],
   curly: ['warn', 'all'],
   'brace-style': ['error', '1tbs', { allowSingleLine: true }],
@@ -38,7 +35,6 @@ const commonRules = {
   'no-unreachable': 'error',
   'valid-typeof': 'error',
 
-  // Modern JavaScript
   'prefer-arrow-callback': 'error',
   'prefer-template': 'error',
   'prefer-spread': 'error',
@@ -53,7 +49,6 @@ const commonRules = {
   'object-shorthand': 'error',
   'quote-props': ['error', 'as-needed'],
 
-  // ===== TYPESCRIPT SPECIFIC RULES (Relaxed) =====
   '@typescript-eslint/no-unused-vars': [
     'warn',
     {
@@ -63,15 +58,15 @@ const commonRules = {
     },
   ],
   '@typescript-eslint/no-explicit-any': 'warn',
-  '@typescript-eslint/no-non-null-assertion': 'off', // Allow when necessary
+  '@typescript-eslint/no-non-null-assertion': 'off',
   '@typescript-eslint/prefer-as-const': 'warn',
   '@typescript-eslint/prefer-nullish-coalescing': 'warn',
   '@typescript-eslint/prefer-optional-chain': 'warn',
-  '@typescript-eslint/strict-boolean-expressions': 'off', // Too strict
-  '@typescript-eslint/no-floating-promises': 'off', // Too strict for development
-  '@typescript-eslint/no-misused-promises': 'off', // Allow async event handlers
+  '@typescript-eslint/strict-boolean-expressions': 'off',
+  '@typescript-eslint/no-floating-promises': 'off',
+  '@typescript-eslint/no-misused-promises': 'off',
   '@typescript-eslint/await-thenable': 'warn',
-  '@typescript-eslint/require-await': 'off', // Can be overly restrictive
+  '@typescript-eslint/require-await': 'off',
   '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
   '@typescript-eslint/consistent-type-definitions': ['warn', 'interface'],
   '@typescript-eslint/consistent-type-imports': [
@@ -92,9 +87,8 @@ const commonRules = {
       'ts-check': false,
     },
   ],
-  '@typescript-eslint/prefer-readonly': 'off', // Can be overly restrictive
+  '@typescript-eslint/prefer-readonly': 'off',
 
-  // Naming Conventions (Relaxed)
   '@typescript-eslint/naming-convention': [
     'warn',
     {
@@ -111,7 +105,6 @@ const commonRules = {
     },
   ],
 
-  // ===== REACT RULES (Balanced) =====
   'react/jsx-uses-react': 'off',
   'react/react-in-jsx-scope': 'off',
   'react/prop-types': 'off',
@@ -138,7 +131,6 @@ const commonRules = {
   'react/no-unknown-property': 'error',
   'react/require-render-return': 'error',
 
-  // React Best Practices (Balanced)
   'react/jsx-boolean-value': ['error', 'never'],
   'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
   'react/jsx-fragments': ['error', 'syntax'],
@@ -153,14 +145,11 @@ const commonRules = {
   'react/hook-use-state': 'warn',
   'react/jsx-no-constructed-context-values': 'error',
 
-  // React Hooks
   ...reactHooks.configs.recommended.rules,
   'react-hooks/exhaustive-deps': 'error',
 
-  // React Refresh
   'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
-  // ===== ACCESSIBILITY RULES (Essential) =====
   'jsx-a11y/alt-text': 'error',
   'jsx-a11y/anchor-has-content': 'error',
   'jsx-a11y/anchor-is-valid': 'error',
@@ -179,7 +168,6 @@ const commonRules = {
   'jsx-a11y/role-supports-aria-props': 'error',
   'jsx-a11y/tabindex-no-positive': 'error',
 
-  // ===== IMPORT/EXPORT RULES (Relaxed) =====
   'import/order': [
     'warn',
     {
@@ -197,7 +185,7 @@ const commonRules = {
         },
       ],
       pathGroupsExcludedImportTypes: ['react'],
-      'newlines-between': 'never', // Less strict about spacing
+      'newlines-between': 'never',
       alphabetize: {
         order: 'asc',
         caseInsensitive: true,
@@ -210,15 +198,13 @@ const commonRules = {
   'import/no-cycle': 'warn',
   'import/no-self-import': 'warn',
   'import/no-useless-path-segments': 'warn',
-  'import/no-unresolved': 'off', // Can be problematic with path mappings
+  'import/no-unresolved': 'off',
   'import/consistent-type-specifier-style': ['warn', 'prefer-top-level'],
 
-  // ===== UNUSED IMPORTS =====
-  'unused-imports/no-unused-imports': 'off', // Too strict for development
-  'unused-imports/no-unused-vars': 'off', // Too strict for development
+  'unused-imports/no-unused-imports': 'off',
+  'unused-imports/no-unused-vars': 'off',
 }
 
-// Common plugins configuration
 const commonPlugins = {
   react,
   'react-hooks': reactHooks,
@@ -228,7 +214,6 @@ const commonPlugins = {
   'unused-imports': unusedImports,
 }
 
-// Common settings configuration
 const commonSettings = {
   react: {
     version: 'detect',
@@ -241,10 +226,8 @@ const commonSettings = {
 }
 
 export default tseslint.config(
-  // Base JavaScript recommended rules
   js.configs.recommended,
 
-  // Global configuration for all files
   {
     languageOptions: {
       globals: {
@@ -262,7 +245,6 @@ export default tseslint.config(
     },
   },
 
-  // Disable TypeScript project parsing for all TypeScript files globally
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -273,14 +255,13 @@ export default tseslint.config(
         ecmaFeatures: {
           jsx: true,
         },
-        project: false, // Explicitly disable project parsing
+        project: false,
       },
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
     },
     rules: {
-      // Basic TypeScript rules without type checking
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
       'prefer-const': 'error',
@@ -288,7 +269,6 @@ export default tseslint.config(
     },
   },
 
-  // TypeScript source files in shared package
   {
     files: ['packages/shared/src/**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked],
@@ -311,7 +291,6 @@ export default tseslint.config(
     },
     rules: {
       ...commonRules,
-      // Override overly strict type-checked rules
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
@@ -320,7 +299,6 @@ export default tseslint.config(
     },
   },
 
-  // TypeScript source files in internal app
   {
     files: ['apps/corp-authsigner-ui-internal/src/**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked],
@@ -343,7 +321,6 @@ export default tseslint.config(
     },
     rules: {
       ...commonRules,
-      // Override overly strict type-checked rules
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
@@ -352,7 +329,6 @@ export default tseslint.config(
     },
   },
 
-  // TypeScript source files in external app
   {
     files: ['apps/corp-authsigner-ui-external/src/**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked],
@@ -375,7 +351,6 @@ export default tseslint.config(
     },
     rules: {
       ...commonRules,
-      // Override overly strict type-checked rules
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
@@ -384,7 +359,6 @@ export default tseslint.config(
     },
   },
 
-  // General configuration for all JS files
   {
     files: ['**/*.{js,jsx}'],
     plugins: {
@@ -402,7 +376,6 @@ export default tseslint.config(
     },
   },
 
-  // Ignores
   {
     ignores: [
       '**/dist/**',
@@ -419,7 +392,6 @@ export default tseslint.config(
     ],
   },
 
-  // Test files
   {
     files: ['**/*.{test,spec}.{ts,tsx,js,jsx}'],
     rules: {

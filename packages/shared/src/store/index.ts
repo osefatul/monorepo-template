@@ -1,23 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { api } from '../api'
+import { baseApi } from '../services/api/baseApi'
 
-// Create the stores
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
-    // notifications: notificationsReducer,
+    [baseApi.reducerPath]: baseApi.reducer,
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [api.util.resetApiState.type],
-      },
-    }).concat(api.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
 export const createAppStore = () => store
-export * from '../api'
+export * from '../services/api/api'
+export * from './utils'

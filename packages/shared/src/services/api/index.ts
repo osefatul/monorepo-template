@@ -1,4 +1,6 @@
-export * from './authApi'
+//index.ts
+
+export * from './api'
 export { baseApi } from './baseApi'
 
 export interface RTKApiResponse<T> {

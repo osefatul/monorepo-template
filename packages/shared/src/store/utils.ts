@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
 
-import { baseApi } from './api'
+import { baseApi } from '../services/api/baseApi'
 import { uiSlice } from './slices'
 
 // Base store configuration that can be extended by apps

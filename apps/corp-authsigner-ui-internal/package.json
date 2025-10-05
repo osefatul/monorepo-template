@@ -20,10 +20,10 @@
     "analyze": "vite build --mode analyze"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.9.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-redux": "^9.2.0",
+    "react-redux": "^8.1.0",
     "shared": "*"
   },
   "devDependencies": {

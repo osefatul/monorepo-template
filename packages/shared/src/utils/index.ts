@@ -8,3 +8,5 @@ export const formatDate = (date: Date | string): string => {
     minute: '2-digit',
   })
 }
+
+export * from './counterUtils'

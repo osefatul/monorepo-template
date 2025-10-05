@@ -50,8 +50,8 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.9.0",
-    "react-redux": "^9.2.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "react-redux": "^8.1.0",
     "react-router-dom": "^7.9.3"
   }
 }

@@ -1,13 +1,24 @@
-import { store as sharedStore } from '@shared/store'
-import type { AppDispatch, RootState } from '@shared/store'
+// index.ts
+import { configureStore } from '@reduxjs/toolkit'
 
-// Use the shared store for the external app
-export const store = sharedStore
+import { baseApi } from '@shared/services/api/baseApi'
 
-// Re-export types
-export type { RootState, AppDispatch }
+import counterReducer from './counterSlice'
 
-// Export shared API hooks and selectors for easy access
-export * from '@shared/store'
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    [baseApi.reducerPath]: baseApi.reducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [baseApi.util.resetApiState.type],
+      },
+    }).concat(baseApi.middleware),
+})
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
 export default store
