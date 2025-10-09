@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auth Signer – ERD (Schema Overview)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
+    mermaid.initialize({ startOnLoad: true, theme: 'base' })
+  </script>
+</head>
+<body class="bg-gray-50">
+  <main class="max-w-7xl mx-auto p-8 space-y-8">
+    <header>
+      <h1 class="text-3xl font-bold">Auth Signer – Entity Relationship Diagram</h1>
+      <p class="text-gray-600">Visual representation of schema relationships across internal and external authorization flows.</p>
+    </header>
+
+    <section class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold mb-3">Entity Relationships</h2>
+      <div class="mermaid">
+      erDiagram
+        ACCOUNTS ||--o{ ACCOUNT_SIGNER_ASSOCIATIONS : has
+        AUTHORIZED_SIGNERS ||--o{ ACCOUNT_SIGNER_ASSOCIATIONS : linked_to
+        ACCOUNTS ||--o{ ASL_REQUESTS : initiates
+        ASL_REQUESTS ||--o{ ASL_REQUEST_DETAILS : contains
+        ASL_REQUESTS ||--o{ ASL_APPROVALS : requires
+        ASL_REQUESTS ||--o{ ASL_AUDIT_LOG : logs
+        ASL_REQUESTS ||--o{ ASL_DOCUMENTS : attaches
+        BUSINESS_LINE_CONFIGS ||--o{ APPROVAL_TEMPLATES : configures
+        EXTERNAL_ROLES ||--o{ CLIENT_USER_ROLES : assigns
+        ACCOUNTS ||--o{ CLIENT_USER_ROLES : scoped_to
+        ACCESS_MGMT_CACHE ||--|| API : caches_for
+
+        ACCOUNTS {
+          VARCHAR(50) account_id PK
+          VARCHAR(20) business_line
+          VARCHAR(255) account_name
+          VARCHAR(50) client_id
+          VARCHAR(20) status
+        }
+
+        AUTHORIZED_SIGNERS {
+          UUID signer_id PK
+          VARCHAR first_name
+          VARCHAR last_name
+          VARCHAR email
+          VARCHAR phone
+          VARCHAR title
+          VARCHAR entity_name
+        }
+
+        ACCOUNT_SIGNER_ASSOCIATIONS {
+          UUID association_id PK
+          VARCHAR account_id FK
+          UUID signer_id FK
+          VARCHAR privilege_level
+          DECIMAL authorization_limit
+          DATE effective_date
+          DATE expiration_date
+          BIT primary_flag
+        }
+
+        ASL_REQUESTS {
+          UUID request_id PK
+          VARCHAR account_id FK
+          VARCHAR request_type
+          VARCHAR initiated_by
+          VARCHAR status
+        }
+
+        ASL_REQUEST_DETAILS {
+          UUID detail_id PK
+          UUID request_id FK
+          UUID signer_id FK
+          VARCHAR action
+          JSON before_data
+          JSON after_data
+        }
+
+        ASL_APPROVALS {
+          UUID approval_id PK
+          UUID request_id FK
+          VARCHAR approver_user_id
+          INT approval_level
+          VARCHAR status
+        }
+
+        ASL_AUDIT_LOG {
+          UUID log_id PK
+          UUID request_id FK
+          UUID signer_id FK
+          VARCHAR action
+          VARCHAR changed_by
+          JSON before_state
+          JSON after_state
+        }
+
+        ASL_DOCUMENTS {
+          UUID document_id PK
+          UUID request_id FK
+          VARCHAR document_name
+          VARCHAR document_type
+          VARCHAR storage_ref
+        }
+
+        BUSINESS_LINE_CONFIGS {
+          UUID config_id PK
+          VARCHAR business_line
+          VARCHAR config_key
+          JSON config_value
+        }
+
+        APPROVAL_TEMPLATES {
+          UUID template_id PK
+          VARCHAR business_line
+          VARCHAR name
+          JSON approval_chain
+        }
+
+        EXTERNAL_ROLES {
+          UUID role_id PK
+          VARCHAR role_name
+          JSON capabilities
+        }
+
+        CLIENT_USER_ROLES {
+          VARCHAR user_id
+          UUID role_id FK
+          VARCHAR account_scope
+        }
+
+        ACCESS_MGMT_CACHE {
+          VARCHAR user_id PK
+          JSON entitlements_json
+          DATETIME2 fetched_at
+          DATETIME2 ttl_expiry
+        }
+      </div>
+    </section>
+  </main>
+</body>
+</html>
